@@ -1,4 +1,4 @@
-package io.dailyly.dairyly
+package io.dairyly.dairyly
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package io.dailyly.dairyly
+package io.dairyly.dairyly
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
