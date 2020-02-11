@@ -3,8 +3,9 @@ package io.dairyly.dairyly.data.models
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
 import java.util.*
+
 @Entity(foreignKeys = [ForeignKey(entity = UserDetail::class,
-                                  parentColumns = ["id"],
+                                  parentColumns = ["userId"],
                                   childColumns = ["userId"],
                                   onDelete = CASCADE)],
         indices = [Index("userId")])
@@ -24,12 +25,23 @@ data class DairyEntryInfo(
 @Entity
 data class Tag(
         @PrimaryKey
-        val number: Int,
+        val tagNumber: Int,
         val string: String,
         val timeCreated: Date
 )
 
-@Entity(primaryKeys = ["entryId", "tagNumber"])
+@Entity(primaryKeys = ["entryId", "tagNumber"],
+        indices = [Index("tagNumber")],
+        foreignKeys = [
+            ForeignKey(entity = Tag::class,
+                       parentColumns = ["tagNumber"],
+                       childColumns = ["tagNumber"],
+                       onDelete = CASCADE),
+            ForeignKey(entity = DairyEntryInfo::class,
+                       parentColumns = ["entryId"],
+                       childColumns = ["entryId"],
+                       onDelete = CASCADE)
+        ])
 data class DairyEntryTagCrossRef(
         val entryId: Int,
         val tagNumber: Int
@@ -37,21 +49,39 @@ data class DairyEntryTagCrossRef(
 
 data class DairyEntry(
         @Embedded
-        val info: DairyEntryInfo,
+        var info: DairyEntryInfo,
 
         @Relation(
                 parentColumn = "entryId",
-                entityColumn = "number",
+                entityColumn = "tagNumber",
                 associateBy = Junction(
-                        UserDetailFileCrossRef::class)
+                        DairyEntryTagCrossRef::class)
         )
-        val tags: List<Tag>,
+        var tags: List<Tag>,
 
         @Relation(
                 parentColumn = "entryId",
-                entityColumn = "parentEntryId"
+                entityColumn = "blockNum",
+                associateBy = Junction(DairyEntryBlockCrossRef::class)
         )
         val blockInfo: List<DairyEntryBlockInfo>
+)
+
+@Entity(primaryKeys = ["entryId", "blockNum"],
+        indices = [Index("blockNum")],
+        foreignKeys = [
+            ForeignKey(entity = DairyEntryBlockInfo::class,
+                       parentColumns = ["blockNum"],
+                       childColumns = ["blockNum"],
+                       onDelete = CASCADE),
+            ForeignKey(entity = DairyEntryInfo::class,
+                       parentColumns = ["entryId"],
+                       childColumns = ["entryId"],
+                       onDelete = CASCADE)
+        ])
+class DairyEntryBlockCrossRef(
+        var entryId: Int,
+        var blockNum: Int
 )
 
 @Entity(foreignKeys = [ForeignKey(entity = DairyEntryInfo::class,

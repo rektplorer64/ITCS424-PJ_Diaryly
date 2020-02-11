@@ -1,0 +1,32 @@
+@startuml
+
+abstract class AbstractList{
+    fun getAll(): Flowable<List<T>>
+    fun getRowById(id: Int): Flowable<T>
+    suspend fun insert(vararg row: I): List<Long>
+    suspend fun update(row: I): Int
+    suspend fun delete(row: I): Int
+}
+abstract AbstractCollection
+interface List
+interface Collection
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+Object[] elementData
+size()
+}
+
+enum TimeUnit {
+DAYS
+HOURS
+MINUTES
+}
+
+@enduml

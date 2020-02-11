@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "aa3d27b3f26e0cd8e1dd074147814a33",
+    "identityHash": "b860c557416569e6486aa28bf9a983b1",
     "entities": [
       {
         "tableName": "UserDetail",
@@ -145,7 +145,7 @@
       },
       {
         "tableName": "UserDetailFileCrossRef",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `fileId` INTEGER NOT NULL, PRIMARY KEY(`userId`, `fileId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `fileId` INTEGER NOT NULL, PRIMARY KEY(`userId`, `fileId`), FOREIGN KEY(`fileId`) REFERENCES `UserFile`(`fileId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`userId`) REFERENCES `UserDetail`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "userId",
@@ -177,13 +177,328 @@
             "createSql": "CREATE INDEX IF NOT EXISTS `index_UserDetailFileCrossRef_fileId` ON `${TABLE_NAME}` (`fileId`)"
           }
         ],
+        "foreignKeys": [
+          {
+            "table": "UserFile",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "fileId"
+            ],
+            "referencedColumns": [
+              "fileId"
+            ]
+          },
+          {
+            "table": "UserDetail",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "userId"
+            ],
+            "referencedColumns": [
+              "userId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "DairyEntryInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` INTEGER NOT NULL, `timeCreated` INTEGER NOT NULL, `timeModified` INTEGER NOT NULL, `goodBad` TEXT NOT NULL, FOREIGN KEY(`userId`) REFERENCES `UserDetail`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "entryId",
+            "columnName": "entryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeCreated",
+            "columnName": "timeCreated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeModified",
+            "columnName": "timeModified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "goodBad",
+            "columnName": "goodBad",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "entryId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_DairyEntryInfo_userId",
+            "unique": false,
+            "columnNames": [
+              "userId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_DairyEntryInfo_userId` ON `${TABLE_NAME}` (`userId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "UserDetail",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "userId"
+            ],
+            "referencedColumns": [
+              "userId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Tag",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tagNumber` INTEGER NOT NULL, `string` TEXT NOT NULL, `timeCreated` INTEGER NOT NULL, PRIMARY KEY(`tagNumber`))",
+        "fields": [
+          {
+            "fieldPath": "tagNumber",
+            "columnName": "tagNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "string",
+            "columnName": "string",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeCreated",
+            "columnName": "timeCreated",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "tagNumber"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "DairyEntryTagCrossRef",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` INTEGER NOT NULL, `tagNumber` INTEGER NOT NULL, PRIMARY KEY(`entryId`, `tagNumber`), FOREIGN KEY(`tagNumber`) REFERENCES `Tag`(`tagNumber`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`entryId`) REFERENCES `DairyEntryInfo`(`entryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "entryId",
+            "columnName": "entryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tagNumber",
+            "columnName": "tagNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "entryId",
+            "tagNumber"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_DairyEntryTagCrossRef_tagNumber",
+            "unique": false,
+            "columnNames": [
+              "tagNumber"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_DairyEntryTagCrossRef_tagNumber` ON `${TABLE_NAME}` (`tagNumber`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Tag",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "tagNumber"
+            ],
+            "referencedColumns": [
+              "tagNumber"
+            ]
+          },
+          {
+            "table": "DairyEntryInfo",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "entryId"
+            ],
+            "referencedColumns": [
+              "entryId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "DairyEntryBlockInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`blockNum` INTEGER NOT NULL, `parentEntryId` INTEGER NOT NULL, `timeCreated` INTEGER NOT NULL, `type` TEXT NOT NULL, `content` TEXT NOT NULL, `fileId` INTEGER, `order` INTEGER NOT NULL, PRIMARY KEY(`blockNum`), FOREIGN KEY(`parentEntryId`) REFERENCES `DairyEntryInfo`(`entryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "blockNum",
+            "columnName": "blockNum",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parentEntryId",
+            "columnName": "parentEntryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeCreated",
+            "columnName": "timeCreated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fileId",
+            "columnName": "fileId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "order",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "blockNum"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_DairyEntryBlockInfo_parentEntryId",
+            "unique": false,
+            "columnNames": [
+              "parentEntryId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_DairyEntryBlockInfo_parentEntryId` ON `${TABLE_NAME}` (`parentEntryId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "DairyEntryInfo",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "parentEntryId"
+            ],
+            "referencedColumns": [
+              "entryId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "DairyEntryBlockCrossRef",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` INTEGER NOT NULL, `blockNum` INTEGER NOT NULL, PRIMARY KEY(`entryId`, `blockNum`), FOREIGN KEY(`blockNum`) REFERENCES `DairyEntryBlockInfo`(`blockNum`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`entryId`) REFERENCES `DairyEntryInfo`(`entryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "entryId",
+            "columnName": "entryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "blockNum",
+            "columnName": "blockNum",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "entryId",
+            "blockNum"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_DairyEntryBlockCrossRef_blockNum",
+            "unique": false,
+            "columnNames": [
+              "blockNum"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_DairyEntryBlockCrossRef_blockNum` ON `${TABLE_NAME}` (`blockNum`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "DairyEntryBlockInfo",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "blockNum"
+            ],
+            "referencedColumns": [
+              "blockNum"
+            ]
+          },
+          {
+            "table": "DairyEntryInfo",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "entryId"
+            ],
+            "referencedColumns": [
+              "entryId"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aa3d27b3f26e0cd8e1dd074147814a33')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b860c557416569e6486aa28bf9a983b1')"
     ]
   }
 }

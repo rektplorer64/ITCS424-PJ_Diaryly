@@ -1,6 +1,7 @@
 package io.dairyly.dairyly.data.models
 
 import androidx.room.*
+import androidx.room.ForeignKey.CASCADE
 import java.io.File
 import java.util.*
 
@@ -30,11 +31,11 @@ data class UserDetail(
                 "ownerId")])
 data class UserFile(
         @PrimaryKey(autoGenerate = true)
-        val fileId: Int,
-        val location: File,
-        val type: Type,
-        val timeAdded: Date,
-        val ownerId: Int
+        var fileId: Int,
+        var location: File,
+        var type: Type,
+        var timeAdded: Date,
+        var ownerId: Int
 ) {
     enum class Type {
         AUDIO, IMAGE, VIDEO, OTHER
@@ -43,7 +44,17 @@ data class UserFile(
 
 @Entity(primaryKeys = ["userId", "fileId"],
         indices = [Index(
-                "fileId")])
+                "fileId")],
+        foreignKeys = [
+            ForeignKey(entity = UserFile::class,
+                       parentColumns = ["fileId"],
+                       childColumns = ["fileId"],
+                       onDelete = CASCADE),
+            ForeignKey(entity = UserDetail::class,
+                       parentColumns = ["userId"],
+                       childColumns = ["userId"],
+                       onDelete = CASCADE)
+        ])
 data class UserDetailFileCrossRef(
         val userId: Int,
         val fileId: Int
