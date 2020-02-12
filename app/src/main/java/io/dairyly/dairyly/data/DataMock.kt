@@ -21,6 +21,7 @@ class DairylyGenerator(
     val entryBlocks: List<DairyEntryBlockInfo>
     val entries: List<DairyEntryInfo>
     val tags: List<Tag>
+    val entryTagsCrossRefs: List<DairyEntryTagCrossRef>
 
     init {
         users = generateUserDetailObjects()
@@ -28,6 +29,24 @@ class DairylyGenerator(
         entryBlocks = generateDairyEntryBlockObjects()
         entries = generateDairyEntryObjects()
         tags = generateTagsObjects()
+        entryTagsCrossRefs = generateEntryTagCrossRef()
+    }
+
+    private fun generateEntryTagCrossRef(): List<DairyEntryTagCrossRef> {
+        val crossRef = mutableListOf<DairyEntryTagCrossRef>()
+        for(i in 1 .. totalEntries){
+            val numberOfTags = m.random.asKotlinRandom().nextInt(3, 8)
+            val tagSet = hashSetOf<Int>()
+            for(j in 1 .. numberOfTags){
+                val tagId = m.random.asKotlinRandom().nextInt(1, totalTags)
+                tagSet.add(tagId)
+            }
+
+            for(t in tagSet){
+                crossRef += DairyEntryTagCrossRef(i, t)
+            }
+        }
+        return crossRef
     }
 
     private fun generateUserDetailObjects(): List<UserDetail> {
@@ -84,7 +103,7 @@ class DairylyGenerator(
                     .add(0.2, DairyEntryBlockInfo.Type.HEADER3)
                     .add(0.3, DairyEntryBlockInfo.Type.IMAGE)
                     .add(0.3, DairyEntryBlockInfo.Type.TEXT).`val`()
-            val content = m.words().adverbs().array(100).mapToString().`val`()
+            val content = m.words().adverbs().array(100).`val`().reduce { acc, s -> "$acc $s" }
             val fileId = m.ints().range(1, totalFiles + 1).`val`()
             val order = m.ints().bound(100).`val`()
             blocks += DairyEntryBlockInfo(i, parentEntryId, timeCreated, type, content,

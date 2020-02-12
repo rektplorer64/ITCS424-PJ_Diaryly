@@ -1,16 +1,20 @@
 package io.dairyly.dairyly.data
 
 import android.content.Context
-import io.dairyly.dairyly.data.models.DairyEntry
+import io.dairyly.dairyly.data.models.DiaryEntry
 import io.dairyly.dairyly.data.models.User
 import io.reactivex.Flowable
 import io.reactivex.Single
+import net.andreinc.mockneat.MockNeat
 import java.util.*
 
 open class DairyRepository(context: Context) {
 
     internal open val database = lazy {
-        AppDatabase.getInstance(context)
+        val a = AppDatabase.getInstance(context)
+        a.populateDatabase(DairylyGenerator(
+                MockNeat.threadLocal(), 10, 100, 1000, 100, 100))
+        a
     }
 
     fun getUser(userId: Int): Flowable<User> {
@@ -21,16 +25,16 @@ open class DairyRepository(context: Context) {
         return database.value.dairyEntryDao().getLatestDiaryEntryId()
     }
 
-    fun listAllDairyEntriesById(entry: Int): Flowable<DairyEntry>{
+    fun listAllDairyEntriesById(entry: Int): Flowable<DiaryEntry>{
         return database.value.dairyEntryDao().getRowById(entry)
     }
 
-    fun listAllDairyEntriesByUserId(userId: Int): Flowable<List<DairyEntry>> {
+    fun listAllDairyEntriesByUserId(userId: Int): Flowable<List<DiaryEntry>> {
         return database.value.dairyEntryDao().getRowByUserId(userId)
     }
 
     fun listAllDairyEntriesInRange(userId: Int, dateStart: Date,
-                                   dateEnd: Date): Flowable<List<DairyEntry>> {
+                                   dateEnd: Date): Flowable<List<DiaryEntry>> {
         if(dateStart.time >= dateEnd.time) {
             throw IllegalArgumentException(
                     "The first argument should be lesser than the second one!")

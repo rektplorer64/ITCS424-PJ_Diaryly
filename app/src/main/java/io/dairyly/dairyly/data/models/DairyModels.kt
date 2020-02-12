@@ -24,7 +24,7 @@ data class DairyEntryInfo(
 
 @Entity
 data class Tag(
-        @PrimaryKey
+        @PrimaryKey(autoGenerate = true)
         val tagNumber: Int,
         val string: String,
         val timeCreated: Date
@@ -39,7 +39,7 @@ data class Tag(
                        onDelete = CASCADE),
             ForeignKey(entity = DairyEntryInfo::class,
                        parentColumns = ["entryId"],
-                       childColumns = ["entryId"],
+                       childColumns = ["tagNumber"],
                        onDelete = CASCADE)
         ])
 data class DairyEntryTagCrossRef(
@@ -47,42 +47,26 @@ data class DairyEntryTagCrossRef(
         val tagNumber: Int
 )
 
-data class DairyEntry(
+data class DiaryEntry(
         @Embedded
-        var info: DairyEntryInfo,
+        val info: DairyEntryInfo,
 
         @Relation(
                 parentColumn = "entryId",
                 entityColumn = "tagNumber",
-                associateBy = Junction(
-                        DairyEntryTagCrossRef::class)
+                entity = Tag::class,
+                associateBy = Junction(DairyEntryTagCrossRef::class)
         )
-        var tags: List<Tag>,
+        val tags: List<Tag>,
 
         @Relation(
                 parentColumn = "entryId",
-                entityColumn = "blockNum",
-                associateBy = Junction(DairyEntryBlockCrossRef::class)
+                entity = DairyEntryBlockInfo::class,
+                entityColumn = "parentEntryId"
         )
         val blockInfo: List<DairyEntryBlockInfo>
 )
 
-@Entity(primaryKeys = ["entryId", "blockNum"],
-        indices = [Index("blockNum")],
-        foreignKeys = [
-            ForeignKey(entity = DairyEntryBlockInfo::class,
-                       parentColumns = ["blockNum"],
-                       childColumns = ["blockNum"],
-                       onDelete = CASCADE),
-            ForeignKey(entity = DairyEntryInfo::class,
-                       parentColumns = ["entryId"],
-                       childColumns = ["entryId"],
-                       onDelete = CASCADE)
-        ])
-class DairyEntryBlockCrossRef(
-        var entryId: Int,
-        var blockNum: Int
-)
 
 @Entity(foreignKeys = [ForeignKey(entity = DairyEntryInfo::class,
                                   parentColumns = ["entryId"],

@@ -77,22 +77,22 @@ interface EnFileDao : BasicDaoInterface<UserFile, UserFile> {
 }
 
 @Dao
-interface DairyEntryDao : BasicDaoInterface<DairyEntry, DairyEntryInfo> {
+interface DairyEntryDao : BasicDaoInterface<DiaryEntry, DairyEntryInfo> {
     @Transaction
     @Query("SELECT * FROM DairyEntryInfo")
-    override fun getAll(): Flowable<List<DairyEntry>>
+    override fun getAll(): Flowable<List<DiaryEntry>>
 
     @Transaction
     @Query("SELECT * FROM DairyEntryInfo WHERE entryId = :id")
-    override fun getRowById(id: Int): Flowable<DairyEntry>
+    override fun getRowById(id: Int): Flowable<DiaryEntry>
 
     @Transaction
     @Query("SELECT * FROM DairyEntryInfo WHERE userId = :id")
-    fun getRowByUserId(id: Int): Flowable<List<DairyEntry>>
+    fun getRowByUserId(id: Int): Flowable<List<DiaryEntry>>
 
     @Transaction
     @Query("SELECT * FROM DairyEntryInfo WHERE (userId = :id) AND (timeCreated BETWEEN :start AND :end)")
-    fun getRowsByTimeRange(id: Int, start: Long, end: Long): Flowable<List<DairyEntry>>
+    fun getRowsByTimeRange(id: Int, start: Long, end: Long): Flowable<List<DiaryEntry>>
 
     @Query("SELECT Max(entryId) FROM DairyEntryInfo")
     fun getLatestDiaryEntryId(): Single<Int>
@@ -132,8 +132,14 @@ interface EnTagDao: BasicDaoInterface<Tag, Tag>{
     @Query("SELECT * FROM Tag")
     override fun getAll(): Flowable<List<Tag>>
 
+    @Query("SELECT * FROM DairyEntryTagCrossRef")
+    fun getAllTagCrossRef(): Flowable<List<DairyEntryTagCrossRef>>
+
     @Query("SELECT * FROM Tag WHERE tagNumber = :id")
     override fun getRowById(id: Int): Flowable<Tag>
+
+    @Insert(onConflict = REPLACE)
+    suspend fun insert(vararg row: DairyEntryTagCrossRef): List<Long>
 
     @Insert(onConflict = REPLACE)
     override suspend fun insert(vararg row: Tag): List<Long>

@@ -1,0 +1,14 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
+
+    <!-- The white background color as one in Amazon, YouTube, or Drive app -->
+    <item android:drawable="@color/darkSlateGray"/>
+
+    <!-- App logo -->
+    <item>
+        <bitmap
+            android:src="@drawable/ic_logo"
+            android:gravity="center">
+        </bitmap>
+    </item>
+
+</layer-list>

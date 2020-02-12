@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_baseline_overline">24dp</dimen>
+    <dimen name="card_padding_side">16dp</dimen>
+    <dimen name="card_padding_side_16">16dp</dimen>
+</resources>

@@ -13,7 +13,7 @@ import kotlinx.coroutines.runBlocking
 
 @Database(
         entities = [UserDetail::class, UserFile::class, UserDetailFileCrossRef::class,
-            DairyEntryInfo::class, Tag::class, DairyEntryTagCrossRef::class, DairyEntryBlockInfo::class, DairyEntryBlockCrossRef::class],
+            DairyEntryInfo::class, Tag::class, DairyEntryTagCrossRef::class, DairyEntryBlockInfo::class],
         version = 1)
 @TypeConverters(DateConverter::class, UserFileTypeConverter::class, FileConverter::class, GoodBadConverter::class, BlockTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -69,5 +69,7 @@ fun AppDatabase.populateDatabase(gen: DairylyGenerator){
 
         val tagDao = db.enTagDao()
         tagDao.insert(*gen.tags.toTypedArray())
+
+        tagDao.insert(*gen.entryTagsCrossRefs.toTypedArray())
     }
 }

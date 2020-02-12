@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b860c557416569e6486aa28bf9a983b1",
+    "identityHash": "d5fdcb9d7fcc4c364c946ca0fc9adb17",
     "entities": [
       {
         "tableName": "UserDetail",
@@ -269,7 +269,7 @@
       },
       {
         "tableName": "Tag",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tagNumber` INTEGER NOT NULL, `string` TEXT NOT NULL, `timeCreated` INTEGER NOT NULL, PRIMARY KEY(`tagNumber`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tagNumber` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `string` TEXT NOT NULL, `timeCreated` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "tagNumber",
@@ -294,14 +294,14 @@
           "columnNames": [
             "tagNumber"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "DairyEntryTagCrossRef",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` INTEGER NOT NULL, `tagNumber` INTEGER NOT NULL, PRIMARY KEY(`entryId`, `tagNumber`), FOREIGN KEY(`tagNumber`) REFERENCES `Tag`(`tagNumber`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`entryId`) REFERENCES `DairyEntryInfo`(`entryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` INTEGER NOT NULL, `tagNumber` INTEGER NOT NULL, PRIMARY KEY(`entryId`, `tagNumber`), FOREIGN KEY(`tagNumber`) REFERENCES `Tag`(`tagNumber`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`tagNumber`) REFERENCES `DairyEntryInfo`(`entryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "entryId",
@@ -350,7 +350,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "entryId"
+              "tagNumber"
             ],
             "referencedColumns": [
               "entryId"
@@ -434,71 +434,12 @@
             ]
           }
         ]
-      },
-      {
-        "tableName": "DairyEntryBlockCrossRef",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` INTEGER NOT NULL, `blockNum` INTEGER NOT NULL, PRIMARY KEY(`entryId`, `blockNum`), FOREIGN KEY(`blockNum`) REFERENCES `DairyEntryBlockInfo`(`blockNum`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`entryId`) REFERENCES `DairyEntryInfo`(`entryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
-        "fields": [
-          {
-            "fieldPath": "entryId",
-            "columnName": "entryId",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "blockNum",
-            "columnName": "blockNum",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "entryId",
-            "blockNum"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [
-          {
-            "name": "index_DairyEntryBlockCrossRef_blockNum",
-            "unique": false,
-            "columnNames": [
-              "blockNum"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_DairyEntryBlockCrossRef_blockNum` ON `${TABLE_NAME}` (`blockNum`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "DairyEntryBlockInfo",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "blockNum"
-            ],
-            "referencedColumns": [
-              "blockNum"
-            ]
-          },
-          {
-            "table": "DairyEntryInfo",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "entryId"
-            ],
-            "referencedColumns": [
-              "entryId"
-            ]
-          }
-        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b860c557416569e6486aa28bf9a983b1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd5fdcb9d7fcc4c364c946ca0fc9adb17')"
     ]
   }
 }

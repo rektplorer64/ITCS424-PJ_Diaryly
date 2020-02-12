@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_dairy"
+        android:title="@string/dairy"
+        android:icon="@drawable/ic_favorite_black_24dp"/>
+
+    <item
+        android:id="@+id/menu_dashboard"
+        android:title="@string/dashboard"
+        android:icon="@drawable/ic_dashboard_black_24dp"/>
+
+    <item
+        android:id="@+id/menu_overview"
+        android:title="@string/overview"
+        android:icon="@drawable/ic_calendar_black_24dp"
+        tools:ignore="PrivateResource" />
+
+    <item
+        android:id="@+id/menu_search"
+        android:title="@string/search"
+        android:icon="@drawable/ic_search_black_24dp" />
+
+    <item
+        android:id="@+id/menu_goals"
+        android:title="@string/goals"
+        android:icon="@drawable/ic_flag_black_24dp"/>
+</menu>

@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Dairyly</string>
+    <string name="app_name">Diaryly</string>
+    <string name="dairy">Diary</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="overview">Overview</string>
+    <string name="search">Search</string>
+    <string name="goals">Goals</string>
 </resources>

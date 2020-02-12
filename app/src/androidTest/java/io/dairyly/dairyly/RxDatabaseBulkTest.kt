@@ -60,11 +60,18 @@ class RxDatabaseBulkTest {
 
     @Test
     fun writeUserAndRead() {
+        println(dairyEntryDao.getAll().blockingFirst())
+        println(tagDao.getAll().blockingFirst())
+
+        println()
+        println(tagDao.getAllTagCrossRef().blockingFirst())
+
         assertEquals(userDao.getAll().blockingFirst().size, totalUsers)
         assertEquals(enFileDao.getAll().blockingFirst().size, totalFiles)
         assertEquals(dairyEntryDao.getAll().blockingFirst().size, totalEntries)
         assertEquals(dairyEntryBlockInfoDao.getAll().blockingFirst().size, totalEntryBlocks)
         assertEquals(tagDao.getAll().blockingFirst().size, totalTags)
+        assert(tagDao.getAllTagCrossRef().blockingFirst().isNotEmpty())
     }
 
     @Test

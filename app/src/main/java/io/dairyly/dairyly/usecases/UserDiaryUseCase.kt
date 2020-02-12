@@ -2,7 +2,7 @@ package io.dairyly.dairyly.usecases
 
 import io.dairyly.dairyly.data.DairyRepository
 import io.dairyly.dairyly.data.Resource
-import io.dairyly.dairyly.data.models.DairyEntry
+import io.dairyly.dairyly.data.models.DiaryEntry
 import io.dairyly.dairyly.data.models.DairyEntryInfo
 import io.dairyly.dairyly.data.models.User
 import io.reactivex.Flowable
@@ -14,7 +14,7 @@ class UserDiaryUseCase(private val repo: DairyRepository) {
         return RxUseCaseProcedure(repo.getUser(userId), null).proceed()
     }
 
-    fun getUserDairyEntries(userId: Int): Flowable<Resource<List<DairyEntry>>> {
+    fun getUserDairyEntries(userId: Int): Flowable<Resource<List<DiaryEntry>>> {
         return RxUseCaseProcedure(repo.listAllDairyEntriesByUserId(userId), null).proceed()
     }
 
@@ -24,21 +24,21 @@ class UserDiaryUseCase(private val repo: DairyRepository) {
 
     suspend fun addOneDairyEntry(entry: DairyEntryInfo): Resource<List<Long>> {
         return SuspendingUseCaseProcedure({
-                                                                                             repo.database.value.dairyEntryDao()
-                                                                                                     .insert(entry)
-                                                                                         }, {
-                                                                                             it.message
-                                                                                         })
+                                              repo.database.value.dairyEntryDao()
+                                                      .insert(entry)
+                                          }, {
+                                              it.message
+                                          })
                 .proceed()
     }
 
     suspend fun updateOneDairyEntry(entry: DairyEntryInfo): Resource<Int> {
         return SuspendingUseCaseProcedure({
-                                                                                             repo.database.value.dairyEntryDao()
-                                                                                                     .update(entry)
-                                                                                         }, {
-                                                                                             it.message
-                                                                                         })
+                                              repo.database.value.dairyEntryDao()
+                                                      .update(entry)
+                                          }, {
+                                              it.message
+                                          })
                 .proceed()
         // return repo.database.value.dairyEntryDao().update(entry)
     }
