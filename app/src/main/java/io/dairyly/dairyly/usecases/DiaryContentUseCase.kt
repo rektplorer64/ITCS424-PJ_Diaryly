@@ -2,12 +2,14 @@ package io.dairyly.dairyly.usecases
 
 import io.dairyly.dairyly.data.DairyRepository
 import io.dairyly.dairyly.data.Resource
-import io.dairyly.dairyly.data.models.DairyEntryBlockInfo
+import io.dairyly.dairyly.data.models.DiaryDateHolder
+import io.dairyly.dairyly.data.models.DiaryEntry
+import io.dairyly.dairyly.data.models.DiaryEntryBlockInfo
 import io.reactivex.Flowable
 
-sealed class DairyBlockUseCase(private val repo: DairyRepository) {
+class DiaryContentUseCase(private val repo: DairyRepository) {
     suspend fun addDairyBlockToEntry(entryId: Int,
-                                     blockInfo: DairyEntryBlockInfo): Flowable<Resource<DairyEntryBlockInfo>> {
+                                     blockInfo: DiaryEntryBlockInfo): Flowable<Resource<DiaryEntryBlockInfo>> {
         val returnValue = SuspendingUseCaseProcedure(
                 {
                     repo.database.value.enDairyEntryBlockInfoDao()
@@ -27,5 +29,13 @@ sealed class DairyBlockUseCase(private val repo: DairyRepository) {
         } else {
             RxUseCaseProcedure(flowable, null).proceed()
         }
+    }
+
+    fun getOneDiaryEntry(entryId: Int): Flowable<Resource<DiaryEntry>>{
+        return RxUseCaseProcedure(repo.getDairyEntryById(entryId), null).proceed()
+    }
+
+    fun getAllDiaryEntriesByDateHolder(userId: Int, dateHolder: DiaryDateHolder): Flowable<Resource<List<DiaryEntry>>> {
+        return RxUseCaseProcedure(repo.getDiaryEntriesByDate(userId, dateHolder.date), null).proceed()
     }
 }

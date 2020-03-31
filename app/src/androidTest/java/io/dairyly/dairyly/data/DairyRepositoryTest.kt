@@ -20,7 +20,7 @@ class DairyRepositoryTest {
     val executor = InstantTaskExecutorRule()
 
     private lateinit var context: Context
-    private lateinit var database: TestDairyRepository
+    private lateinit var repo: DairyRepository
 
     private val testUserId = 1
 
@@ -29,14 +29,14 @@ class DairyRepositoryTest {
     @Before
     fun initializeDatabase() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        database = TestDairyRepository(context){
-            it.populateDatabase(DairylyGenerator(MockNeat.threadLocal(), 10, 100, 100, 100, 100))
-        }
+        repo = DairyRepository.getInstance(context)
+
+        repo.populateDatabase(DairylyGenerator(MockNeat.threadLocal(), 10, 100, 100, 100, 100))
     }
 
     @Test
     fun listAllDairyEntriesByUserId() {
-        val list = database.listAllDairyEntriesByUserId(testUserId).blockingFirst()
+        val list = repo.listAllDairyEntriesByUserId(testUserId).blockingFirst()
 
         list.forEach {
             assert(it.info.userId == testUserId)
@@ -48,8 +48,8 @@ class DairyRepositoryTest {
         val startDate = m.localDates()
                 .between(m.localDates().`val`(), LocalDate.of(2020, 1, 2))
                 .toUtilDate().`val`()
-        val list = database.listAllDairyEntriesInRange(testUserId, startDate,
-                                                       Calendar.getInstance().time).blockingFirst()
+        val list = repo.listAllDairyEntriesInRange(testUserId, startDate,
+                                                   Calendar.getInstance().time).blockingFirst()
         list.forEach {
             assert(it.info.userId == testUserId)
         }

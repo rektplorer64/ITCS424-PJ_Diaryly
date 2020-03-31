@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import io.dairyly.dairyly.data.DairyRepository
 import io.dairyly.dairyly.data.DairylyGenerator
-import io.dairyly.dairyly.data.TestDairyRepository
-import io.dairyly.dairyly.data.models.DairyEntryInfo
+import io.dairyly.dairyly.data.models.DiaryEntryInfo
 import io.dairyly.dairyly.data.populateDatabase
 import io.dairyly.dairyly.usecases.UserDiaryUseCase
 import kotlinx.coroutines.runBlocking
@@ -28,7 +28,7 @@ class UseCaseTest {
     var executor = InstantTaskExecutorRule()
 
     private lateinit var context: Context
-    private lateinit var repo: TestDairyRepository
+    private lateinit var repo: DairyRepository
 
     private lateinit var userDiaryUseCase: UserDiaryUseCase
 
@@ -41,10 +41,9 @@ class UseCaseTest {
         //         InstrumentationRegistry.getInstrumentation().targetContext, AppDatabase::class.java)
         //         .build()
 
-        repo = TestDairyRepository(context){
-            it.populateDatabase(DairylyGenerator(
-                    MockNeat.threadLocal(), 10, 100, 100, 100, 100))
-        }
+        repo = DairyRepository.getInstance(context)
+        repo.populateDatabase(DairylyGenerator(
+                MockNeat.threadLocal(), 10, 100, 100, 100, 100))
 
         userDiaryUseCase = UserDiaryUseCase(repo)
     }
@@ -53,7 +52,7 @@ class UseCaseTest {
     fun addOneDairyEntry() {
         runBlocking {
             val now = Calendar.getInstance().time
-            val dairyEntry = DairyEntryInfo(0, 4, now, now, DairyEntryInfo.GoodBad.GOOD)
+            val dairyEntry = DiaryEntryInfo(0, 4, now, now, DiaryEntryInfo.GoodBad.GOOD)
             val res = userDiaryUseCase.addOneDairyEntry(dairyEntry)
 
             println(res.message)

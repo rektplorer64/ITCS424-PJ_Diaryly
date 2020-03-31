@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="com.google.android.material.appbar.MaterialToolbar">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/calendarBarCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.CardView"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="4dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/google_sans_medium"
+                android:paddingStart="@dimen/margin_med_16"
+                android:paddingTop="@dimen/margin_med_16"
+                android:paddingEnd="@dimen/margin_med_16"
+                android:textColor="@color/mainBlue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="February, 2020" />
+
+            <view
+                android:id="@+id/date_tabs"
+                class="io.dairyly.dairyly.ui.components.DiaryCalendarBar$FadingTabLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fadingEdge="horizontal"
+                android:fadingEdgeLength="48dp"
+                android:fillViewport="true"
+                android:overScrollMode="always"
+                android:paddingTop="@dimen/spacing_8dp"
+
+                android:paddingBottom="@dimen/spacing_8dp"
+                android:requiresFadingEdge="horizontal"
+                app:layout_constraintEnd_toStartOf="@id/view_guide"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dateTextView"
+
+                app:tabIndicatorHeight="0dp"
+                app:tabMaxWidth="64dp"
+                app:tabMinWidth="34dp"
+                app:tabMode="scrollable"
+                app:tabPaddingBottom="0dp"
+                app:tabPaddingEnd="4dp"
+                app:tabPaddingStart="4dp"
+                app:tabPaddingTop="0dp"
+
+                app:tabRippleColor="@color/colorPrimary"
+                app:tabUnboundedRipple="true" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/view_guide"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".60" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/view_guide2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".80" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/bigTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/google_sans_medium"
+                android:maxLines="2"
+                android:layout_marginStart="@dimen/margin_med_16"
+                android:textSize="@dimen/headline"
+                app:layout_constraintEnd_toStartOf="@id/view_guide2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/date_tabs"
+                android:textColor="@android:color/black"
+                tools:text="Coming-back-to-doing-some-good-again day" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/subtitleTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:layout_marginStart="@dimen/margin_med_16"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintEnd_toStartOf="@id/view_guide2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bigTextView"
+                android:textColor="@color/blackAlpha60"
+                tools:text="Today"
+                android:paddingBottom="16dp" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image_view"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="@dimen/margin_med_16"
+                android:layout_marginEnd="@dimen/margin_med_16"
+                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</merge>

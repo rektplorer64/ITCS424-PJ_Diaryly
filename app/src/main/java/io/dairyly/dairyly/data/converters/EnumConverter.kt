@@ -1,8 +1,8 @@
 package io.dairyly.dairyly.data.converters
 
 import androidx.room.TypeConverter
-import io.dairyly.dairyly.data.models.DairyEntryBlockInfo
-import io.dairyly.dairyly.data.models.DairyEntryInfo
+import io.dairyly.dairyly.data.models.DiaryEntryBlockInfo
+import io.dairyly.dairyly.data.models.DiaryEntryInfo
 // import io.dairyly.dairyly.data.models.DairyEntryBlockInfo
 // import io.dairyly.dairyly.data.models.DairyEntryInfo
 import io.dairyly.dairyly.data.models.UserFile
@@ -23,28 +23,36 @@ class UserFileTypeConverter{
 
 class GoodBadConverter{
     @TypeConverter
-    fun fromString(value: String?): DairyEntryInfo.GoodBad? {
-        return value?.let {
-            DairyEntryInfo.GoodBad.valueOf(it)
+    fun fromString(value: Int?): DiaryEntryInfo.GoodBad? {
+        return when(value){
+            -1 -> {
+                DiaryEntryInfo.GoodBad.BAD
+            }
+            else -> {
+                DiaryEntryInfo.GoodBad.GOOD
+            }
         }
     }
 
     @TypeConverter
-    fun fromEnum(type: DairyEntryInfo.GoodBad?): String? {
-        return type?.toString()
+    fun fromEnum(type: DiaryEntryInfo.GoodBad?): Int? {
+        return when(type.toString()){
+            DiaryEntryInfo.GoodBad.GOOD.toString() -> 1
+            else                                   -> -1
+        }
     }
 }
 
 class BlockTypeConverter{
     @TypeConverter
-    fun fromString(value: String?): DairyEntryBlockInfo.Type? {
+    fun fromString(value: String?): DiaryEntryBlockInfo.Type? {
         return value?.let {
-            DairyEntryBlockInfo.Type.valueOf(it)
+            DiaryEntryBlockInfo.Type.valueOf(it)
         }
     }
 
     @TypeConverter
-    fun fromEnum(type: DairyEntryBlockInfo.Type?): String? {
+    fun fromEnum(type: DiaryEntryBlockInfo.Type?): String? {
         return type?.toString()
     }
 }

@@ -1,19 +1,30 @@
 package io.dairyly.dairyly.data
 
 import android.content.Context
+import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.data.models.DiaryEntry
 import io.dairyly.dairyly.data.models.User
 import io.reactivex.Flowable
 import io.reactivex.Single
 import net.andreinc.mockneat.MockNeat
+
 import java.util.*
 
-open class DairyRepository(context: Context) {
+open class DairyRepository private constructor(context: Context) {
+
+    companion object{
+        @Volatile
+        private var INSTANCE: DairyRepository? = null
+
+        fun getInstance(context: Context): DairyRepository = INSTANCE ?: synchronized(this){
+            INSTANCE?: DairyRepository(context).also { INSTANCE = it }
+        }
+    }
 
     internal open val database = lazy {
         val a = AppDatabase.getInstance(context)
         a.populateDatabase(DairylyGenerator(
-                MockNeat.threadLocal(), 10, 100, 1000, 100, 100))
+                MockNeat.threadLocal(), 1, 1, 1000, 1000, 10))
         a
     }
 
@@ -25,7 +36,7 @@ open class DairyRepository(context: Context) {
         return database.value.dairyEntryDao().getLatestDiaryEntryId()
     }
 
-    fun listAllDairyEntriesById(entry: Int): Flowable<DiaryEntry>{
+    fun getDairyEntryById(entry: Int): Flowable<DiaryEntry>{
         return database.value.dairyEntryDao().getRowById(entry)
     }
 
@@ -42,12 +53,26 @@ open class DairyRepository(context: Context) {
         return database.value.dairyEntryDao()
                 .getRowsByTimeRange(userId, dateStart.time, dateEnd.time)
     }
-}
 
-class TestDairyRepository(context: Context, callback: (AppDatabase) -> Unit) : DairyRepository(context){
-    override val database = lazy{
-        val a = AppDatabase.getInstance(context)
-        callback(a)
-        a
+    fun identifyTotalGoodBadScoreInRange(userId: Int, dateStart: Date,
+                                         dateEnd: Date): Flowable<Int>{
+        if(dateStart.time >= dateEnd.time) {
+            throw IllegalArgumentException(
+                    "The first argument should be lesser than the second one!")
+        }
+        return database.value.dairyEntryDao().getTotalGoodBadScoreInRange(userId, dateStart, dateEnd)
+    }
+
+    fun identifyGoodBadScoreListInRange(userId: Int, dateStart: Date,
+                                         dateEnd: Date): Flowable<List<DiaryDateHolder>>{
+        if(dateStart.time >= dateEnd.time) {
+            throw IllegalArgumentException(
+                    "The first argument should be lesser than the second one!")
+        }
+        return database.value.dairyEntryDao().getGoodBadScoreListInRange(userId, dateStart, dateEnd)
+    }
+
+    fun getDiaryEntriesByDate(userId: Int, date: Date): Flowable<List<DiaryEntry>> {
+        return database.value.dairyEntryDao().getRowsByDate(userId, date)
     }
 }

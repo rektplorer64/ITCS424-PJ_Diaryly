@@ -5,4 +5,8 @@
     <string name="overview">Overview</string>
     <string name="search">Search</string>
     <string name="goals">Goals</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_an_entry">Create an entry</string>
 </resources>

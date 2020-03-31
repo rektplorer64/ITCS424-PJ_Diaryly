@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/date_root_card"
+        android:layout_width="26dp"
+        android:layout_height="wrap_content"
+        android:minWidth="26dp"
+        android:translationZ="0dp"
+        app:cardBackgroundColor="@color/color_item_date_recycler"
+        app:cardCornerRadius="13dp"
+        style="@style/Widget.MaterialComponents.CardView"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/date_wrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:minWidth="22dp"
+                android:layout_marginHorizontal="3dp"
+                android:layout_marginTop="3dp"
+                android:stateListAnimator="@null"
+                android:translationZ="0dp"
+                app:cardBackgroundColor="@color/color_item_date_shape"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@android:id/text1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/google_sans_medium"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:textColor="@color/blackAlpha60"
+                    tools:text="3"
+                    android:layout_gravity="center_horizontal"/>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/goodnessPointTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="6dp"
+                android:textSize="9sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/date_wrapper"
+                tools:ignore="SmallSp"
+                tools:text="+8" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

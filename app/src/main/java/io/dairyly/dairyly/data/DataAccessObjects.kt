@@ -6,6 +6,9 @@ import io.dairyly.dairyly.data.models.*
 import io.reactivex.Flowable
 import io.reactivex.Single
 
+
+import java.util.*
+
 /**
  * Base Interface for Data access objects classes
  * @param T the type of output of main queries
@@ -77,53 +80,67 @@ interface EnFileDao : BasicDaoInterface<UserFile, UserFile> {
 }
 
 @Dao
-interface DairyEntryDao : BasicDaoInterface<DiaryEntry, DairyEntryInfo> {
+interface DairyEntryDao : BasicDaoInterface<DiaryEntry, DiaryEntryInfo> {
     @Transaction
-    @Query("SELECT * FROM DairyEntryInfo")
+    @Query("SELECT * FROM DiaryEntryInfo")
     override fun getAll(): Flowable<List<DiaryEntry>>
 
     @Transaction
-    @Query("SELECT * FROM DairyEntryInfo WHERE entryId = :id")
+    @Query("SELECT * FROM DiaryEntryInfo WHERE entryId = :id")
     override fun getRowById(id: Int): Flowable<DiaryEntry>
 
     @Transaction
-    @Query("SELECT * FROM DairyEntryInfo WHERE userId = :id")
+    @Query("SELECT * FROM DiaryEntryInfo WHERE userId = :id")
     fun getRowByUserId(id: Int): Flowable<List<DiaryEntry>>
 
     @Transaction
-    @Query("SELECT * FROM DairyEntryInfo WHERE (userId = :id) AND (timeCreated BETWEEN :start AND :end)")
-    fun getRowsByTimeRange(id: Int, start: Long, end: Long): Flowable<List<DiaryEntry>>
+    @Query("SELECT * FROM DiaryEntryInfo WHERE (userId = :userId) AND (timeCreated BETWEEN :start AND :end)")
+    fun getRowsByTimeRange(userId: Int, start: Long, end: Long): Flowable<List<DiaryEntry>>
 
-    @Query("SELECT Max(entryId) FROM DairyEntryInfo")
+    @Transaction
+    @Query("SELECT * FROM DiaryEntryInfo WHERE userId = :userId AND DATE(datetime(timeCreated/1000, 'unixepoch')) = DATE(:dateString)")
+    fun getRowsByDate(userId: Int, dateString: String): Flowable<List<DiaryEntry>>
+
+    @Query("SELECT Max(entryId) FROM DiaryEntryInfo")
     fun getLatestDiaryEntryId(): Single<Int>
 
     @Insert(onConflict = REPLACE)
-    override suspend fun insert(vararg row: DairyEntryInfo): List<Long>
+    override suspend fun insert(vararg row: DiaryEntryInfo): List<Long>
 
     @Update
-    override suspend fun update(row: DairyEntryInfo): Int
+    override suspend fun update(row: DiaryEntryInfo): Int
 
     @Delete
-    override suspend fun delete(row: DairyEntryInfo): Int
+    override suspend fun delete(row: DiaryEntryInfo): Int
+
+    @Query("SELECT SUM(goodBad) FROM DiaryEntryInfo WHERE userId = :userId AND timeCreated BETWEEN :time AND :time1")
+    fun getTotalGoodBadScoreInRange(userId: Int, time: Date, time1: Date): Flowable<Int>
+
+    @Query("SELECT cast(timeCreated / 86400000 as int) as date, SUM(goodBad) as goodBadScore FROM DiaryEntryInfo WHERE userId = :userId AND timeCreated BETWEEN :time AND :time1 GROUP BY cast(timeCreated / 86400000 as int) ORDER BY timeCreated")
+    fun getGoodBadScoreListInRange(userId: Int, time: Date, time1: Date): Flowable<List<DiaryDateHolder>>
+
+    @Transaction
+    @Query("SELECT * FROM DiaryEntryInfo WHERE userId = :userId AND DATE(cast(timeCreated / 86400000 as int)) = DATE(cast(:date / 86400000 as int))")
+    fun getRowsByDate(userId: Int, date: Date): Flowable<List<DiaryEntry>>
 }
 
 @Dao
-interface EnDairyEntryBlockInfoDao: BasicDaoInterface<DairyEntryBlockInfo, DairyEntryBlockInfo>{
+interface EnDairyEntryBlockInfoDao: BasicDaoInterface<DiaryEntryBlockInfo, DiaryEntryBlockInfo>{
 
-    @Query("SELECT * FROM DairyEntryBlockInfo")
-    override fun getAll(): Flowable<List<DairyEntryBlockInfo>>
+    @Query("SELECT * FROM DiaryEntryBlockInfo")
+    override fun getAll(): Flowable<List<DiaryEntryBlockInfo>>
 
-    @Query("SELECT * FROM DairyEntryBlockInfo WHERE fileId = :id")
-    override fun getRowById(id: Int): Flowable<DairyEntryBlockInfo>
+    @Query("SELECT * FROM DiaryEntryBlockInfo WHERE fileId = :id")
+    override fun getRowById(id: Int): Flowable<DiaryEntryBlockInfo>
 
     @Insert(onConflict = REPLACE)
-    override suspend fun insert(vararg row: DairyEntryBlockInfo): List<Long>
+    override suspend fun insert(vararg row: DiaryEntryBlockInfo): List<Long>
 
     @Update
-    override suspend fun update(row: DairyEntryBlockInfo): Int
+    override suspend fun update(row: DiaryEntryBlockInfo): Int
 
     @Delete
-    override suspend fun delete(row: DairyEntryBlockInfo): Int
+    override suspend fun delete(row: DiaryEntryBlockInfo): Int
 }
 
 @Dao
@@ -132,14 +149,14 @@ interface EnTagDao: BasicDaoInterface<Tag, Tag>{
     @Query("SELECT * FROM Tag")
     override fun getAll(): Flowable<List<Tag>>
 
-    @Query("SELECT * FROM DairyEntryTagCrossRef")
-    fun getAllTagCrossRef(): Flowable<List<DairyEntryTagCrossRef>>
+    @Query("SELECT * FROM DiaryEntryTagCrossRef")
+    fun getAllTagCrossRef(): Flowable<List<DiaryEntryTagCrossRef>>
 
     @Query("SELECT * FROM Tag WHERE tagNumber = :id")
     override fun getRowById(id: Int): Flowable<Tag>
 
     @Insert(onConflict = REPLACE)
-    suspend fun insert(vararg row: DairyEntryTagCrossRef): List<Long>
+    suspend fun insert(vararg row: DiaryEntryTagCrossRef): List<Long>
 
     @Insert(onConflict = REPLACE)
     override suspend fun insert(vararg row: Tag): List<Long>

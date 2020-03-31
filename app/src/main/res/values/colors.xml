@@ -26,14 +26,21 @@
     <!--  Minion Yellow  -->
     <color name="minionYellow">#F4E04D</color>
 
+    <!-- Light Orange -->
+    <color name="lightYellow">#FFE082</color>
+
     <!--  Dark Slate Gray  -->
     <color name="darkSlateGray">#2F4858</color>
 
 <!--  Common Colors  -->
     <color name="white">#FFFFFF</color>
+    <color name="whiteAlpha100">#00FFFFFF</color>
     <color name="blackAlpha75">#BF000000</color>
     <color name="blackAlpha50">#80000000</color>
     <color name="blackAlpha25">#40000000</color>
+    <color name="blackAlpha60">#99000000</color>
+    <color name="whiteAlpha35">#59FFFFFF</color>
+    <color name="blackAlpha15">#26000000</color>
 
 
 </resources>

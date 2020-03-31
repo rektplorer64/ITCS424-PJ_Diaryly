@@ -3,4 +3,8 @@
     <dimen name="card_baseline_overline">24dp</dimen>
     <dimen name="card_padding_side">16dp</dimen>
     <dimen name="card_padding_side_16">16dp</dimen>
+    <dimen name="margin_med_16">16dp</dimen>
+    <dimen name="margin_small_8">8dp</dimen>
+    <dimen name="spacing_8dp">8dp</dimen>
+    <dimen name="headline">24sp</dimen>
 </resources>

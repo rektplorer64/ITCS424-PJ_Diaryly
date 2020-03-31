@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d5fdcb9d7fcc4c364c946ca0fc9adb17",
+    "identityHash": "b621ba2ff439c2360b35f9e09a24b8eb",
     "entities": [
       {
         "tableName": "UserDetail",
@@ -203,8 +203,8 @@
         ]
       },
       {
-        "tableName": "DairyEntryInfo",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` INTEGER NOT NULL, `timeCreated` INTEGER NOT NULL, `timeModified` INTEGER NOT NULL, `goodBad` TEXT NOT NULL, FOREIGN KEY(`userId`) REFERENCES `UserDetail`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "tableName": "DiaryEntryInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` INTEGER NOT NULL, `timeCreated` INTEGER NOT NULL, `timeModified` INTEGER NOT NULL, `goodBad` INTEGER NOT NULL, FOREIGN KEY(`userId`) REFERENCES `UserDetail`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "entryId",
@@ -233,7 +233,7 @@
           {
             "fieldPath": "goodBad",
             "columnName": "goodBad",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -245,12 +245,12 @@
         },
         "indices": [
           {
-            "name": "index_DairyEntryInfo_userId",
+            "name": "index_DiaryEntryInfo_userId",
             "unique": false,
             "columnNames": [
               "userId"
             ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_DairyEntryInfo_userId` ON `${TABLE_NAME}` (`userId`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_DiaryEntryInfo_userId` ON `${TABLE_NAME}` (`userId`)"
           }
         ],
         "foreignKeys": [
@@ -300,8 +300,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "DairyEntryTagCrossRef",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` INTEGER NOT NULL, `tagNumber` INTEGER NOT NULL, PRIMARY KEY(`entryId`, `tagNumber`), FOREIGN KEY(`tagNumber`) REFERENCES `Tag`(`tagNumber`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`tagNumber`) REFERENCES `DairyEntryInfo`(`entryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "tableName": "DiaryEntryTagCrossRef",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` INTEGER NOT NULL, `tagNumber` INTEGER NOT NULL, PRIMARY KEY(`entryId`, `tagNumber`), FOREIGN KEY(`tagNumber`) REFERENCES `Tag`(`tagNumber`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`tagNumber`) REFERENCES `DiaryEntryInfo`(`entryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "entryId",
@@ -325,12 +325,12 @@
         },
         "indices": [
           {
-            "name": "index_DairyEntryTagCrossRef_tagNumber",
+            "name": "index_DiaryEntryTagCrossRef_tagNumber",
             "unique": false,
             "columnNames": [
               "tagNumber"
             ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_DairyEntryTagCrossRef_tagNumber` ON `${TABLE_NAME}` (`tagNumber`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_DiaryEntryTagCrossRef_tagNumber` ON `${TABLE_NAME}` (`tagNumber`)"
           }
         ],
         "foreignKeys": [
@@ -346,7 +346,7 @@
             ]
           },
           {
-            "table": "DairyEntryInfo",
+            "table": "DiaryEntryInfo",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -359,8 +359,8 @@
         ]
       },
       {
-        "tableName": "DairyEntryBlockInfo",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`blockNum` INTEGER NOT NULL, `parentEntryId` INTEGER NOT NULL, `timeCreated` INTEGER NOT NULL, `type` TEXT NOT NULL, `content` TEXT NOT NULL, `fileId` INTEGER, `order` INTEGER NOT NULL, PRIMARY KEY(`blockNum`), FOREIGN KEY(`parentEntryId`) REFERENCES `DairyEntryInfo`(`entryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "tableName": "DiaryEntryBlockInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`blockNum` INTEGER NOT NULL, `parentEntryId` INTEGER NOT NULL, `timeCreated` INTEGER NOT NULL, `type` TEXT NOT NULL, `content` TEXT NOT NULL, `fileId` INTEGER, `order` INTEGER NOT NULL, PRIMARY KEY(`blockNum`), FOREIGN KEY(`parentEntryId`) REFERENCES `DiaryEntryInfo`(`entryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "blockNum",
@@ -413,17 +413,17 @@
         },
         "indices": [
           {
-            "name": "index_DairyEntryBlockInfo_parentEntryId",
+            "name": "index_DiaryEntryBlockInfo_parentEntryId",
             "unique": false,
             "columnNames": [
               "parentEntryId"
             ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_DairyEntryBlockInfo_parentEntryId` ON `${TABLE_NAME}` (`parentEntryId`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_DiaryEntryBlockInfo_parentEntryId` ON `${TABLE_NAME}` (`parentEntryId`)"
           }
         ],
         "foreignKeys": [
           {
-            "table": "DairyEntryInfo",
+            "table": "DiaryEntryInfo",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -439,7 +439,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd5fdcb9d7fcc4c364c946ca0fc9adb17')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b621ba2ff439c2360b35f9e09a24b8eb')"
     ]
   }
 }

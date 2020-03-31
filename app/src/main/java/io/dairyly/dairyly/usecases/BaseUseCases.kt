@@ -1,35 +1,52 @@
 package io.dairyly.dairyly.usecases
 
+import android.annotation.SuppressLint
+import androidx.lifecycle.LiveDataReactiveStreams
 import io.dairyly.dairyly.data.Resource
 import io.dairyly.dairyly.data.Status
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+
+import java.io.PrintWriter
+import java.io.StringWriter
+import java.util.function.Consumer
 
 class RxUseCaseProcedure<T>(
         private val operation: Flowable<T>,
         private val mapPredicate: ((T) -> T)?) {
 
+    @SuppressLint("CheckResult")
     fun proceed(): Flowable<Resource<T>> {
 
-        var a = operation.observeOn(AndroidSchedulers.mainThread())
+        val publishSubject = PublishProcessor.create<Resource<T>>()
+
+        var a = operation
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
 
         if(mapPredicate != null) {
             a = a.map(mapPredicate)
         }
 
-        return a.map {
-                    Resource.loading(it, null)
-                }
-                .doOnError {
-                    Resource.error(null,
-                                   it.message)
-                }
-                .map {
-                    it.status = Status.SUCCESS
-                    it
-                }
+        a.map { Resource.loading(it, null) }
+                .subscribe({
+                               it.status = Status.SUCCESS
+                               publishSubject.offer(it)
+                           }, {
+                                it.printStackTrace()
+
+                                val stringWriter = StringWriter()
+                                it.printStackTrace(PrintWriter(stringWriter))
+                                publishSubject.onNext(
+                                        Resource.error(
+                                                null, stringWriter.toString()))
+                           }, {
+                                publishSubject.onComplete()
+                           })
+        return publishSubject.toObservable().toFlowable(BackpressureStrategy.BUFFER)
     }
 }
 

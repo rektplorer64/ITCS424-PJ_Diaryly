@@ -13,7 +13,7 @@ import kotlinx.coroutines.runBlocking
 
 @Database(
         entities = [UserDetail::class, UserFile::class, UserDetailFileCrossRef::class,
-            DairyEntryInfo::class, Tag::class, DairyEntryTagCrossRef::class, DairyEntryBlockInfo::class],
+            DiaryEntryInfo::class, Tag::class, DiaryEntryTagCrossRef::class, DiaryEntryBlockInfo::class],
         version = 1)
 @TypeConverters(DateConverter::class, UserFileTypeConverter::class, FileConverter::class, GoodBadConverter::class, BlockTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -53,6 +53,30 @@ abstract class AppDatabase : RoomDatabase() {
 fun AppDatabase.populateDatabase(gen: DairylyGenerator){
 
     val db = this
+
+    runBlocking{
+        val userDao = db.userInfoDao()
+        userDao.insert(*gen.users.toTypedArray())
+
+        val enFileDao = db.userFileDao()
+        enFileDao.insert(*gen.files.toTypedArray())
+
+        val dairyEntryDao = db.dairyEntryDao()
+        dairyEntryDao.insert(*gen.entries.toTypedArray())
+
+        val dairyEntryBlockInfoDao = db.enDairyEntryBlockInfoDao()
+        dairyEntryBlockInfoDao.insert(*gen.entryBlocks.toTypedArray())
+
+        val tagDao = db.enTagDao()
+        tagDao.insert(*gen.tags.toTypedArray())
+
+        tagDao.insert(*gen.entryTagsCrossRefs.toTypedArray())
+    }
+}
+
+fun DairyRepository.populateDatabase(gen: DairylyGenerator){
+
+    val db = this.database.value
 
     runBlocking{
         val userDao = db.userInfoDao()

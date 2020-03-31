@@ -9,7 +9,7 @@ import java.util.*
                                   childColumns = ["userId"],
                                   onDelete = CASCADE)],
         indices = [Index("userId")])
-data class DairyEntryInfo(
+data class DiaryEntryInfo(
         @PrimaryKey(autoGenerate = true)
         val entryId: Int,
         val userId: Int,
@@ -37,43 +37,43 @@ data class Tag(
                        parentColumns = ["tagNumber"],
                        childColumns = ["tagNumber"],
                        onDelete = CASCADE),
-            ForeignKey(entity = DairyEntryInfo::class,
+            ForeignKey(entity = DiaryEntryInfo::class,
                        parentColumns = ["entryId"],
                        childColumns = ["tagNumber"],
                        onDelete = CASCADE)
         ])
-data class DairyEntryTagCrossRef(
+data class DiaryEntryTagCrossRef(
         val entryId: Int,
         val tagNumber: Int
 )
 
 data class DiaryEntry(
         @Embedded
-        val info: DairyEntryInfo,
+        val info: DiaryEntryInfo,
 
         @Relation(
                 parentColumn = "entryId",
                 entityColumn = "tagNumber",
                 entity = Tag::class,
-                associateBy = Junction(DairyEntryTagCrossRef::class)
+                associateBy = Junction(DiaryEntryTagCrossRef::class)
         )
         val tags: List<Tag>,
 
         @Relation(
                 parentColumn = "entryId",
-                entity = DairyEntryBlockInfo::class,
+                entity = DiaryEntryBlockInfo::class,
                 entityColumn = "parentEntryId"
         )
-        val blockInfo: List<DairyEntryBlockInfo>
+        val blockInfo: List<DiaryEntryBlockInfo>
 )
 
 
-@Entity(foreignKeys = [ForeignKey(entity = DairyEntryInfo::class,
+@Entity(foreignKeys = [ForeignKey(entity = DiaryEntryInfo::class,
                                   parentColumns = ["entryId"],
                                   childColumns = ["parentEntryId"],
                                   onDelete = CASCADE)],
         indices = [Index("parentEntryId")])
-data class DairyEntryBlockInfo(
+data class DiaryEntryBlockInfo(
         @PrimaryKey
         val blockNum: Int,
 

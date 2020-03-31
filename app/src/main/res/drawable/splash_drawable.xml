@@ -1,5 +1,4 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
-
     <!-- The white background color as one in Amazon, YouTube, or Drive app -->
     <item android:drawable="@color/darkSlateGray"/>
 
