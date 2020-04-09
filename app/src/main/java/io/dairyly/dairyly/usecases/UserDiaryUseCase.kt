@@ -7,11 +7,10 @@ import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.data.models.DiaryEntry
 import io.dairyly.dairyly.data.models.DiaryEntryInfo
 import io.dairyly.dairyly.data.models.User
+import io.dairyly.dairyly.models.DiaryRepo
 import io.dairyly.dairyly.utils.getDayRange
 import io.reactivex.Flowable
 import io.reactivex.Single
-import org.apache.commons.lang3.time.DateUtils
-import java.time.Instant
 import java.util.*
 
 class UserDiaryUseCase(private val repo: DairyRepository) {
@@ -49,6 +48,10 @@ class UserDiaryUseCase(private val repo: DairyRepository) {
                                           })
                 .proceed()
         // return repo.database.value.dairyEntryDao().update(entry)
+    }
+
+    fun getDiaryEntry(): Flowable<Resource<List<io.dairyly.dairyly.models.data.DiaryEntry>>>{
+        return RxUseCaseProcedure(DiaryRepo.retrieveAllEntry(), null).proceed()
     }
 
     fun getGoodBadScoreInDay(userId: Int, day: Date): Flowable<Resource<Int>> {

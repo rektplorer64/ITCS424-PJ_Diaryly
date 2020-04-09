@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "335232004519",
+    "firebase_url": "https://diaryly-52a2c.firebaseio.com",
+    "project_id": "diaryly-52a2c",
+    "storage_bucket": "diaryly-52a2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335232004519:android:daf720e5e4ad434a2d4682",
+        "android_client_info": {
+          "package_name": "io.dairyly.dairyly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "335232004519-ranor4u0p4hsnufo76dkasb3cjt5rbj9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKMQeFbuK_vYBaq7n9dtA5DT2PZ5EKLOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "335232004519-ranor4u0p4hsnufo76dkasb3cjt5rbj9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

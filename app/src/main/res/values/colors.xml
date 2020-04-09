@@ -41,6 +41,9 @@
     <color name="blackAlpha60">#99000000</color>
     <color name="whiteAlpha35">#59FFFFFF</color>
     <color name="blackAlpha15">#26000000</color>
+    <color name="errorRed">#AD0000</color>
+    <color name="whiteAlpha50">#80FFFFFF</color>
+    <color name="whiteAlpha60">#99FFFFFF</color>
 
 
 </resources>

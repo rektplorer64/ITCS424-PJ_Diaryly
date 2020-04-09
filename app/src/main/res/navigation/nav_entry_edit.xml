@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/entry_edit_navigation.xml"
+    app:startDestination="@id/entryEditFragment">
+    <fragment
+        android:id="@+id/entryEditFragment"
+        android:name="io.dairyly.dairyly.screens.entry.EntryEditFragment"
+        android:label="EntryEditFragment" >
+        <action
+            android:id="@+id/action_entryEditFragment_to_locationActivity"
+            app:destination="@id/locationActivity"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:launchSingleTop="true" />
+    </fragment>
+
+    <activity
+        android:id="@+id/locationActivity"
+        android:name="io.dairyly.dairyly.screens.LocationActivity"
+        android:label="LocationActivity">
+        <argument
+            android:name="coordinateLat"
+            app:argType="float"/>
+
+        <argument
+            android:name="coordinateLong"
+            app:argType="float"/>
+    </activity>
+</navigation>

@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".EntryActivity">
+        tools:context=".screens.entry.EntryActivity">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/editNavHostFragment"
@@ -19,6 +19,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/entry_edit_navigation" />
+            app:navGraph="@navigation/nav_entry_view" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

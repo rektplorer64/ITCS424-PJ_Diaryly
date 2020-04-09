@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Diaryly</string>
-    <string name="dairy">Diary</string>
+    <string name="app_name" translatable="false">Diaryly</string>
+    <string name="diary">Diary</string>
     <string name="dashboard">Dashboard</string>
     <string name="overview">Overview</string>
     <string name="search">Search</string>
@@ -9,4 +9,73 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_an_entry">Create an entry</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="diaryly_logo">Diaryly Logo</string>
+    <string name="login_to_diaryly">Login to Diaryly</string>
+    <string name="haven_t_sign_up_yet">Haven\'t Sign up yet?</string>
+    <string name="sign_up_here">Sign up here</string>
+    <string name="log_in_with_email">Log in with Email</string>
+    <string name="log_in_with_google">Log in with google</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="email_login_hint">An email associated with a Diaryly account</string>
+    <string name="email">Email</string>
+    <string name="back">Back</string>
+    <string name="password">Password</string>
+    <string name="password_login_hint">The password associated with the email</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="hint_password_enter_again">Enter your password again</string>
+    <string name="hint_password_repeat_register">Confirm your password</string>
+    <string name="hint_password_register">At least 6 characters</string>
+    <string name="register_a_new_account">Register a new Diaryly Account</string>
+    <string name="tell_us_your_email">Tell us your Email Address</string>
+    <string name="error_email_invalid_already_taken">This Email has already been taken! :(</string>
+    <string name="email_is_ready">You can use this email!</string>
+    <string name="register_passwords_not_identical">The passwords are not identical!</string>
+    <string name="register_password_too_short">The length must be greater than 6 characters!</string>
+    <string name="password_error_no_space">A password cannot contain a white space.</string>
+    <string name="password_error_null">You haven\'t enter any password!</string>
+    <string name="password_error_too_short">A password must have at least 6 characters.</string>
+    <string name="password_error_too_long">A password must have at most 30 characters.</string>
+    <string name="specify_your_password">Specify your password</string>
+    <string name="login_enter_email_password">Enter your Email and Password</string>
+    <string name="error">Error</string>
+    <string name="logged_in">Logged in the user</string>
+    <string name="password_valid">The Password is valid!</string>
+    <string name="error_sorry_cant_login">Can\'t log you in, sorry!</string>
+    <string name="title">Title</string>
+    <string name="subtitle">Subtitle</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_edit_entry_title">Edit Entry\'s Title</string>
+    <string name="dialog_add_entry_tag">Add an Entry\'s Tag</string>
+    <string name="entry_title">Entry\'s Title</string>
+    <string name="entry_tag">Entry\'s Tag</string>
+    <string name="dialog_edit_entry_subtitle">Edit Entry\'s Subtitle</string>
+    <string name="entry_subtitle">Entry\'s Subtitle</string>
+    <string name="untitled">Untitled</string>
+    <string name="hint_start_typing">Tell us the memory you want to keep forever</string>
+    <string name="action_add_tag">Add a Tag</string>
+    <string name="status_saved">Save successfully!</string>
+    <string name="dialog_remove_the_image">Remove the selected image?</string>
+    <string name="dialog_save_the_entry">Save the entry?</string>
+    <string name="title_activity_location">Map</string>
+    <string name="permission_request_location">Please give us permission to access the location!</string>
+    <string name="associated_location">Associated Location</string>
+    <string name="entry_tags">Entry tags</string>
+    <string name="confirm_selection">Confirm Selection</string>
+    <string name="dialog_exit_location_selector">Exit the location selector?</string>
+    <string name="dialog_confirm_selected_location">Confirm the selected location?</string>
+    <string name="location_saved">Location saved!</string>
+    <string name="title_entry_create">Create a diary entry</string>
+    <string name="login_has_account_already">Already have an account?</string>
+    <string name="login_here">Login here</string>
+    <string name="login_error_too_many_attempts">Too many login attempts!</string>
 </resources>

@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
-import io.dairyly.dairyly.EntryActivityArgs
 import io.dairyly.dairyly.R
 import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.data.models.DiaryEntry
 import io.dairyly.dairyly.databinding.CardNormalDiaryBinding
+import io.dairyly.dairyly.screens.entry.EntryActivityArgs
 import java.text.SimpleDateFormat
 
 
@@ -64,7 +64,7 @@ class DairyRvAdapter(val diaryDateHolder: DiaryDateHolder) : ListAdapter<DiaryEn
                 for(element in item.tags) {
                     this.addView((LayoutInflater
                             .from(context)
-                            .inflate(R.layout.chip_diary, null, false) as Chip)
+                            .inflate(R.layout.chip_tag, null, false) as Chip)
                                          .apply {
                                              setChipDrawable(
                                                      ChipDrawable

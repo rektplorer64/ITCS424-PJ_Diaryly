@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.CardView"
         app:cardBackgroundColor="@color/white"
+        android:clipChildren="true"
         app:cardElevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,13 +40,11 @@
                 android:fillViewport="true"
                 android:overScrollMode="always"
                 android:paddingTop="@dimen/spacing_8dp"
-
                 android:paddingBottom="@dimen/spacing_8dp"
                 android:requiresFadingEdge="horizontal"
                 app:layout_constraintEnd_toStartOf="@id/view_guide"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/dateTextView"
-
                 app:tabIndicatorHeight="0dp"
                 app:tabMaxWidth="64dp"
                 app:tabMinWidth="34dp"
@@ -54,7 +53,6 @@
                 app:tabPaddingEnd="4dp"
                 app:tabPaddingStart="4dp"
                 app:tabPaddingTop="0dp"
-
                 app:tabRippleColor="@color/colorPrimary"
                 app:tabUnboundedRipple="true" />
 

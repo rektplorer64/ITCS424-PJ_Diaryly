@@ -8,10 +8,9 @@ import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.ui.components.DAY_TIME_WINDOW
 import io.dairyly.dairyly.usecases.UserDiaryUseCase
 import io.dairyly.dairyly.utils.addDays
+import io.dairyly.dairyly.utils.zipLiveData
 import org.apache.commons.lang3.time.DateUtils
-import java.io.Serializable
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.math.ceil
 
 class DiaryDateViewModel(repository: DairyRepository, private val rawUserId: Int) : ViewModel() {
@@ -66,9 +65,9 @@ class DiaryDateViewModel(repository: DairyRepository, private val rawUserId: Int
 
             Log.d(this::class.java.simpleName, "GoodBad Score Retrieved from DB: $dbResource")
             array.sort()
-            for(dateHolderRes in dbResource.data!!){
+            for(dateHolderRes in dbResource.data!!) {
                 val targetIndex = array.indexOf(dateHolderRes)
-                if(targetIndex >= 0){
+                if(targetIndex >= 0) {
                     array[targetIndex].goodBadScore = dateHolderRes.goodBadScore
                 }
             }
@@ -90,25 +89,3 @@ class DiaryDateViewModel(repository: DairyRepository, private val rawUserId: Int
     }
 }
 
-fun <A, B, C> zipLiveData(a: LiveData<A>, b: LiveData<B>, predicate: (A, B) -> C): LiveData<C> {
-    return MediatorLiveData<C>().apply {
-        var lastA: A? = null
-        var lastB: B? = null
-
-        fun update() {
-            val localLastA = lastA
-            val localLastB = lastB
-            if(localLastA != null && localLastB != null)
-                this.value = predicate(localLastA, localLastB)
-        }
-
-        addSource(a) {
-            lastA = it
-            update()
-        }
-        addSource(b) {
-            lastB = it
-            update()
-        }
-    }
-}

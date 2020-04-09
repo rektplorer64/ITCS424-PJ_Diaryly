@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="androidx.constraintlayout.widget.ConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="0dp"
+    android:backgroundTint="@color/colorPrimaryDark"
+    android:textColor="@color/white"
+    app:closeIconEnabled="true"
+    app:closeIconVisible="true"
+    tools:text="asdsad">
+
+</com.google.android.material.chip.Chip>

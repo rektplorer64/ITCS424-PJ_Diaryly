@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation.xml"
+    app:startDestination="@id/diaryFragment">
+
+    <fragment
+        android:id="@+id/diaryFragment"
+        android:name="io.dairyly.dairyly.screens.main.DiaryFragment"
+        android:label="DairyHome"
+        tools:layout="@layout/fragment_diary">
+        <action
+            android:id="@+id/moreEntryDetailAction"
+            app:destination="@id/entryActivityEnt"
+            app:launchSingleTop="true"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"/>
+        <action
+            android:id="@+id/action_diaryFragment_to_entryEditActivity"
+            app:destination="@id/entryEditActivity"
+            app:launchSingleTop="true"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="io.dairyly.dairyly.screens.main.DashboardFragment"
+        android:label="DashboardHome"
+        tools:layout="@layout/fragment_diary" />
+    <activity
+        android:id="@+id/entryActivityEnt"
+        android:name="io.dairyly.dairyly.screens.entry.EntryActivity"
+        android:label="EntryActivity" >
+        <argument
+            android:name="entryId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+        <argument
+            android:name="userId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+        <argument
+            android:name="diaryDateHolder"
+            app:nullable="true"
+            app:argType="io.dairyly.dairyly.data.models.DiaryDateHolder" />
+    </activity>
+    <activity
+        android:id="@+id/entryEditActivity"
+        android:name="io.dairyly.dairyly.screens.entry.EntryEditActivity"
+        android:label="EntryEditActivity" />
+
+</navigation>

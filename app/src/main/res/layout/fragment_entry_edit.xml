@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootCoordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:expanded="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:liftOnScrollTargetViewId="@id/diaryRecyclerView">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:animateLayoutChanges="true"
+            app:collapsedTitleTextAppearance="@android:color/white"
+            app:contentScrim="@color/colorPrimaryDark"
+            app:expandedTitleMarginStart="72dp"
+            app:expandedTitleTextAppearance="@android:color/black"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="Hello"
+            app:titleEnabled="false">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/heroImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.5" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/overlayImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/gradient_image_overlay"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.5" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="256dp"
+                android:layout_marginBottom="@dimen/margin_xlarge_48">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/google_sans_medium"
+                    android:paddingStart="72dp"
+                    android:paddingTop="@dimen/margin_med_16"
+                    android:paddingEnd="@dimen/margin_med_16"
+                    android:text="@string/placeholder"
+                    android:textColor="@color/colorAccent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="February, 2020" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/view_guide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent=".60" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/view_guide2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent=".85" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/titleTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="72dp"
+                    android:backgroundTint="@color/blackAlpha15"
+                    android:fontFamily="@font/google_sans_medium"
+                    android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                    android:inputType="textMultiLine"
+                    android:maxLength="30"
+                    android:maxLines="3"
+                    android:minLines="1"
+                    android:paddingTop="@dimen/margin_small_8"
+                    android:text="Android Test"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/headline2"
+                    app:layout_constraintEnd_toStartOf="@id/view_guide2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dateTextView"
+                    tools:text="Coming-back-to-doing-some-good-again day" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/titleEditBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    android:scaleX=".5"
+                    android:scaleY=".5"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:tint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/titleTextView"
+                    app:layout_constraintStart_toEndOf="@id/titleTextView"
+                    app:layout_constraintTop_toTopOf="@id/titleTextView" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/subtitleTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="72dp"
+                    android:layout_marginBottom="16dp"
+                    android:backgroundTint="@color/blackAlpha15"
+                    android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                    android:maxLines="2"
+                    android:paddingTop="@dimen/margin_small_8"
+                    android:text="@string/placeholder"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintEnd_toStartOf="@id/view_guide2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/titleTextView" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/subtitleEditBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:padding="4dp"
+                    android:scaleX=".5"
+                    android:scaleY=".5"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:tint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/subtitleTextView"
+                    app:layout_constraintStart_toEndOf="@id/titleTextView"
+                    app:layout_constraintTop_toTopOf="@id/subtitleTextView" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/Theme.MaterialComponents.Light.DarkActionBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:elevation="0dp"
+                app:layout_collapseMode="pin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:title="@string/title_entry_create"
+                app:titleTextColor="@android:color/white"
+                app:navigationIcon="@drawable/ic_close_white_24dp" />
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tagOverlineText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/margin_large_24"
+                    android:layout_marginTop="@dimen/margin_large_24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.MaterialComponents.Overline"
+                    android:text="@string/entry_tags"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/tagEditContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_large_24"
+                    android:animateLayoutChanges="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tagOverlineText"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/locationOverlineText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/margin_large_24"
+                    android:layout_marginTop="@dimen/margin_large_24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.MaterialComponents.Overline"
+                    android:text="@string/associated_location"
+                    android:layout_marginBottom="@dimen/margin_small_8"
+                    app:layout_constraintTop_toBottomOf="@id/tagEditContainer"/>
+
+                <ProgressBar
+                    android:id="@+id/progressMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/locationOverlineText"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:indeterminateOnly="true"/>
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:tag="mapPreview"
+                    app:layout_constraintTop_toBottomOf="@id/progressMap"
+                    tools:context=".screens.LocationActivity"
+                    android:foreground="?android:attr/selectableItemBackgroundBorderless" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/diaryTextEditor"
+                    style="@null"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="start|top"
+                    android:hint="@string/hint_start_typing"
+                    android:paddingHorizontal="@dimen/margin_large_24"
+                    android:paddingTop="@dimen/margin_large_24"
+                    android:paddingBottom="128dp"
+                    android:textColorHint="@color/blackAlpha50"
+                    android:typeface="serif"
+                    app:layout_constraintTop_toBottomOf="@id/map" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveBtn"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_med_16"
+        android:layout_marginBottom="@dimen/margin_med_16"
+        app:backgroundTint="@color/colorPrimary"
+        app:borderWidth="0dp"
+        app:layout_anchor="@id/frameLayout"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/ic_check_white_24dp"
+        app:tint="@color/blackAlpha60" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/imageBtn"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/margin_med_16"
+        android:layout_marginBottom="81dp"
+        app:backgroundTint="@android:color/white"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        app:layout_anchor="@id/saveBtn"
+        app:layout_anchorGravity="top|center"
+        app:srcCompat="@drawable/ic_image_add_black_24dp"
+        app:tint="@color/blackAlpha60" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/tagBtn"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/margin_med_16"
+        android:layout_marginBottom="136dp"
+        app:backgroundTint="@android:color/white"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        app:layout_anchor="@id/imageBtn"
+        app:layout_anchorGravity="top|center"
+        app:srcCompat="@drawable/ic_tag_add_black_24dp"
+        app:tint="@color/blackAlpha60" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

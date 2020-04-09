@@ -7,7 +7,7 @@ xmlns:tools="http://schemas.android.com/tools">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EntryActivity"
+    tools:context=".screens.entry.EntryActivity"
     android:background="@color/darkSlateGray">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -60,7 +60,7 @@ xmlns:tools="http://schemas.android.com/tools">
             </com.google.android.material.appbar.AppBarLayout>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/diaryTextView"
+                android:id="@+id/diaryTextEditor"
                 android:layout_width="match_parent"
                 android:padding="24dp"
                 android:layout_height="match_parent"

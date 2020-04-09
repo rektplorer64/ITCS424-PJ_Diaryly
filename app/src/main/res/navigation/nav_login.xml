@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_navigation.xml"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="io.dairyly.dairyly.screens.oobe.login.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_loginEmailFragment"
+            app:destination="@id/loginEmailFragment"
+            app:launchSingleTop="true"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/action_loginFragment_to_registerEmailFragment"
+            app:destination="@id/registerEmailFragment"
+            app:launchSingleTop="true"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"/>
+        <action
+            android:id="@+id/action_loginFragment_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"
+            app:popUpTo="@id/mainActivity"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/loginEmailFragment"
+        android:name="io.dairyly.dairyly.screens.oobe.login.LoginEmailFragment"
+        android:label="LoginEmailFragment"
+        tools:layout="@layout/fragment_login_email">
+        <action
+            android:id="@+id/action_loginEmailFragment_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:launchSingleTop="true"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"
+            app:popUpTo="@id/mainActivity"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_loginEmailFragment_to_registerEmailFragment"
+            app:destination="@id/registerEmailFragment"
+            app:launchSingleTop="true"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/registerEmailFragment"
+        android:name="io.dairyly.dairyly.screens.oobe.register.RegisterEmailFragment"
+        android:label="RegisterEmailFragment"
+        tools:layout="@layout/fragment_register_email">
+        <action
+            android:id="@+id/action_registerEmailFragment_to_registerPasswordFragment"
+            app:destination="@id/registerPasswordFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"
+            app:launchSingleTop="true" />
+        <action
+            android:id="@+id/action_registerEmailFragment_to_loginEmailFragment"
+            app:destination="@id/loginEmailFragment"
+            app:launchSingleTop="true"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerPasswordFragment"
+        android:name="io.dairyly.dairyly.screens.oobe.register.RegisterPasswordFragment"
+        android:label="RegisterPasswordFragment"
+        tools:layout="@layout/fragment_register_password">
+        <action
+            android:id="@+id/action_registerPasswordFragment_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"
+            app:popUpTo="@id/mainActivity"
+            app:launchSingleTop="true" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="io.dairyly.dairyly.screens.main.MainActivity"
+        android:label="MainActivity">
+        <argument
+            android:name="uid"
+            android:defaultValue="Aa"
+            app:argType="string" />
+    </activity>
+</navigation>
