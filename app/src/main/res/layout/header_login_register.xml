@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/headerTextView"
+        android:id="@+id/defaultHeaderText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -42,6 +42,6 @@
         app:firstBaselineToTopHeight="@dimen/margin_large_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerTextView" />
+        app:layout_constraintTop_toBottomOf="@id/defaultHeaderText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

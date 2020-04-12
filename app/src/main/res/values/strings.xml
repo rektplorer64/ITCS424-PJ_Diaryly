@@ -78,4 +78,6 @@
     <string name="login_has_account_already">Already have an account?</string>
     <string name="login_here">Login here</string>
     <string name="login_error_too_many_attempts">Too many login attempts!</string>
+    <string name="debug_android_test">Android Test</string>
+    <string name="template_dot_2_messages">%1$s • %2$s</string>
 </resources>

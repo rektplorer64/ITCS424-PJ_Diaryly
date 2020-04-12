@@ -75,7 +75,7 @@
         android:id="@+id/textContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="start"
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/margin_med_16"
         app:layout_constraintEnd_toEndOf="parent"

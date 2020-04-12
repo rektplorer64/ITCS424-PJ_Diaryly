@@ -1,25 +1,20 @@
 package io.dairyly.dairyly.screens.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.dairyly.dairyly.R
 import io.dairyly.dairyly.data.DairyRepository
 import io.dairyly.dairyly.data.models.DiaryDateHolder
-import io.dairyly.dairyly.screens.entry.EntryEditActivity
 import io.dairyly.dairyly.ui.adapter.DairyRvAdapter
 import io.dairyly.dairyly.utils.AppViewModelFactory
 import io.dairyly.dairyly.viewmodels.DiaryViewModel
-import kotlinx.android.synthetic.main.fragment_diary.*
 import kotlinx.android.synthetic.main.fragment_diary_list.*
 
 class DiaryListFragment : Fragment() {
@@ -34,8 +29,7 @@ class DiaryListFragment : Fragment() {
         var userId: Int?
 
         arguments!!.apply{
-            getSerializable(
-                    BUNDLE_DIARY_DATE_HOLDER).let {
+            getSerializable(BUNDLE_DIARY_DATE_HOLDER).let {
                 dataHolder = it as DiaryDateHolder
             }
             getInt(BUNDLE_USER_ID).let {

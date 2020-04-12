@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -20,7 +19,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.buttons_login_register.*
 import kotlinx.android.synthetic.main.fragment_register_email.*
 import kotlinx.android.synthetic.main.header_login_register.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -35,7 +33,7 @@ class RegisterEmailFragment : Fragment() {
                 RegisterViewModel::class.java)
 
         // Set the page header
-        headerTextView.text = getString(
+        defaultHeaderText.text = getString(
                 R.string.register_a_new_account)
         subtitleTextView.text = getString(
                 R.string.tell_us_your_email)

@@ -32,7 +32,7 @@ class DiaryDateHolderViewModelTest {
 
     @Test
     fun getDateListLiveData() {
-        val a = testDiaryDateVm.dateHolderListLiveData.getOrAwaitValue()
+        val a = testDiaryDateVm.dateHolders.getOrAwaitValue()
         assert(a.isNotEmpty())
     }
 

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/dateTextView"
+                android:id="@+id/defaultOverlineText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/google_sans_medium"
@@ -32,7 +32,7 @@
 
             <view
                 android:id="@+id/date_tabs"
-                class="io.dairyly.dairyly.ui.components.DiaryCalendarBar$FadingTabLayout"
+                class="io.dairyly.dairyly.ui.components.RylyToolbarView$FadingTabLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fadingEdge="horizontal"
@@ -44,7 +44,7 @@
                 android:requiresFadingEdge="horizontal"
                 app:layout_constraintEnd_toStartOf="@id/view_guide"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dateTextView"
+                app:layout_constraintTop_toBottomOf="@id/defaultOverlineText"
                 app:tabIndicatorHeight="0dp"
                 app:tabMaxWidth="64dp"
                 app:tabMinWidth="34dp"
@@ -71,7 +71,7 @@
                 app:layout_constraintGuide_percent=".80" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/bigTextView"
+                android:id="@+id/defaultHeaderText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/google_sans_medium"
@@ -93,7 +93,7 @@
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintEnd_toStartOf="@id/view_guide2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bigTextView"
+                app:layout_constraintTop_toBottomOf="@id/defaultHeaderText"
                 android:textColor="@color/blackAlpha60"
                 tools:text="Today"
                 android:paddingBottom="16dp" />

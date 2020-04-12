@@ -46,7 +46,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".screens.entry.EntryActivity"
+            android:name=".screens.entry.EntryDisplayActivity"
             android:launchMode="singleTop" />
         <activity android:name=".screens.main.MainActivity" />
         <activity android:name=".screens.entry.EntryEditActivity" />

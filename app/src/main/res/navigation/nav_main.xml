@@ -36,17 +36,12 @@
         tools:layout="@layout/fragment_diary" />
     <activity
         android:id="@+id/entryActivityEnt"
-        android:name="io.dairyly.dairyly.screens.entry.EntryActivity"
+        android:name="io.dairyly.dairyly.screens.entry.EntryDisplayActivity"
         android:label="EntryActivity" >
         <argument
             android:name="entryId"
             android:defaultValue="-1"
-            app:argType="integer" />
-
-        <argument
-            android:name="userId"
-            android:defaultValue="-1"
-            app:argType="integer" />
+            app:argType="string" />
 
         <argument
             android:name="diaryDateHolder"

@@ -13,13 +13,12 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import io.dairyly.dairyly.R
 import io.dairyly.dairyly.data.models.DiaryDateHolder
-import io.dairyly.dairyly.data.models.DiaryEntry
 import io.dairyly.dairyly.databinding.CardNormalDiaryBinding
-import io.dairyly.dairyly.screens.entry.EntryActivityArgs
+import io.dairyly.dairyly.screens.entry.EntryDisplayActivityArgs
 import java.text.SimpleDateFormat
 
 
-class DairyRvAdapter(val diaryDateHolder: DiaryDateHolder) : ListAdapter<DiaryEntry, DairyRvAdapter.DairyViewHolder>(
+class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder) : ListAdapter<io.dairyly.dairyly.models.data.DiaryEntry, DairyRvAdapter.DairyViewHolder>(
         DiaryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DairyViewHolder {
@@ -36,19 +35,19 @@ class DairyRvAdapter(val diaryDateHolder: DiaryDateHolder) : ListAdapter<DiaryEn
         holder.itemViewBinding.apply {
 
             root.setOnClickListener {
-                val b = EntryActivityArgs(item.info.entryId, item.info.userId, diaryDateHolder)
+                val b = EntryDisplayActivityArgs(item.id, diaryDateHolder)
                 it.findNavController().navigate(R.id.moreEntryDetailAction, b.toBundle())
             }
 
             detailTextView.apply {
                 // text = item.info.toString()
-                if(item.blockInfo.isNotEmpty()) {
+                if(item.title.isNotEmpty()) {
                     // val precomputedTextParams: PrecomputedTextCompat.Params = TextViewCompat.getTextMetricsParams(this)
                     // val precomputedText = PrecomputedTextCompat.create(item.blockInfo[0].content, precomputedTextParams)
                     // TextViewCompat.setPrecomputedText(this, precomputedText)
 
                     this.setTextFuture(PrecomputedTextCompat.getTextFuture(
-                            item.blockInfo[0].content,
+                            item.title,
                             TextViewCompat.getTextMetricsParams(this) /* Do not change TextView property after this line */,
                             /*optional custom executor*/ null))
                 }
@@ -57,7 +56,7 @@ class DairyRvAdapter(val diaryDateHolder: DiaryDateHolder) : ListAdapter<DiaryEn
             overlineTextView.apply {
                 val dateFormat = SimpleDateFormat("hh:mm dd/MM/YYYY",
                                                   this.context.resources.configuration.locales[0])
-                text = dateFormat.format(item.info.timeCreated)
+                text = dateFormat.format(item.timeCreated)
             }
 
             tagChipGroup.apply {
@@ -71,7 +70,7 @@ class DairyRvAdapter(val diaryDateHolder: DiaryDateHolder) : ListAdapter<DiaryEn
                                                              .createFromAttributes(context,
                                                                                    null, 0,
                                                                                    R.style.Widget_MaterialComponents_Chip_Action))
-                                             text = element.string
+                                             text = element.title
                                          })
                 }
             }
@@ -82,12 +81,12 @@ class DairyRvAdapter(val diaryDateHolder: DiaryDateHolder) : ListAdapter<DiaryEn
     class DairyViewHolder(val itemViewBinding: CardNormalDiaryBinding) :
             RecyclerView.ViewHolder(itemViewBinding.root)
 
-    private class DiaryDiffCallback : DiffUtil.ItemCallback<DiaryEntry>() {
-        override fun areItemsTheSame(oldItem: DiaryEntry, newItem: DiaryEntry): Boolean {
-            return oldItem.info.entryId == newItem.info.entryId
+    private class DiaryDiffCallback : DiffUtil.ItemCallback<io.dairyly.dairyly.models.data.DiaryEntry>() {
+        override fun areItemsTheSame(oldItem: io.dairyly.dairyly.models.data.DiaryEntry, newItem: io.dairyly.dairyly.models.data.DiaryEntry): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: DiaryEntry, newItem: DiaryEntry): Boolean {
+        override fun areContentsTheSame(oldItem: io.dairyly.dairyly.models.data.DiaryEntry, newItem: io.dairyly.dairyly.models.data.DiaryEntry): Boolean {
             return oldItem == newItem
         }
     }

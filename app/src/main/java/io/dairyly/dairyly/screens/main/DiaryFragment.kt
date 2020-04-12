@@ -9,19 +9,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import io.dairyly.dairyly.R
 import io.dairyly.dairyly.data.models.DiaryDateHolder
-import io.dairyly.dairyly.ui.components.DiaryCalendarBar
-import io.dairyly.dairyly.ui.components.DiaryCalendarBar.Companion.BEHAVIOR_DIARY_DATE
+import io.dairyly.dairyly.ui.components.RylyTabDateDelegate
+import io.dairyly.dairyly.ui.components.RylyToolbarView
 import io.dairyly.dairyly.viewmodels.DiaryDateViewModel
 import kotlinx.android.synthetic.main.fragment_diary.*
 import org.apache.commons.lang3.time.DateUtils
 import java.util.*
 
 class DiaryFragment : Fragment() {
-
-    private val VIEW_PAGER_OFFSCREEN_PAGE_LIMIT: Int = 5
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -31,15 +30,15 @@ class DiaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val userId = 1
-        val diaryDateViewModel: DiaryDateViewModel = ViewModelProvider(
+        val viewModel: DiaryDateViewModel = ViewModelProvider(
                 this@DiaryFragment.activity!!).get(DiaryDateViewModel::class.java)
 
-        val calendarBar: DiaryCalendarBar<DiaryDateHolder> = view.findViewById<DiaryCalendarBar<DiaryDateHolder>>(
+        val calendarBar: RylyToolbarView<DiaryDateHolder> = view.findViewById<RylyToolbarView<DiaryDateHolder>>(
                 R.id.calendarBar).apply {
-            this.behaviorBehaviorDelegate = BEHAVIOR_DIARY_DATE
+            behaviorBehaviorDelegate = RylyTabDateDelegate()
         }
-        diaryDateViewModel.dateHolderListLiveData.observe(this) {
-            println(it)
+
+        viewModel.dateHolders.observe(this) {
             val fragmentAdapter = DiaryDateViewPagerAdapter(
                     userId, this, it)
             diaryDateViewPager.apply {
@@ -47,10 +46,9 @@ class DiaryFragment : Fragment() {
                 TabLayoutMediator(calendarBar.tabLayoutWrapper.calendarTab, this) { tab, _ ->
                     this.setCurrentItem(tab.position, true)
                 }.attach()
-                offscreenPageLimit = VIEW_PAGER_OFFSCREEN_PAGE_LIMIT
+                offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
             }
             calendarBar.postDataUpdate(it)
-
         }
         calendarBarLayout.setLiftable(true)
 

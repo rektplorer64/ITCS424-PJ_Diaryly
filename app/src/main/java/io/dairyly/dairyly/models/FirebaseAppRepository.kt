@@ -9,9 +9,9 @@ internal object FirebaseAppRepository {
     private val LOG_TAG = this::class.java.simpleName
 
     val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    internal lateinit var userRoot: DatabaseReference
+    internal var userRoot: DatabaseReference = database.reference.root
 
-    internal fun setUserDatabaseReference(ref: String){
-        userRoot = database.reference.child(ref)
+    internal fun setUserDatabaseReference(uid: String){
+        userRoot = database.reference.child(uid)
     }
 }

@@ -31,7 +31,7 @@ class RegisterPasswordFragment : Fragment() {
                 RegisterViewModel::class.java)
 
         // Set the page header
-        headerTextView.text = getString(
+        defaultHeaderText.text = getString(
                 R.string.register_a_new_account)
         subtitleTextView.text = getString(
                 R.string.specify_your_password)

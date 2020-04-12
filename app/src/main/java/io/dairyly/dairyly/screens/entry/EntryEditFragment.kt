@@ -20,9 +20,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
-import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.input.getInputField
@@ -36,19 +36,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.database.ServerValue
 import es.dmoral.toasty.Toasty
 import io.dairyly.dairyly.R
-import io.dairyly.dairyly.data.models.DiaryEntryInfo
 import io.dairyly.dairyly.models.DiaryRepo
-import io.dairyly.dairyly.models.FirebaseAppRepository
 import io.dairyly.dairyly.models.data.DiaryEntry
+import io.dairyly.dairyly.models.data.DiaryImage
 import io.dairyly.dairyly.models.data.DiaryTag
 import io.dairyly.dairyly.screens.LocationActivity
 import io.dairyly.dairyly.screens.entry.EntryEditFragment.Companion.FILE_READ_ONLY
 import io.dairyly.dairyly.screens.entry.EntryEditorViewModel.Companion.DEFAULT_LOCATION
-import io.dairyly.dairyly.ui.components.DiaryCalendarBar
 import io.dairyly.dairyly.utils.CODE_PERMISSION_FINE_LOCATION
+import io.dairyly.dairyly.utils.TIME_FORMATTER_FULL
 import io.dairyly.dairyly.utils.isGrantedFineLocationPermission
 import io.noties.markwon.Markwon
 import io.noties.markwon.editor.MarkwonEditor
@@ -94,9 +92,13 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        viewModel.entryName.observe(viewLifecycleOwner) {
+        viewModel.title.observe(viewLifecycleOwner) {
             titleTextView.apply {
-                text = it ?: context!!.getString(R.string.untitled)
+                text = if(it.isNullOrBlank()){
+                    context!!.getString(R.string.untitled)
+                }else{
+                    it
+                }
 
                 val textColorRes = when(it) {
                     null -> R.color.whiteAlpha50
@@ -108,7 +110,11 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.subtitle.observe(viewLifecycleOwner) {
             subtitleTextView.apply {
-                text = it ?: context!!.getString(R.string.untitled)
+                text = if(it.isNullOrBlank()){
+                    context!!.getString(R.string.untitled)
+                }else{
+                    it
+                }
 
                 val textColorRes = when(it) {
                     null -> R.color.whiteAlpha50
@@ -119,14 +125,15 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.dateText.observe(viewLifecycleOwner) {
-            dateTextView.text = it
+            overlineTextView.text = it
         }
 
         // Configure the markdown editor
         diaryTextEditor.apply {
             addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(markwonEditor,
-                                                                          Executors.newCachedThreadPool(),
-                                                                          this))
+                                                          Executors.newCachedThreadPool(),
+                                                          this))
+            doOnTextChanged { text, _, _, _ -> viewModel.content.value = text.toString() }
             this.text?.let { markwonEditor.process(it) }
         }
 
@@ -135,12 +142,13 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                 cornerRadius(res = R.dimen.corner_radius)
                 title(res = R.string.dialog_save_the_entry)
                 positiveButton(android.R.string.ok) {
-                    Toasty.success(context, getString(R.string.status_saved)).show()
-
                     // TODO: save the data here!!!!
-                    viewModel.saveData()
-                            .subscribe { it, throwable ->
-                                Toasty.success(context, it.toString()).show()
+                    viewModel
+                            .saveData()
+                            .subscribe { it2, throwable ->
+                                Log.d(LOG_TAG, "Data Saved Completed: $it2")
+                                Toasty.success(context, getString(R.string.status_saved)).show()
+                                // Toasty.success(context, it2.toString()).show()
                             }
                 }
                 negativeButton(android.R.string.cancel)
@@ -148,14 +156,14 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
         }
 
         MaterialDialog(context!!).apply {
-            val prefillText = if(viewModel.entryName.value == null) "" else viewModel.entryName.value
+            val prefillText = if(viewModel.title.value == null) "" else viewModel.title.value
 
             cornerRadius(res = R.dimen.corner_radius)
             title(R.string.dialog_edit_entry_title)
             input(waitForPositiveButton = true, prefill = prefillText,
                   hintRes = R.string.entry_title, inputType = InputType.TYPE_TEXT_FLAG_AUTO_CORRECT,
                   maxLength = 30) { dialog, inputText ->
-                viewModel.entryName.value = inputText.toString()
+                viewModel.title.value = inputText.toString()
             }
 
             onCancel { input(prefill = "") }
@@ -299,7 +307,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
                 Snackbar.make(rootCoordinator, getString(R.string.permission_request_location),
-                              Snackbar.LENGTH_INDEFINITE).show();
+                              Snackbar.LENGTH_INDEFINITE).show()
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(activity!!,
@@ -369,7 +377,8 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                                 lat.toFloat(), long.toFloat()).arguments
                         Log.d(LOG_TAG, "Sent Location Bundle: $lat, $long")
 
-                        val intent = Intent(activity!!, LocationActivity::class.java).putExtras(action)
+                        val intent = Intent(activity!!, LocationActivity::class.java).putExtras(
+                                action)
                         startActivityForResult(intent, REQUEST_CODE_LOCATION_PICKER)
                     }
 
@@ -393,7 +402,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(resultCode == Activity.RESULT_OK)
             when(requestCode) {
-                REQUEST_CODE_GALLERY -> {
+                REQUEST_CODE_GALLERY         -> {
                     //data.getData return the content URI for the selected Image
                     val selectedImage: Uri = data?.data ?: return
                     viewModel.imageUri.value = selectedImage
@@ -401,7 +410,8 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
 
                 REQUEST_CODE_LOCATION_PICKER -> {
                     Toasty.success(context!!, getString(R.string.location_saved)).show()
-                    Log.d(LOG_TAG, "Returned Location Extra: ${data!!.extras?.get("lat")}, ${data.extras?.get("long")}")
+                    Log.d(LOG_TAG, "Returned Location Extra: ${data!!.extras?.get(
+                            "lat")}, ${data.extras?.get("long")}")
 
                     val lat = data.extras?.get("lat")?.toString()?.toDouble()!!
                     val long = data.extras?.get("long")?.toString()?.toDouble()!!
@@ -420,16 +430,16 @@ class EntryEditorViewModel(application: Application) : AndroidViewModel(applicat
 
     private val LOG_TAG = this::class.java.simpleName
 
-    val entryName: MutableLiveData<String?> = MutableLiveData(null)
-    val subtitle: MutableLiveData<String?> = MutableLiveData(null)
-    val text: MutableLiveData<String> = MutableLiveData("")
+    val title = MutableLiveData("")
+    val subtitle = MutableLiveData("")
+    val content = MutableLiveData("")
 
     val date = MutableLiveData(Calendar.getInstance().time)
-    val dateText: LiveData<String> = Transformations.map(date) {
-        DiaryCalendarBar.DATE_FORMATTER_FULL.format(it)
+    val dateText = Transformations.map(date) {
+        TIME_FORMATTER_FULL.format(it)
     }
 
-    val imageUri: MutableLiveData<Uri?> = MutableLiveData(null)
+    val imageUri = MutableLiveData<Uri?>(null)
     val imageBitMap: LiveData<Bitmap?> = Transformations.switchMap(imageUri) {
         Log.d(LOG_TAG, "imageBitMap LiveData invoked")
         it ?: return@switchMap liveData<Bitmap?> { emit(null) }
@@ -444,10 +454,10 @@ class EntryEditorViewModel(application: Application) : AndroidViewModel(applicat
         return@switchMap liveData { emit(bitmap) }
     }
 
-    val tagCount: MutableLiveData<Int> = MutableLiveData(0)
-    val tagSet: TreeSet<String> = TreeSet()
+    val tagCount = MutableLiveData(0)
+    val tagSet = TreeSet<String>()
 
-    val coordinate: MutableLiveData<Pair<Double, Double>> = MutableLiveData(DEFAULT_LOCATION)
+    val coordinate = MutableLiveData(DEFAULT_LOCATION)
 
     fun saveData(): Single<Boolean> {
         val c = Calendar.getInstance()
@@ -455,9 +465,16 @@ class EntryEditorViewModel(application: Application) : AndroidViewModel(applicat
             DiaryTag(it)
         }
 
-        val entry = DiaryEntry("-1", c.time, c.time, 0, tags, entryName.value!!, coordinate.value!!.first, coordinate.value!!.second)
+        val diaryImage = imageUri.value?.let { listOf(DiaryImage(uri = it, timeCreated = c.time)) }
+
+        Log.d(LOG_TAG, "Saving data...")
+        val entry = DiaryEntry("-1", c.time, c.time, 0, tags, title.value!!
+                               , subtitle.value!!, content.value!!, diaryImage,
+                               coordinate.value!!.first
+                               , coordinate.value!!.second)
         return DiaryRepo
-                .addNewEntry(entry)
+                .addNewEntry(getApplication(), entry)
                 .observeOn(AndroidSchedulers.mainThread())
     }
+
 }

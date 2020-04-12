@@ -1,19 +1,17 @@
 package io.dairyly.dairyly.screens.oobe.login
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.*
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.FirebaseAuthEmailException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import es.dmoral.toasty.Toasty
 import io.dairyly.dairyly.R
-import io.dairyly.dairyly.screens.oobe.register.RegisterPasswordFragmentDirections
 import io.dairyly.dairyly.viewmodels.LoginViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.buttons_login_register.*
@@ -31,7 +29,7 @@ class LoginEmailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set the page header
-        headerTextView.text = getString(
+        defaultHeaderText.text = getString(
                 R.string.login_to_diaryly)
         subtitleTextView.text = getString(
                 R.string.login_enter_email_password)

@@ -4,12 +4,10 @@ import androidx.lifecycle.*
 import io.dairyly.dairyly.data.DairyRepository
 import io.dairyly.dairyly.data.Resource
 import io.dairyly.dairyly.data.models.DiaryDateHolder
-import io.dairyly.dairyly.data.models.DiaryEntry
 import io.dairyly.dairyly.data.models.User
-import io.dairyly.dairyly.models.DiaryRepo
 import io.dairyly.dairyly.usecases.UserDiaryUseCase
 
-class DiaryViewModel(repository: DairyRepository, rawUserId: Int) : ViewModel(){
+class DiaryViewModel(repository: DairyRepository, rawUserId: Int) : ViewModel() {
 
     private val dairyUseCase = UserDiaryUseCase(repository)
 
@@ -22,16 +20,14 @@ class DiaryViewModel(repository: DairyRepository, rawUserId: Int) : ViewModel(){
         }
     }
 
-    val listEntriesByDateHolder: LiveData<Resource<List<DiaryEntry>>> by lazy {
-        Transformations.switchMap(user){user ->
-            Transformations.switchMap(dateHolderLiveData){holder ->
-                LiveDataReactiveStreams.fromPublisher(dairyUseCase.getDiaryEntriesInDay(user.data?.detail!!.userId, holder.date))
-                // LiveDataReactiveStreams.fromPublisher(dairyUseCase.getDiaryEntriesInDay(user.data?.detail!!.userId, holder.date))
-            }
+    val listEntriesByDateHolder: LiveData<Resource<List<io.dairyly.dairyly.models.data.DiaryEntry>>> by lazy {
+        Transformations.switchMap(dateHolderLiveData) { holder ->
+            LiveDataReactiveStreams.fromPublisher(dairyUseCase.getDiaryEntriesInDay(holder.date))
+            // LiveDataReactiveStreams.fromPublisher(dairyUseCase.getDiaryEntriesInDay(user.data?.detail!!.userId, holder.date))
         }
     }
 
-    fun postDateHolder(dateHolder: DiaryDateHolder){
+    fun postDateHolder(dateHolder: DiaryDateHolder) {
         dateHolderLiveData.postValue(dateHolder)
     }
 

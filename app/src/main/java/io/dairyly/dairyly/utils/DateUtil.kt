@@ -1,9 +1,16 @@
 package io.dairyly.dairyly.utils
 
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun Date.getDayRange(): List<Date>{
+val DATE_FORMATTER_MONTH_YEAR = SimpleDateFormat("MMMM, yyyy", CURRENT_LOCALE)
+val DATE_FORMATTER_DATE = SimpleDateFormat("dd", CURRENT_LOCALE)
+val DATE_FORMATTER_FULL: DateFormat = DateFormat.getDateInstance(DateFormat.FULL)
+val TIME_FORMATTER_SHORT: DateFormat = DateFormat.getTimeInstance(DateFormat.SHORT)
+val TIME_FORMATTER_FULL: DateFormat = DateFormat.getTimeInstance(DateFormat.FULL)
+
+fun Date.getDayRange(): Pair<Date, Date>{
     val c = Calendar.getInstance().apply {
         time = this@getDayRange
         set(Calendar.HOUR_OF_DAY, 0)
@@ -21,7 +28,7 @@ fun Date.getDayRange(): List<Date>{
         set(Calendar.SECOND, 59)
         set(Calendar.MILLISECOND, 59)
     }.time
-    return listOf(midnight, midnightTomorrow)
+    return Pair(midnight, midnightTomorrow)
 }
 
 fun Date.getDateInt(): Int{

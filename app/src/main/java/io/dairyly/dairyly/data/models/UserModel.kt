@@ -26,7 +26,7 @@ data class UserDetail(
         entity = UserDetail::class,
         parentColumns = ["userId"],
         childColumns = ["ownerId"],
-        onDelete = ForeignKey.CASCADE)],
+        onDelete = CASCADE)],
         indices = [Index(
                 "ownerId")])
 data class UserFile(

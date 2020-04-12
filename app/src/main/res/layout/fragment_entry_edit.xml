@@ -64,7 +64,7 @@
                 android:layout_marginBottom="@dimen/margin_xlarge_48">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/dateTextView"
+                    android:id="@+id/overlineTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/google_sans_medium"
@@ -104,12 +104,12 @@
                     android:maxLines="3"
                     android:minLines="1"
                     android:paddingTop="@dimen/margin_small_8"
-                    android:text="Android Test"
+                    android:text="@string/debug_android_test"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/headline2"
                     app:layout_constraintEnd_toStartOf="@id/view_guide2"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/dateTextView"
+                    app:layout_constraintTop_toBottomOf="@id/overlineTextView"
                     tools:text="Coming-back-to-doing-some-good-again day" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
@@ -125,7 +125,8 @@
                     android:tint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/titleTextView"
                     app:layout_constraintStart_toEndOf="@id/titleTextView"
-                    app:layout_constraintTop_toTopOf="@id/titleTextView" />
+                    app:layout_constraintTop_toTopOf="@id/titleTextView"
+                    tools:ignore="PrivateResource" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/subtitleTextView"
@@ -136,7 +137,7 @@
                     android:backgroundTint="@color/blackAlpha15"
                     android:foreground="?android:attr/selectableItemBackgroundBorderless"
                     android:maxLines="2"
-                    android:paddingTop="@dimen/margin_small_8"
+                    app:firstBaselineToTopHeight="@dimen/margin_large_24"
                     android:text="@string/placeholder"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintEnd_toStartOf="@id/view_guide2"
@@ -155,7 +156,8 @@
                     android:tint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/subtitleTextView"
                     app:layout_constraintStart_toEndOf="@id/titleTextView"
-                    app:layout_constraintTop_toTopOf="@id/subtitleTextView" />
+                    app:layout_constraintTop_toTopOf="@id/subtitleTextView"
+                    tools:ignore="PrivateResource" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

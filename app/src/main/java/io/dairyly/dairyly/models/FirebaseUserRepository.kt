@@ -13,8 +13,7 @@ object FirebaseUserRepository {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
 
-    var firebaseUser = firebaseAuth.currentUser
-        private set
+    private var firebaseUser = firebaseAuth.currentUser
 
     fun createUserAccount(email: String, password: String): Single<FirebaseUser> {
         return Flowable
@@ -88,6 +87,7 @@ object FirebaseUserRepository {
                                                                  //"Create an Account Successfully"
                                                                  if(task.result?.user != null) {
                                                                      injectUserToAppRepo()
+                                                                     injectUserToStorageRepo()
                                                                      flowable.onNext(
                                                                              task.result?.user!!)
                                                                              .also { flowable.onComplete() }
@@ -115,6 +115,15 @@ object FirebaseUserRepository {
         firebaseUser = firebaseAuth.currentUser
         FirebaseAppRepository.setUserDatabaseReference(
                 firebaseUser!!.uid)
+        Log.d(LOG_TAG, "Injected Firebase User reference to the App Repo")
+    }
+
+    fun injectUserToStorageRepo(){
+        // firebaseUser = firebaseAuth.currentUser
+        FirebaseStorageRepository.setUserStorageReference(
+                firebaseUser!!.uid)
+        Log.d(LOG_TAG, "Injected Firebase User reference to the Storage Repo")
+
     }
 
 }

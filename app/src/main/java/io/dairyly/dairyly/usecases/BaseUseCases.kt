@@ -1,17 +1,13 @@
 package io.dairyly.dairyly.usecases
 
 import android.annotation.SuppressLint
-import com.google.firebase.auth.FirebaseUser
 import io.dairyly.dairyly.data.Resource
 import io.dairyly.dairyly.data.Status
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-
 import java.io.PrintWriter
 import java.io.StringWriter
 

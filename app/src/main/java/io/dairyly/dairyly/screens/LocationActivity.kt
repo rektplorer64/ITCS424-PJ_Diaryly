@@ -10,17 +10,18 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import es.dmoral.toasty.Toasty
@@ -119,7 +120,7 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
                 Snackbar.make(rootCoordinator, getString(R.string.permission_request_location),
-                              Snackbar.LENGTH_INDEFINITE).show();
+                              Snackbar.LENGTH_INDEFINITE).show()
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this@LocationActivity,
@@ -188,18 +189,17 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        viewModel.coordinate.observe(this, object : Observer<Pair<Double, Double>>{
-            override fun onChanged(it: Pair<Double, Double>) {
-                Log.d(LOG_TAG, "Updating the location to (${it.first}, ${it.second})")
-                val position = LatLng(it.first, it.second)
+        viewModel.coordinate.observe(this,
+                                     Observer {
+                                         Log.d(LOG_TAG, "Updating the location to (${it.first}, ${it.second})")
+                                         val position = LatLng(it.first, it.second)
 
-                g.clear()
-                g.addMarker(MarkerOptions().draggable(true).position(position))
-                g.moveCamera(CameraUpdateFactory.newLatLng(position))
+                                         g.clear()
+                                         g.addMarker(MarkerOptions().draggable(true).position(position))
+                                         g.moveCamera(CameraUpdateFactory.newLatLng(position))
 
-                // viewModel.coordinate.removeObserver(this)
-            }
-        })
+                                         // viewModel.coordinate.removeObserver(this)
+                                     })
     }
 
     class LocationSelectorViewModel : ViewModel(){

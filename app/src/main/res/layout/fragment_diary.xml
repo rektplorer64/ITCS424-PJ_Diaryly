@@ -15,7 +15,7 @@
         app:liftOnScrollTargetViewId="@id/diaryRecyclerView"
         app:statusBarForeground="@color/colorPrimary">
 
-        <io.dairyly.dairyly.ui.components.DiaryCalendarBar
+        <io.dairyly.dairyly.ui.components.RylyToolbarView
             android:id="@+id/calendarBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
