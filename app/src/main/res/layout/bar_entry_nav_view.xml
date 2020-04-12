@@ -35,7 +35,7 @@
         app:layout_constraintGuide_begin="288dp" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image_view"
+        android:id="@+id/profileImageView"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:src="@drawable/ic_launcher_background"

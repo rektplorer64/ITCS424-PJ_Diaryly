@@ -35,7 +35,7 @@ xmlns:tools="http://schemas.android.com/tools">
         android:layout_height="match_parent">
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBarLayout"
@@ -49,6 +49,7 @@ xmlns:tools="http://schemas.android.com/tools">
                     android:id="@+id/entryTabs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:profileImage="@color/colorPrimary"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:autoInitialScroll="false"/>

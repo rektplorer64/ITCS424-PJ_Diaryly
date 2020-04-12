@@ -31,6 +31,12 @@ class DiaryContentDisplayFragment : Fragment() {
             }
         }
 
+        val imageAdapter = ImageCarouselRvAdapter()
+        imageCarousel.apply {
+            adapter = imageAdapter
+            clipToPadding = false
+        }
+
         // TODO -> Implement this fragment to display contents!
         val viewModel = viewModelInjectionHelper<EntryDisplayViewModel>(this, diaryEntryId = userId)
 
@@ -41,6 +47,8 @@ class DiaryContentDisplayFragment : Fragment() {
                     text = it.data.content
                 }
             }
+
+            imageAdapter.submitList(it.data?.images)
         }
     }
 

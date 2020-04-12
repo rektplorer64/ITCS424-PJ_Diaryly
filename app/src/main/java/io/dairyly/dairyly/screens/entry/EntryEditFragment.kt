@@ -94,9 +94,9 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.title.observe(viewLifecycleOwner) {
             titleTextView.apply {
-                text = if(it.isNullOrBlank()){
+                text = if(it.isNullOrBlank()) {
                     context!!.getString(R.string.untitled)
-                }else{
+                } else {
                     it
                 }
 
@@ -110,9 +110,9 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.subtitle.observe(viewLifecycleOwner) {
             subtitleTextView.apply {
-                text = if(it.isNullOrBlank()){
+                text = if(it.isNullOrBlank()) {
                     context!!.getString(R.string.untitled)
-                }else{
+                } else {
                     it
                 }
 
@@ -131,8 +131,8 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
         // Configure the markdown editor
         diaryTextEditor.apply {
             addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(markwonEditor,
-                                                          Executors.newCachedThreadPool(),
-                                                          this))
+                                                                          Executors.newCachedThreadPool(),
+                                                                          this))
             doOnTextChanged { text, _, _, _ -> viewModel.content.value = text.toString() }
             this.text?.let { markwonEditor.process(it) }
         }
@@ -162,7 +162,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
             title(R.string.dialog_edit_entry_title)
             input(waitForPositiveButton = true, prefill = prefillText,
                   hintRes = R.string.entry_title, inputType = InputType.TYPE_TEXT_FLAG_AUTO_CORRECT,
-                  maxLength = 30) { dialog, inputText ->
+                  maxLength = 30) { _, inputText ->
                 viewModel.title.value = inputText.toString()
             }
 
@@ -211,12 +211,8 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
             invokeImageSelectionIntent()
         }
 
-        viewModel.tagCount.observe(viewLifecycleOwner) {
-            if(it == 0) {
-                tagOverlineText.visibility = View.GONE
-            } else {
-                tagOverlineText.visibility = View.VISIBLE
-            }
+        viewModel.tagCount.observe(viewLifecycleOwner) {count ->
+            tagOverlineText.visibility = if(count == 0) { View.GONE } else { View.VISIBLE }
         }
 
         tagBtn.setOnClickListener {
@@ -274,8 +270,6 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun invokeImageSelectionIntent() {
-        // TODO: Invoke an Image selector
-
         //Create an Intent with action as ACTION_PICK
         val intent = Intent(Intent.ACTION_PICK)
 
@@ -324,7 +318,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                 if(location == null || viewModel.coordinate.value != DEFAULT_LOCATION) {
                     return
                 }
-                progressMap.visibility = View.GONE
+                progressMap?.visibility = View.GONE
                 viewModel.coordinate.value = Pair(location.latitude, location.longitude)
                 locationManager.removeUpdates(this)
             }

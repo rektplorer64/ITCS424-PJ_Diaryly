@@ -1,9 +1,13 @@
 package io.dairyly.dairyly.ui.components
 
 import android.content.Context
+import android.os.Bundle
+import android.os.Parcelable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.observe
@@ -34,17 +38,16 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
 
     init {
         val attrs = context.obtainStyledAttributes(attributes, R.styleable.RylyToolbarView, 0, 0)
-        val profileImage = attrs.getColor(R.styleable.RylyToolbarView_profileImage,
-                                          R.drawable.ic_launcher_background)
-
-        // TODO: Add
 
         // Apply attributes
+        val profileImageRes: Int
         attrs.apply {
             try {
                 autoScrollingEnabled = getBoolean(R.styleable.RylyToolbarView_autoInitialScroll,
                                                   true)
 
+                profileImageRes = getResourceId(R.styleable.RylyToolbarView_profileImage,
+                                                R.drawable.ic_launcher_background)
             } finally {
                 recycle()
             }
@@ -61,6 +64,8 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
                 liveDataScrollX.postValue(scrollX)
             }
         }
+
+        profileImageView.setImageDrawable(getDrawable(context, profileImageRes))
     }
 
     fun postDataUpdate(list: List<TabType>?) {
@@ -85,10 +90,10 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
                         }
 
                         override fun onTabSelected(tab: TabLayout.Tab?) {
-                            behaviorBehaviorDelegate.onTabSelectedListener(defaultOverlineText,
-                                                                           defaultHeaderText,
-                                                                           subtitleTextView,
-                                                                           list[tab!!.position])
+                            behaviorBehaviorDelegate.onTabSelected(defaultOverlineText,
+                                                                   defaultHeaderText,
+                                                                   subtitleTextView,
+                                                                   list[tab!!.position])
                         }
                     })
         }
@@ -114,6 +119,31 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
 
     fun setupViewPager(viewPager: ViewPager) {
         tabLayoutWrapper.calendarTab.setupWithViewPager(viewPager)
+    }
+
+    private val STATE_PERSISTENT_SUPER = "sajdhaskdjkahsjkda"
+    private val STATE_PERSISTENT_TAB_SELECTION = "sajdhaskdjkahsjkda"
+
+    override fun onSaveInstanceState(): Parcelable? {
+        super.onSaveInstanceState()
+        return Bundle().apply {
+            putParcelable(STATE_PERSISTENT_SUPER, super.onSaveInstanceState())
+            putInt(STATE_PERSISTENT_TAB_SELECTION, tabLayoutWrapper.calendarTab.selectedTabPosition)
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        var newState = state
+        if(newState is Bundle){
+            val selectedTab = newState.getInt(STATE_PERSISTENT_TAB_SELECTION)
+            this@RylyToolbarView.post {
+                Log.d(LOG_TAG, "Scrolling to the ${selectedTab}th tab")
+                tabLayoutWrapper.scrollToTab(selectedTab)
+            }
+            newState = newState.getParcelable(STATE_PERSISTENT_SUPER)
+        }
+
+        super.onRestoreInstanceState(newState)
     }
 
     inner class TabLayoutWrapper(root: View) {
@@ -148,7 +178,7 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
             }
         }
 
-        private fun scrollToTab(tabIndex: Int = ((DAY_TIME_WINDOW + 1) / 2)) {
+        fun scrollToTab(tabIndex: Int = ((DAY_TIME_WINDOW + 1) / 2)) {
             val parent = calendarTab.getChildAt(0) as ViewGroup
 
             val finalTabIndex = if(tabIndex >= parent.childCount) {
@@ -156,12 +186,13 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
             } else {
                 tabIndex
             }
-
-            val tab = parent.getChildAt(finalTabIndex)
-            tab.post {
-                val right = tab.right
-                calendarTab.scrollTo(right, 0)
-                calendarTab.getTabAt(finalTabIndex)!!.select()
+            parent.post {
+                val tab = parent.getChildAt(finalTabIndex)?: parent.getChildAt(0)
+                tab?.post {
+                    val right = tab.right
+                    calendarTab.scrollTo(right, 0)
+                    calendarTab.getTabAt(finalTabIndex)!!.select()
+                }
             }
         }
 

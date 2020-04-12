@@ -28,10 +28,10 @@ interface RylyToolbarBehaviorDelegate<TabType>{
      * @param subtitleTextView MaterialTextView the TextView that located below the headerTextView
      * @param item TabType      the data item that will be bind to the target tab.
      */
-    fun onTabSelectedListener(overlineTextView: MaterialTextView,
-                              headerTextView: MaterialTextView,
-                              subtitleTextView: MaterialTextView,
-                              item: TabType)
+    fun onTabSelected(overlineTextView: MaterialTextView,
+                      headerTextView: MaterialTextView,
+                      subtitleTextView: MaterialTextView,
+                      item: TabType)
 
     /**
      * This method specifies the appearance of each individual Tag on its creation time.

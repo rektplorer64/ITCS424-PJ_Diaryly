@@ -104,10 +104,11 @@ data class DiaryImage(
         var id: String = "",
         val description: String = "",
         val uri: Uri = Uri.EMPTY,
-        val timeCreated: Date = Calendar.getInstance().time
+        val timeCreated: Date = Calendar.getInstance().time,
+        val entryId: String = ""
 ){
     fun toFirebaseData(): FirebaseDiaryImage {
-        return FirebaseDiaryImage(id, description, uri.toString(), timeCreated.time)
+        return FirebaseDiaryImage(id, description, uri.toString(), timeCreated.time, entryId)
     }
 }
 
@@ -115,11 +116,12 @@ data class FirebaseDiaryImage(
         var id: String = "",
         val description: String = "",
         val uri: String = Uri.EMPTY.toString(),
-        val timeCreated: Long = 0L
+        val timeCreated: Long = 0L,
+        var entryId: String = ""
 ){
 
     fun toNormalData(): DiaryImage {
-        return DiaryImage(id, description, Uri.parse(uri), Date(timeCreated))
+        return DiaryImage(id, description, Uri.parse(uri), Date(timeCreated), entryId)
     }
 
     override fun equals(other: Any?): Boolean {

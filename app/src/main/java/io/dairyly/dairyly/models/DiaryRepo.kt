@@ -26,11 +26,14 @@ object DiaryRepo {
     fun addNewEntry(context: Context,
                     diaryEntry: DiaryEntry): Single<Boolean> {
 
+        val ref = diaryEntryRoot.push()
+        val key = ref.key
         val entryToBeInserted = diaryEntry.toFirebaseData().apply {
             if(!images.isNullOrEmpty()) {
                 val hashMap = hashMapOf<String, FirebaseDiaryImage>()
                 for(entry in images!!) {
                     entry.value.id = entry.value.hashCode().toString()
+                    entry.value.entryId = key!!
                     hashMap[entry.value.id] = entry.value
                 }
                 images = hashMap
@@ -40,8 +43,6 @@ object DiaryRepo {
         Log.d(LOG_TAG, "Adding a new diary entry: $entryToBeInserted")
 
         val flowCallback = FlowableOnSubscribe { flowable: FlowableEmitter<Boolean> ->
-            val ref = diaryEntryRoot.push()
-            val key = ref.key
             val task = ref.setValue(
                     entryToBeInserted.apply { id = key!!; Log.d(LOG_TAG, "Got a new key ($key)") })
 
@@ -201,4 +202,5 @@ object DiaryRepo {
             return@map a
         }
     }
+
 }

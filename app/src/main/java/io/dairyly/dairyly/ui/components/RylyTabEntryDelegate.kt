@@ -12,7 +12,7 @@ import io.dairyly.dairyly.utils.TIME_FORMATTER_SHORT
 import org.apache.commons.lang3.time.DateUtils.isSameDay
 import java.util.*
 
-class RylyTabEntryDelegate : RylyToolbarBehaviorDelegate<DiaryEntry> {
+class RylyTabEntryDelegate(var onTabClickListener: ((DiaryEntry) -> Unit)? = null) : RylyToolbarBehaviorDelegate<DiaryEntry> {
 
     private val LOG_TAG = this::class.java.simpleName
 
@@ -25,10 +25,10 @@ class RylyTabEntryDelegate : RylyToolbarBehaviorDelegate<DiaryEntry> {
             subtitleTextView: MaterialTextView,
             item: DiaryEntry) {}
 
-    override fun onTabSelectedListener(overlineTextView: MaterialTextView,
-                                       headerTextView: MaterialTextView,
-                                       subtitleTextView: MaterialTextView,
-                                       item: DiaryEntry) {
+    override fun onTabSelected(overlineTextView: MaterialTextView,
+                               headerTextView: MaterialTextView,
+                               subtitleTextView: MaterialTextView,
+                               item: DiaryEntry) {
 
         Log.d(LOG_TAG, "Selected a new entry: ${item.id}\t${item.title}")
         // bigTextView.text = TIME_FORMATTER_FULL.format(currentSelectedTime)
@@ -46,6 +46,7 @@ class RylyTabEntryDelegate : RylyToolbarBehaviorDelegate<DiaryEntry> {
         headerTextView.text = item.title
         subtitleTextView.text = item.subtitle
 
+        onTabClickListener?.let { it(item) }
         // bigTextView.typeface
         // subtitleTextView.text = DateUtils.getRelativeTimeSpanString(
         //         currentSelectedTime.time, System.currentTimeMillis(),

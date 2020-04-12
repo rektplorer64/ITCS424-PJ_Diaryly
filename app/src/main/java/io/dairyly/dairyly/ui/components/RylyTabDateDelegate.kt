@@ -25,7 +25,7 @@ class RylyTabDateDelegate : RylyToolbarBehaviorDelegate<DiaryDateHolder> {
         overlineTextView.text = DATE_FORMATTER_MONTH_YEAR.format(item.date)
     }
 
-    override fun onTabSelectedListener(
+    override fun onTabSelected(
             overlineTextView: MaterialTextView, headerTextView: MaterialTextView,
             subtitleTextView: MaterialTextView,
             item: DiaryDateHolder) {

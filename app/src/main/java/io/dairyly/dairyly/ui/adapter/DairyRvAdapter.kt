@@ -1,6 +1,7 @@
 package io.dairyly.dairyly.ui.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.PrecomputedTextCompat
@@ -18,8 +19,11 @@ import io.dairyly.dairyly.screens.entry.EntryDisplayActivityArgs
 import java.text.SimpleDateFormat
 
 
-class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder) : ListAdapter<io.dairyly.dairyly.models.data.DiaryEntry, DairyRvAdapter.DairyViewHolder>(
-        DiaryDiffCallback()) {
+class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder) :
+        ListAdapter<io.dairyly.dairyly.models.data.DiaryEntry, DairyRvAdapter.DairyViewHolder>(
+                DiaryDiffCallback()) {
+
+    private val LOG_TAG: String = this::class.java.simpleName
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DairyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -36,6 +40,7 @@ class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder) : ListAdapter
 
             root.setOnClickListener {
                 val b = EntryDisplayActivityArgs(item.id, diaryDateHolder)
+                Log.d(LOG_TAG, "Clicked on item ID = ${item.id}")
                 it.findNavController().navigate(R.id.moreEntryDetailAction, b.toBundle())
             }
 
@@ -48,7 +53,8 @@ class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder) : ListAdapter
 
                     this.setTextFuture(PrecomputedTextCompat.getTextFuture(
                             item.title,
-                            TextViewCompat.getTextMetricsParams(this) /* Do not change TextView property after this line */,
+                            TextViewCompat.getTextMetricsParams(
+                                    this) /* Do not change TextView property after this line */,
                             /*optional custom executor*/ null))
                 }
             }
@@ -81,12 +87,15 @@ class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder) : ListAdapter
     class DairyViewHolder(val itemViewBinding: CardNormalDiaryBinding) :
             RecyclerView.ViewHolder(itemViewBinding.root)
 
-    private class DiaryDiffCallback : DiffUtil.ItemCallback<io.dairyly.dairyly.models.data.DiaryEntry>() {
-        override fun areItemsTheSame(oldItem: io.dairyly.dairyly.models.data.DiaryEntry, newItem: io.dairyly.dairyly.models.data.DiaryEntry): Boolean {
+    private class DiaryDiffCallback :
+            DiffUtil.ItemCallback<io.dairyly.dairyly.models.data.DiaryEntry>() {
+        override fun areItemsTheSame(oldItem: io.dairyly.dairyly.models.data.DiaryEntry,
+                                     newItem: io.dairyly.dairyly.models.data.DiaryEntry): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: io.dairyly.dairyly.models.data.DiaryEntry, newItem: io.dairyly.dairyly.models.data.DiaryEntry): Boolean {
+        override fun areContentsTheSame(oldItem: io.dairyly.dairyly.models.data.DiaryEntry,
+                                        newItem: io.dairyly.dairyly.models.data.DiaryEntry): Boolean {
             return oldItem == newItem
         }
     }

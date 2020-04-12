@@ -5,9 +5,13 @@ import android.util.Log
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import io.reactivex.*
+import io.dairyly.dairyly.models.data.DiaryImage
+import io.dairyly.dairyly.models.data.FirebaseDiaryImage.Companion.getFirebaseStoragePath
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.ByteArrayOutputStream
 
 object FirebaseStorageRepository {
@@ -83,4 +87,9 @@ object FirebaseStorageRepository {
         userRoot = firebaseStorage.child(uid)
     }
 
+    fun DiaryImage.getImageStorageReference(): StorageReference {
+        val path = getFirebaseStoragePath(entryId)  + this.id + ".jpg"
+        Log.d(LOG_TAG, "Getting Image Path: $path")
+        return userRoot.child(path)
+    }
 }
