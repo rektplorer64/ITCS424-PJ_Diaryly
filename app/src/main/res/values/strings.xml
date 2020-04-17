@@ -57,7 +57,7 @@
     <string name="dialog_edit_entry_title">Edit Entry\'s Title</string>
     <string name="dialog_add_entry_tag">Add an Entry\'s Tag</string>
     <string name="entry_title">Entry\'s Title</string>
-    <string name="entry_tag">Entry\'s Tag</string>
+    <string name="entry_tag">Tag</string>
     <string name="dialog_edit_entry_subtitle">Edit Entry\'s Subtitle</string>
     <string name="entry_subtitle">Entry\'s Subtitle</string>
     <string name="untitled">Untitled</string>
@@ -68,7 +68,7 @@
     <string name="dialog_save_the_entry">Save the entry?</string>
     <string name="title_activity_location">Map</string>
     <string name="permission_request_location">Please give us permission to access the location!</string>
-    <string name="associated_location">Associated Location</string>
+    <string name="location">Location</string>
     <string name="entry_tags">Entry tags</string>
     <string name="confirm_selection">Confirm Selection</string>
     <string name="dialog_exit_location_selector">Exit the location selector?</string>
@@ -81,4 +81,21 @@
     <string name="debug_android_test">Android Test</string>
     <string name="template_dot_2_messages">%1$s • %2$s</string>
     <string name="debug_placeholder_lorem">Lorem ipsum dolor sit amet, nullam neque faucibus quis urna bibendum, et tincidunt ut pulvinar, donec diam aliquam, varius orci integer nulla enim torquent, velit dictum velit massa accumsan. Congue magna nisl est, sed magna mauris mauris suscipit velit quis, fringilla dui donec orci vulputate. Euismod nullam, vivamus risus sed cum dolor eu quisque, in urna, nulla rutrum. Ut suscipit eu turpis sed. Turpis cursus ultricies cum amet diam ac, cras lectus mattis, tempor corrupti nibh ut ac vestibulum, feugiat vitae. Aliquam urna, pellentesque vestibulum lorem, eget in diam suspendisse lectus fusce ornare, pulvinar ipsum nec aenean facilisis non est, metus ante nam sapien feugiat pariatur quisque. Aute duis leo netus at vitae, duis mollis dolor, lorem cras faucibus amet egestas turpis pretium. Cursus id purus ligula nunc sed eros, sem sit feugiat. Velit vestibulum luctus nibh facilisis curabitur eros, viverra quis et sollicitudin, vitae duis dui massa purus turpis.  Pellentesque imperdiet pede ac feugiat blandit vehicula, vel tincidunt nulla magna amet fringilla, similique facilisis luctus sociis velit justo, natoque nulla fringilla, posuere aliquam integer elit pellentesque. Adipiscing purus metus ut, scelerisque eleifend et vitae in, augue aptent vivamus ut etiam non, mauris ipsum sit mi donec iaculis. Tempus viverra vitae suscipit praesent donec porta, ea suspendisse, vel ornare lobortis. Cursus luctus sollicitudin dolor, non vivamus mauris auctor a justo, magna vel. Sit ipsa congue commodo luctus nam, ante aliquet amet.  Mollis amet iaculis semper, eros eu turpis donec, vitae imperdiet. Vero fermentum adipiscing sapien felis vestibulum, quam amet turpis vestibulum hendrerit et consectetuer, lectus dis tellus quis magna sit, nec sodales, erat platea lorem varius. Commodo pellentesque parturient eu arcu lacus viverra, nec morbi. Accumsan montes turpis sapien libero amet, convallis proin sodales quam amet eleifend, luctus aliquet eu fringilla donec purus ac, proin dapibus suspendisse vehicula, ut rhoncus. Ut fermentum, ante fusce tempus duis, consequat venenatis nunc pellentesque massa.  Vitae in deserunt amet lacinia. Sed non lorem imperdiet magna, orci morbi fusce ante. Gravida per porttitor pellentesque lacus, eget in natoque mauris nunc aliquam venenatis, metus fringilla nulla conubia nascetur temporibus, eros nec eget massa mi et. Dolor dictum lectus euismod pede cras, non rutrum fames pede non eu ornare, pellentesque nonummy at, purus vitae praesent. Vel diam fringilla auctor justo risus, ac fusce neque fusce mauris a, non morbi vivamus feugiat eu vestibulum nunc, nulla cursus habitasse feugiat gravida. Natoque massa volutpat donec eget, mauris deserunt enim consequat amet sodales, amet rhoncus sem luctus varius in auctor.</string>
+    <string name="location_unknown">Unknown Location</string>
+    <string name="location_geo">Geo</string>
+    <string name="entry_color">Color</string>
+    <string name="entry_image">Image</string>
+    <string name="dialog_edit_entry_color">Select an Accent color</string>
+    <string name="goodBad">Good or Bad</string>
+    <string name="goodbad_good">Good</string>
+    <string name="goodbad_bad">Bad</string>
+    <string name="goodbad_neutral">Neutral</string>
+    <string name="unknown">Unknown</string>
+    <string name="action_edit_this_entry">edit this entry</string>
+    <string name="debug_default_id">-1</string>
+    <string name="permission_thanks_storage">Storage Permission Granted, Thank you!</string>
+    <string name="permission_thanks_location">Location Permission Granted, Thank you!</string>
+    <string name="permission_request_storage">No Permission Granted: Requesting now...</string>
+    <string name="location_not_selected">No Location Selected</string>
+    <string name="confirm">confirm</string>
 </resources>

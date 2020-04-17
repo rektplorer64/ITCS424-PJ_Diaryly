@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:checkable="true"
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/default_corner_radius">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Media -->
+            <ImageView
+                android:id="@+id/cardImageView"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/white_gradient" />
+
+            <!-- Title, secondary and supporting text -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/titleTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/google_sans_medium"
+                android:paddingStart="@dimen/card_padding_side_16"
+                android:paddingTop="@dimen/card_padding_side_16"
+                android:paddingEnd="@dimen/card_padding_side_16"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="start"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardImageView"
+                app:layout_constraintEnd_toStartOf="@id/sideIcon"
+                tools:text="Title Text Here" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/sideIcon"
+                android:layout_width="@dimen/icon_medium_size"
+                android:layout_height="@dimen/icon_medium_size"
+                android:layout_marginTop="@dimen/card_padding_side_16"
+                android:layout_marginEnd="@dimen/card_padding_side_16"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_tag_add_black_24dp"
+                app:civ_border="false"
+                app:civ_border_color="@color/colorPrimaryDark"
+                app:civ_border_width="1dp"
+                app:tint="@color/white"
+                app:civ_circle_color="@color/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardImageView" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/sideIconText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintStart_toStartOf="@id/sideIcon"
+                app:layout_constraintEnd_toEndOf="@id/sideIcon"
+                app:layout_constraintTop_toBottomOf="@id/sideIcon"
+                tools:text="+1" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/subtitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small_8"
+                android:paddingStart="@dimen/card_padding_side_16"
+                android:paddingEnd="@dimen/card_padding_side_16"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/titleTextView"
+                tools:text="Subtitle Text Here" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/supportingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:maxLines="4"
+                android:paddingStart="@dimen/card_padding_side_16"
+                android:paddingEnd="@dimen/card_padding_side_16"
+                android:paddingBottom="@dimen/card_padding_side_16"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/subtitleTextView"
+                tools:text="@string/debug_placeholder_lorem" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/card_padding_side_16"
+                android:layout_marginEnd="@dimen/card_padding_side_16"
+                android:paddingBottom="@dimen/card_padding_side_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/supportingTextView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

@@ -50,7 +50,7 @@
     </activity>
     <activity
         android:id="@+id/entryEditActivity"
-        android:name="io.dairyly.dairyly.screens.entry.EntryEditActivity"
+        android:name="io.dairyly.dairyly.screens.entry.EntryEditorActivity"
         android:label="EntryEditActivity" />
 
 </navigation>

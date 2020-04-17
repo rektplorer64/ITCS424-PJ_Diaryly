@@ -6,15 +6,18 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.dairyly.dairyly.data.models.DiaryDateHolder
+import io.dairyly.dairyly.models.data.DEFAULT_ID
 import io.dairyly.dairyly.models.data.DiaryEntry
 import io.dairyly.dairyly.models.data.FirebaseDiaryEntry
 import io.dairyly.dairyly.models.data.FirebaseDiaryImage
 import io.dairyly.dairyly.models.data.FirebaseDiaryImage.Companion.getFirebaseStoragePath
 import io.dairyly.dairyly.utils.createUploadImageWork
 import io.dairyly.dairyly.utils.getDayRange
+import io.dairyly.dairyly.utils.serializeToMap
 import io.reactivex.*
 import org.apache.commons.lang3.time.DateUtils
 import java.util.*
+import kotlin.collections.HashMap
 
 object DiaryRepo {
 
@@ -40,7 +43,7 @@ object DiaryRepo {
             }
         }
 
-        Log.d(LOG_TAG, "Adding a new diary entry: $entryToBeInserted")
+        Log.d(LOG_TAG, "ADDING a new diary entry: $entryToBeInserted and its ${entryToBeInserted.images?.size?: 0} images")
 
         val flowCallback = FlowableOnSubscribe { flowable: FlowableEmitter<Boolean> ->
             val task = ref.setValue(
@@ -51,9 +54,10 @@ object DiaryRepo {
                       "Task Finished\nAdding a new diary! (Result = ${it.isSuccessful})\n\t${it}")
 
                 if(key != null && !entryToBeInserted.images.isNullOrEmpty()) {
-                    Log.d(LOG_TAG, "Image Uploading task initializing...")
+                    val imageList = entryToBeInserted.images!!.values.toList()
+                    Log.d(LOG_TAG, "An UPLOADING task has been initialized for ${imageList.size} images.")
                     createUploadImageWork(context, getFirebaseStoragePath(entryToBeInserted.id),
-                                          entryToBeInserted.images!!.values.toList())
+                                          imageList)
                 }
                 flowable.onNext(it.isSuccessful)
                 flowable.onComplete()
@@ -69,7 +73,7 @@ object DiaryRepo {
                 .singleOrError()
     }
 
-    fun reactivelyRetrieveAnEntryById(entry: String): Flowable<DiaryEntry> {
+    fun reactivelyRetrieveAnEntryById(entry: String, isReactive: Boolean = true): Flowable<DiaryEntry> {
         val flowCallback = FlowableOnSubscribe { flowable: FlowableEmitter<DiaryEntry> ->
             diaryEntryRoot.child(entry)
                     .addValueEventListener(object : ValueEventListener {
@@ -77,10 +81,15 @@ object DiaryRepo {
                             val value = p0.getValue(FirebaseDiaryEntry::class.java)
                             if(value == null) {
                                 flowable.onError(Throwable("No data found!"))
+                                flowable.onComplete()
                                 return
                             }
                             Log.d(LOG_TAG, "Retrieved a new entry -> ${value.id}")
                             flowable.onNext(value.toNormalData())
+
+                            if(!isReactive){
+                                flowable.onComplete()
+                            }
                         }
                         override fun onCancelled(error: DatabaseError) {
                             // *** Do not call Flowable.onComplete() in onDataChange(); ***
@@ -96,8 +105,9 @@ object DiaryRepo {
                 .create(flowCallback, BackpressureStrategy.BUFFER)
     }
 
-    fun retrieveAnEntryById(entry: String): Single<DiaryEntry> {
-        return reactivelyRetrieveAnEntryById(entry).singleOrError()
+    fun retrieveAnEntryById(entryId: String): Single<DiaryEntry> {
+        Log.d(LOG_TAG, "Retrieving a Diary Entry by ID = $entryId")
+        return reactivelyRetrieveAnEntryById(entryId, false).singleOrError()
     }
 
     fun retrieveAllEntry(): Flowable<List<DiaryEntry>> {
@@ -144,9 +154,6 @@ object DiaryRepo {
                                                          .toNormalData())
                                     }
                                     flowable.onNext(list)
-
-                                    Log.d(LOG_TAG, "Fetched new entries: $list")
-                                    flowable.onComplete()
                                 }
                             })
                 }, BackpressureStrategy.BUFFER)
@@ -171,13 +178,11 @@ object DiaryRepo {
                                         list.add(it.getValue(FirebaseDiaryEntry::class.java)!!
                                                          .toNormalData())
                                     }
-                                    flowable.onNext(list)
-
                                     Log.d(LOG_TAG, "Fetched new entries: $list")
-                                    flowable.onComplete()
+                                    flowable.onNext(list)
                                 }
                             })
-                }, BackpressureStrategy.BUFFER)
+                }, BackpressureStrategy.LATEST)
     }
 
     fun identifyGoodBadScoreListInRange(time1: Date, time2: Date): Flowable<List<DiaryDateHolder>> {
@@ -201,6 +206,71 @@ object DiaryRepo {
             }
             return@map a
         }
+    }
+
+    fun updateAnEntry(context: Context, diaryEntry: DiaryEntry): Single<Boolean>{
+        val firebaseDiaryEntry = diaryEntry.toFirebaseData().apply {
+            if(!images.isNullOrEmpty()) {
+                val hashMap = hashMapOf<String, FirebaseDiaryImage>()
+                for(entry in images!!) {
+                    if(entry.value.id == DEFAULT_ID) {
+                        entry.value.id = entry.value.hashCode().toString()
+                        entry.value.entryId = diaryEntry.id
+                    }
+                    hashMap[entry.value.id] = entry.value
+                }
+                images = hashMap
+            }
+        }
+
+        Log.d(LOG_TAG, "UPDATE: Total Image to be Uploaded: ${diaryEntry.images?.size}")
+
+        // List of new images to be uploaded
+        val addedImages = firebaseDiaryEntry.images?.filter { !it.value.isUploaded }
+        Log.d(LOG_TAG, "UPDATE: Total Image to be Uploaded: ${addedImages?.size}")
+
+        val addedImageMap = addedImages?.values?.toList()
+
+        // List of old images to be deleted
+        val targetForRemovalImages = firebaseDiaryEntry.images?.filter { it.value.markedForDeletion }?.values?.toList()
+
+        val serializedDiaryEntry = HashMap(firebaseDiaryEntry.serializeToMap()).apply {
+            remove("isUploaded")
+            remove("markedForDeletion")
+        }
+
+        Log.d(LOG_TAG, "Preparing to UPDATE diary entry: ${firebaseDiaryEntry.id}")
+        val ref = diaryEntryRoot.child(firebaseDiaryEntry.id)
+
+        val flowCallback = FlowableOnSubscribe { flowable: FlowableEmitter<Boolean> ->
+            val task = ref.updateChildren(serializedDiaryEntry)
+
+            task.addOnCompleteListener {
+                Log.d(LOG_TAG,
+                      "Task Finished\nUPDATING a diary entry! (Result = ${it.isSuccessful})\n\t${it}")
+
+                if(it.isSuccessful && !addedImageMap.isNullOrEmpty()) {
+                    Log.d(LOG_TAG, "Image Uploading task initializing...")
+                    createUploadImageWork(context, getFirebaseStoragePath(firebaseDiaryEntry.id),
+                                          addedImageMap)
+                }
+
+                // if(it.isSuccessful && !targetForRemovalImages.isNullOrEmpty()) {
+                //     Log.d(LOG_TAG, "Image Deletion task initializing...")
+                //     createImageDeletionWork(context, getFirebaseStoragePath(firebaseDiaryImage.id),
+                //                           targetForRemovalImages)
+                // }
+                flowable.onNext(it.isSuccessful)
+                flowable.onComplete()
+            }.addOnFailureListener {
+                Log.e(LOG_TAG, "Task Error!\n${it.stackTrace}")
+                flowable.onError(it)
+            }
+        }
+
+        return Flowable
+                .create(flowCallback, BackpressureStrategy.BUFFER)
+                .singleOrError()
     }
 
 }

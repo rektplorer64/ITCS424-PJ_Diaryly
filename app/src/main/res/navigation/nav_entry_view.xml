@@ -7,5 +7,21 @@
     <fragment
         android:id="@+id/showEntryFragment"
         android:name="io.dairyly.dairyly.screens.entry.ShowEntryFragment"
-        android:label="ShowEntryFragment" />
+        android:label="ShowEntryFragment" >
+        <action
+            android:id="@+id/action_showEntryFragment_to_entryEditActivity2"
+            app:destination="@id/entryEditActivity2" />
+    </fragment>
+
+    <activity
+        android:id="@+id/entryEditActivity2"
+        android:name="io.dairyly.dairyly.screens.entry.EntryEditorActivity"
+        android:label="EntryEditActivity">
+
+        <argument
+            android:name="entryId"
+            app:argType="string"
+            android:defaultValue="-1"/>
+
+    </activity>
 </navigation>

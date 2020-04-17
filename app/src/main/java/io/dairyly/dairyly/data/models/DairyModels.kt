@@ -18,7 +18,7 @@ data class DiaryEntryInfo(
         val goodBad: GoodBad
 ) {
     enum class GoodBad {
-        GOOD, BAD
+        GOOD, BAD, NEUTRAL
     }
 }
 

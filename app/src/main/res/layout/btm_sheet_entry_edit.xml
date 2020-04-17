@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheetView"
+    android:layout_width="match_parent"
+    android:layout_height="540dp"
+    android:clickable="true"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="58dp"
+    app:cardCornerRadius="@dimen/default_corner_radius"
+    app:cardElevation="8dp"
+    android:foreground="@null"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    app:state_dragged="true">
+    <!--    tools:showIn="@layout/fragment_entry_edit">-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/collapseImageBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:background="@null"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/margin_med_16"
+            android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+            android:tint="@color/blackAlpha60"
+            app:layout_constraintBottom_toBottomOf="@id/actionChipGroup"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/actionChipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:tint="@color/blackAlpha60"
+            app:layout_constraintBottom_toBottomOf="@id/collapseImageBtn"
+            app:layout_constraintStart_toEndOf="@id/collapseImageBtn"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tagBtn"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/entry_tag"
+                android:textColor="@color/mainBlue"
+                app:chipBackgroundColor="@android:color/white"
+                app:chipIcon="@drawable/ic_tag_add_black_24dp"
+                app:chipIconEnabled="true"
+                app:chipIconSize="20dp"
+                app:chipIconTint="@color/mainBlue"
+                app:chipStrokeColor="@color/mainBlue"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/imageBtn"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/entry_image"
+                android:textColor="@color/infoColor"
+                app:chipBackgroundColor="@android:color/white"
+                app:chipIcon="@drawable/ic_image_add_black_24dp"
+                app:chipIconEnabled="true"
+                app:chipIconSize="20dp"
+                app:chipIconTint="@color/infoColor"
+                app:chipStrokeColor="@color/infoColor"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/colorSelectBtn"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/entry_color"
+                android:textColor="@color/blackAlpha60"
+                app:chipBackgroundColor="@android:color/white"
+                app:chipIcon="@drawable/ic_color_lens_black_24dp"
+                app:chipIconEnabled="true"
+                app:chipIconSize="20dp"
+                app:chipIconTint="@color/blackAlpha60"
+                app:chipStrokeColor="@color/blackAlpha25"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/locationBtn"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/location_geo"
+                android:textColor="@color/giantsOrange"
+                app:chipBackgroundColor="@android:color/white"
+                app:chipIcon="@drawable/ic_location_on_black_24dp"
+                app:chipIconEnabled="true"
+                app:chipIconTint="@color/giantsOrange"
+                app:chipStrokeColor="@color/giantsOrange"
+                app:chipStrokeWidth="1dp" />
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/goodBadOverlineText"
+            style="@style/TextAppearance.MaterialComponents.Overline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_med_16"
+            android:layout_marginTop="@dimen/margin_large_24"
+            android:layout_marginBottom="@dimen/margin_small_8"
+            android:text="@string/goodBad"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/collapseImageBtn" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/goodBadBtnGroup"
+            app:layout_constraintTop_toBottomOf="@id/goodBadOverlineText"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/margin_med_16"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            android:layout_marginTop="@dimen/margin_med_16"
+            app:checkedButton="@id/neutralBtn"
+            app:selectionRequired="true">
+
+            <Button
+                android:id="@+id/goodBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                app:icon="@drawable/ic_thumb_up_black_24dp" />
+
+            <Button
+                android:id="@+id/neutralBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                app:icon="@drawable/ic_circle_off_black_24dp" />
+
+            <Button
+                android:id="@+id/badBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                app:icon="@drawable/ic_thumb_down_black_24dp" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/goodBadStatusText"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_med_16"
+            android:text="@string/goodBad"
+            app:layout_constraintStart_toEndOf="@id/goodBadBtnGroup"
+            app:layout_constraintBottom_toBottomOf="@id/goodBadBtnGroup"
+            app:layout_constraintTop_toTopOf="@id/goodBadBtnGroup" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/locationOverlineText"
+            style="@style/TextAppearance.MaterialComponents.Overline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_med_16"
+            android:layout_marginTop="@dimen/margin_large_24"
+            android:layout_marginBottom="@dimen/margin_small_8"
+            android:text="@string/location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/goodBadBtnGroup" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mapCardView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginHorizontal="@dimen/margin_med_16"
+            android:layout_marginTop="@dimen/margin_med_16"
+            android:clipChildren="true"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            app:cardCornerRadius="@dimen/default_corner_radius"
+            app:cardElevation="0dp"
+            android:clickable="true"
+            app:layout_constraintTop_toBottomOf="@id/locationOverlineText">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:tag="mapPreview"
+                    app:layout_constraintTop_toBottomOf="@id/progressMap"
+                    tools:context=".screens.LocationActivity" />
+
+                <ProgressBar
+                    android:id="@+id/progressMap"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminateOnly="true"
+                    app:layout_constraintTop_toBottomOf="@id/locationOverlineText" />
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/locationNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_med_16"
+            android:layout_marginTop="@dimen/margin_med_16"
+            android:fontFamily="@font/google_sans"
+            android:textFontWeight="600"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mapCardView"
+            android:text="@string/location_not_selected" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/locationCoordinateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_med_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/locationNameTextView"
+            tools:text="13.745, 100.377" />
+
+        <Button
+            android:id="@+id/locationClearBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.App.Button.IconOnly"
+            app:icon="@drawable/ic_cancel_black_24dp"
+            app:layout_constraintTop_toTopOf="@id/locationNameTextView"
+            app:layout_constraintBottom_toBottomOf="@id/locationCoordinateTextView"
+            android:enabled="false"
+            app:layout_constraintEnd_toStartOf="@id/locationEditBtn"/>
+
+        <Button
+            android:id="@+id/locationEditBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.App.Button.IconOnly"
+            app:icon="@drawable/ic_create_black_24dp"
+            app:layout_constraintTop_toTopOf="@id/locationNameTextView"
+            app:layout_constraintBottom_toBottomOf="@id/locationCoordinateTextView"
+            android:enabled="false"
+            app:layout_constraintEnd_toEndOf="@id/mapCardView"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

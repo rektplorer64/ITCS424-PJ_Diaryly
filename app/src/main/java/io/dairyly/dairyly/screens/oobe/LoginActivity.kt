@@ -10,7 +10,7 @@ import io.dairyly.dairyly.viewmodels.RegisterViewModel
 class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
+        setTheme(R.style.Diaryly)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 

@@ -9,8 +9,10 @@
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" tools:remove="android:maxSdkVersion" />
-    <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:remove="android:maxSdkVersion"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:remove="android:maxSdkVersion" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Diaryly">
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -49,7 +51,7 @@
             android:name=".screens.entry.EntryDisplayActivity"
             android:launchMode="singleTop" />
         <activity android:name=".screens.main.MainActivity" />
-        <activity android:name=".screens.entry.EntryEditActivity" />
+        <activity android:name=".screens.entry.EntryEditorActivity" />
     </application>
 
 </manifest>

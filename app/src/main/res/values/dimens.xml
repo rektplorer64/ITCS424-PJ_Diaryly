@@ -6,11 +6,16 @@
     <dimen name="margin_med_16">16dp</dimen>
     <dimen name="margin_small_8">8dp</dimen>
     <dimen name="spacing_8dp">8dp</dimen>
-    <dimen name="headline">24sp</dimen>
+    <dimen name="textHeadline5">24sp</dimen>
     <dimen name="headline2">28sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="margin_large_24">24dp</dimen>
     <dimen name="margin_xlarge_48">48dp</dimen>
-    <dimen name="corner_radius">16dp</dimen>
+    <dimen name="dialog_corner_radius">16dp</dimen>
     <dimen name="fab_mini">40dp</dimen>
+    <dimen name="default_corner_radius">8dp</dimen>
+    <dimen name="icon_default_size">24dp</dimen>
+    <dimen name="icon_medium_size">32dp</dimen>
+    <dimen name="textHeadline4">34sp</dimen>
+    <dimen name="textHeadline4_5">28sp</dimen>
 </resources>

@@ -38,6 +38,7 @@ class ImageUploadWorker(context: Context, workerParams: WorkerParameters)
         return FirebaseStorageRepository
                 .uploadDiaryEntryImages(storagePath!!, bitmapArrayList)!!
                 .toList()
+                .doOnError { it.printStackTrace() }
                 .map {
                     val outputData = workDataOf(KEY_NO_IMAGE_UPLOADS to it.size)
                     Result.success(outputData)

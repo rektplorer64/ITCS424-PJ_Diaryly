@@ -17,7 +17,11 @@ class EntryActivityViewModel(repository: DairyRepository, entryId: String, diary
 
     // private val dateHolder = MutableLiveData(rawDateHolder)
     val dailyDiary: LiveData<Resource<List<DiaryEntry>>> =
-            LiveDataReactiveStreams.fromPublisher(diaryContentUseCase.getAllDiaryEntriesByDateHolder(diaryDateHolder))
+            LiveDataReactiveStreams.fromPublisher(diaryContentUseCase.getAllDiaryEntriesByDateHolder(diaryDateHolder)).apply {
+                observeForever {
+                    Log.d("Converting to LiveData", "Getting $it")
+                }
+            }
 
     var selectedDiaryEntry = entryId
     var isFirstTime = true

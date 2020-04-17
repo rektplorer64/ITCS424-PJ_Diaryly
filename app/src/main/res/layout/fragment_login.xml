@@ -28,7 +28,7 @@
         android:fontFamily="@font/google_sans_medium"
         android:text="@string/login_to_diaryly"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/headline"
+        android:textSize="@dimen/textHeadline5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logoImageView" />

@@ -1,6 +1,7 @@
 package io.dairyly.dairyly.utils
 
 import android.util.Patterns
+import java.lang.String.format
 import java.security.MessageDigest
 
 fun CharSequence?.isValidEmail() = !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this!!).matches()
@@ -11,3 +12,4 @@ fun String.toSHA256(): String{
     val digest = md.digest()
     return digest.contentToString()
 }
+

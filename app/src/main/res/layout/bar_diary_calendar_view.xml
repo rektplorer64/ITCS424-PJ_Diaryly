@@ -11,6 +11,8 @@
         style="@style/Widget.MaterialComponents.CardView"
         app:cardBackgroundColor="@color/white"
         android:clipChildren="true"
+        app:cardCornerRadius="0dp"
+        android:animateLayoutChanges="true"
         app:cardElevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -73,15 +75,19 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/defaultHeaderText"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="72dp"
                 android:fontFamily="@font/google_sans_medium"
                 android:maxLines="2"
                 android:layout_marginStart="@dimen/margin_med_16"
-                android:textSize="@dimen/headline"
+                android:textSize="@dimen/textHeadline4_5"
+                android:autoSizeTextType="uniform"
+                app:autoSizeMaxTextSize="@dimen/textHeadline4_5"
+                app:autoSizeMinTextSize="@dimen/textHeadline5"
                 app:layout_constraintEnd_toStartOf="@id/view_guide2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/date_tabs"
                 android:textColor="@android:color/black"
+                android:animateLayoutChanges="true"
                 tools:text="Coming-back-to-doing-some-good-again day" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -89,19 +95,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:animateLayoutChanges="true"
                 android:layout_marginStart="@dimen/margin_med_16"
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintEnd_toStartOf="@id/view_guide2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/defaultHeaderText"
                 android:textColor="@color/blackAlpha60"
-                tools:text="Today"
-                android:paddingBottom="16dp" />
+                android:paddingBottom="@dimen/margin_large_24"
+                tools:text="Today" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profileImageView"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
+                android:animateLayoutChanges="true"
                 android:layout_marginTop="@dimen/margin_med_16"
                 android:layout_marginEnd="@dimen/margin_med_16"
                 android:src="@drawable/ic_launcher_background"

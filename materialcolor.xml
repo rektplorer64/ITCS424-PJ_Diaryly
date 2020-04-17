@@ -1,51 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-<!--  Main Branding Colors  -->
-
-    <!--  Saffron  -->
-    <color name="colorPrimary">#FBC02D</color>
-
-    <!--  Teal Blue  -->
-    <color name="colorPrimaryDark">#33658A</color>
-
-    <!--  Cyan  -->
-    <color name="colorAccent">#00F9FF</color>
-
-    <!--  Turquoise  -->
-    <color name="colorAccentDark">#55DDE0</color>
-
-<!-- Complementary Colors  -->
-
-    <!--  Main Blue  -->
-    <color name="mainBlue">#2962FF</color>
-
-    <!--  Giants Orange  -->
-    <color name="giantsOrange">#F26419</color>
-
-    <!--  Minion Yellow  -->
-    <color name="minionYellow">#F4E04D</color>
-
-    <!-- Light Orange -->
-    <color name="lightYellow">#FFE082</color>
-
-    <!--  Dark Slate Gray  -->
-    <color name="darkSlateGray">#2F4858</color>
-
-<!--  Common Colors  -->
-    <color name="white">#FFFFFF</color>
-    <color name="whiteAlpha100">#00FFFFFF</color>
-    <color name="blackAlpha75">#BF000000</color>
-    <color name="blackAlpha50">#80000000</color>
-    <color name="blackAlpha25">#40000000</color>
-    <color name="blackAlpha60">#99000000</color>
-    <color name="whiteAlpha35">#59FFFFFF</color>
-    <color name="blackAlpha15">#26000000</color>
-    <color name="errorRed">#AD0000</color>
-    <color name="whiteAlpha50">#80FFFFFF</color>
-    <color name="whiteAlpha60">#99FFFFFF</color>
-
-<!--  Material Color  -->
     <color name="Red50">#ffebee</color>
     <color name="Red100">#ffcdd2</color>
     <color name="Red200">#ef9a9a</color>

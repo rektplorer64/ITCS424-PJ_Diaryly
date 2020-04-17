@@ -1,8 +1,9 @@
 package io.dairyly.dairyly.ui.components
 
-import android.text.format.DateFormat
+import android.icu.text.DateFormat
 import android.text.format.DateUtils
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textview.MaterialTextView
@@ -12,7 +13,7 @@ import io.dairyly.dairyly.utils.TIME_FORMATTER_SHORT
 import org.apache.commons.lang3.time.DateUtils.isSameDay
 import java.util.*
 
-class RylyTabEntryDelegate(var onTabClickListener: ((DiaryEntry) -> Unit)? = null) : RylyToolbarBehaviorDelegate<DiaryEntry> {
+class RylyTabEntryDelegate(private var onTabClickListener: ((DiaryEntry) -> Unit)? = null) : RylyToolbarBehaviorDelegate<DiaryEntry> {
 
     private val LOG_TAG = this::class.java.simpleName
 
@@ -35,16 +36,21 @@ class RylyTabEntryDelegate(var onTabClickListener: ((DiaryEntry) -> Unit)? = nul
 
         overlineTextView.apply {
             val time = item.timeCreated
-            val timeString = DateFormat.getTimeFormat(context).format(time)
+            val timeString = DateFormat.getDateInstance(DateFormat.LONG).format(time)
+
             val relativeTimeString = DateUtils.getRelativeTimeSpanString(
                     time.time, System.currentTimeMillis(),
-                    DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_ABBREV_RELATIVE)
+                    DateUtils.MINUTE_IN_MILLIS, DateUtils.FORMAT_NUMERIC_DATE)
 
             text = context.getString(R.string.template_dot_2_messages,
                                      relativeTimeString, timeString)
         }
         headerTextView.text = item.title
-        subtitleTextView.text = item.subtitle
+        if(!item.subtitle.isNullOrEmpty()) {
+            subtitleTextView.text = item.subtitle
+        } else {
+            subtitleTextView.visibility = View.GONE
+        }
 
         onTabClickListener?.let { it(item) }
         // bigTextView.typeface

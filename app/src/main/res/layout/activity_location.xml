@@ -12,29 +12,30 @@
         android:layout_height="match_parent"
         tools:context=".screens.LocationActivity" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/cancelBtn"
-        android:layout_width="wrap_content"
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/btmAppBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_anchor="@id/map"
-        app:layout_anchorGravity="top|start"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
-        app:srcCompat="@drawable/ic_arrow_back_black_24dp"
-        app:tint="@color/blackAlpha60"
-        app:backgroundTint="@android:color/white"
-        android:layout_marginStart="@dimen/margin_large_24"
-        android:layout_marginTop="@dimen/margin_large_24"/>
+        app:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="center"
+        android:layout_gravity="bottom"
+        android:foregroundTint="@color/blackAlpha60"
+        style="@style/Widget.MaterialComponents.BottomAppBar"
+        app:navigationIcon="@drawable/icon_back_black"
+        app:fabAnimationMode="scale"
+        app:fabCradleMargin="@dimen/margin_small_8"
+        app:fabCradleRoundedCornerRadius="@dimen/margin_med_16"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/locationConfirmBtn"
-        app:layout_anchor="@id/map"
-        app:layout_anchorGravity="end|bottom"
+        app:layout_anchor="@id/btmAppBar"
+        app:layout_anchorGravity="center|bottom"
         android:layout_marginBottom="@dimen/margin_large_24"
         android:layout_marginEnd="@dimen/margin_large_24"
         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/confirm_selection"
+        android:text="@string/confirm"
         android:textColor="@android:color/white"
         app:backgroundTint="@color/colorPrimaryDark"
         app:icon="@drawable/ic_check_white_24dp"

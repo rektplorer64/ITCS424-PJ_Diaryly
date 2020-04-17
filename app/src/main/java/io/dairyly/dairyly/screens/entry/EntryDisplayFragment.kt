@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -40,35 +41,47 @@ class ShowEntryFragment : Fragment() {
             behaviorBehaviorDelegate = RylyTabEntryDelegate()
         }
 
-        viewModel.dailyDiary.observe(this){
-            if(it.data.isNullOrEmpty()){
+        viewModel.dailyDiary.observe(this) { list ->
+            if(list.data.isNullOrEmpty()) {
                 return@observe
             }
-            Log.d(LOG_TAG, "${it.data.size} entries received for displaying tabs")
-            entryTabs.postDataUpdate(it.data)
+            Log.d(LOG_TAG, "${list.data.size} entries received for displaying tabs")
+            // entryTabs.postDataUpdate(list.data)
 
             val fragmentAdapter = DiaryEntryViewPagerAdapter(
-                    it.data.map(DiaryEntry::id), this)
+                    list.data.map(DiaryEntry::id), this)
 
-            diaryEntryViewPager.apply {
-                isUserInputEnabled = false
-                adapter = fragmentAdapter
+            if(viewModel.isFirstTime) {
+                diaryEntryViewPager.apply {
+                    isUserInputEnabled = false
+                    adapter = fragmentAdapter
 
-                TabLayoutMediator(entryTabs.tabLayoutWrapper.calendarTab, this) { tab, _ ->
-                    this.setCurrentItem(tab.position, true)
-                }.attach()
-                offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
+                    TabLayoutMediator(entryTabs.tabLayoutWrapper.calendarTab, this) { tab, _ ->
+                        if(viewModel.isFirstTime) {
+                            this.setCurrentItem(tab.position, true)
+                        }
+                    }.attach()
 
-                if(viewModel.isFirstTime) {
+                    offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
                     scrollTab(viewModel.getSelectedDiaryEntryIndex())
                     viewModel.isFirstTime = false
                 }
             }
-            entryTabs.postDataUpdate(it.data)
+            entryTabs.postDataUpdate(list.data)
+
+            editEntryFab.setOnClickListener {
+                val diaryEntry = list.data[entryTabs.getSelectedTabIndex()]
+                Log.d(LOG_TAG,
+                      "Entering the Edit Activity with [EntryId = ${diaryEntry.id}] @ index = ${entryTabs.getSelectedTabIndex()}")
+
+                val action = ShowEntryFragmentDirections.actionShowEntryFragmentToEntryEditActivity2(
+                        diaryEntry.id)
+                findNavController().navigate(action)
+            }
         }
     }
 
-    private fun scrollTab(index: Int){
+    private fun scrollTab(index: Int) {
         diaryEntryViewPager.post {
             Log.d(LOG_TAG, "Scrolling to the ${index}th tab")
             entryTabs.tabLayoutWrapper.scrollToTab(index)
@@ -92,17 +105,26 @@ class DiaryEntryViewPagerAdapter(private val entryIds: List<String>, fragment: F
     }
 }
 
-class ImageCarouselRvAdapter : ListAdapter<DiaryImage, ImageCarouselRvAdapter.ViewHolder>(DiaryImageDiffCallback()) {
+class ImageCarouselRvAdapter :
+        ListAdapter<DiaryImage, ImageCarouselRvAdapter.ViewHolder>(DiaryImageDiffCallback()) {
+
+    private val LOG_TAG = this::class.java.simpleName
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context).inflate(R.layout.item_carousel_image, parent, false)
+        val layoutInflater = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_carousel_image, parent, false)
         return ViewHolder(layoutInflater)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)!!
         holder.imageView.apply {
-            Glide.with(context!!).load(item.getImageStorageReference()).into(this)
+            Log.d(LOG_TAG, "Getting Image from $item")
+            if(item.isUploaded) {
+                Glide.with(context!!).load(item.getImageStorageReference()).into(this)
+            } else {
+                Glide.with(context!!).load(item.imageBitmap).into(this)
+            }
         }
     }
 

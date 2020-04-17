@@ -11,7 +11,6 @@ import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.observe
-import androidx.viewpager.widget.ViewPager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
@@ -34,7 +33,7 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
 
     private val liveDataScrollX: MutableLiveData<Int> = MutableLiveData()
 
-    val autoScrollingEnabled: Boolean
+    var autoScrollingEnabled: Boolean
 
     init {
         val attrs = context.obtainStyledAttributes(attributes, R.styleable.RylyToolbarView, 0, 0)
@@ -64,42 +63,53 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
                 liveDataScrollX.postValue(scrollX)
             }
         }
-
         profileImageView.setImageDrawable(getDrawable(context, profileImageRes))
     }
 
+    private lateinit var onTabSelectedListener: TabLayout.OnTabSelectedListener
+
     fun postDataUpdate(list: List<TabType>?) {
         if(list != null) {
-            tabLayoutWrapper.postUpdate(list)
 
+            liveDataScrollX.removeObservers(context as LifecycleOwner)
             liveDataScrollX.observe(context as LifecycleOwner) {
-                val minPosition = calculateTagInTheMiddle(tabLayoutWrapper.calendarTab, it)
-                behaviorBehaviorDelegate.onTabScrolled(defaultOverlineText, defaultHeaderText,
-                                                       subtitleTextView, list[minPosition])
+                try {
+                    val minPosition = calculateTabInTheMiddle(tabLayoutWrapper.calendarTab, it)
+                    behaviorBehaviorDelegate.onTabScrolled(defaultOverlineText, defaultHeaderText,
+                                                           subtitleTextView, list[minPosition])
+                } catch(e: KotlinNullPointerException) {
+                    e.printStackTrace()
+                }
                 // println("Closest View: ${tabLayoutWrapper.calendarTab.getTabAt(minPosition)!!.text}")
             }
 
-            tabLayoutWrapper.calendarTab
-                    .addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                        override fun onTabReselected(tab: TabLayout.Tab?) {
-                            // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                        }
+            if(this::onTabSelectedListener.isInitialized) {
+                tabLayoutWrapper.calendarTab.removeOnTabSelectedListener(onTabSelectedListener)
+            }
 
-                        override fun onTabUnselected(tab: TabLayout.Tab?) {
-                            // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                        }
+            onTabSelectedListener = object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
 
-                        override fun onTabSelected(tab: TabLayout.Tab?) {
-                            behaviorBehaviorDelegate.onTabSelected(defaultOverlineText,
-                                                                   defaultHeaderText,
-                                                                   subtitleTextView,
-                                                                   list[tab!!.position])
-                        }
-                    })
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    behaviorBehaviorDelegate.onTabSelected(defaultOverlineText,
+                                                           defaultHeaderText,
+                                                           subtitleTextView,
+                                                           list[tab!!.position])
+                }
+            }
+            tabLayoutWrapper.calendarTab.addOnTabSelectedListener(onTabSelectedListener)
+
+            tabLayoutWrapper.postUpdate(list)
         }
     }
 
-    private fun calculateTagInTheMiddle(tabLayout: TabLayout, scrollX: Int = 0): Int {
+    private fun calculateTabInTheMiddle(tabLayout: TabLayout, scrollX: Int = 0): Int {
         val tabLayoutWidthCenter = tabLayout.measuredWidth / 2 - tabLayout.getTabAt(0)!!.view.width
 
         var minPosition = -1
@@ -117,12 +127,12 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
         return minPosition
     }
 
-    fun setupViewPager(viewPager: ViewPager) {
-        tabLayoutWrapper.calendarTab.setupWithViewPager(viewPager)
+    fun getSelectedTabIndex(): Int {
+        return tabLayoutWrapper.getSelectedTabIndex()
     }
 
     private val STATE_PERSISTENT_SUPER = "sajdhaskdjkahsjkda"
-    private val STATE_PERSISTENT_TAB_SELECTION = "sajdhaskdjkahsjkda"
+    private val STATE_PERSISTENT_TAB_SELECTION = "sajdhaskdjasdsadasdpogfplgokpdfpokkahsjkda"
 
     override fun onSaveInstanceState(): Parcelable? {
         super.onSaveInstanceState()
@@ -153,7 +163,10 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
             calendarTab.isSmoothScrollingEnabled = true
         }
 
+        var oldTabIndex = -1
         fun postUpdate(diaryDateHolders: List<TabType>) {
+            oldTabIndex = getSelectedTabIndex()
+            Log.d(LOG_TAG, "postUpdate Old Selected tab: $oldTabIndex")
             calendarTab.removeAllTabs()
             for(i in diaryDateHolders.indices) {
                 val tab = calendarTab.newTab().apply {
@@ -173,6 +186,13 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
                 calendarTab.addTab(tab)
             }
 
+            if(oldTabIndex !in -1..0){
+                val oldAutoScroll = autoScrollingEnabled
+                autoScrollingEnabled = false
+                scrollToTab(oldTabIndex)
+                autoScrollingEnabled = oldAutoScroll
+            }
+
             if(autoScrollingEnabled) {
                 scrollToTab()
             }
@@ -187,13 +207,29 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
                 tabIndex
             }
             parent.post {
-                val tab = parent.getChildAt(finalTabIndex)?: parent.getChildAt(0)
-                tab?.post {
-                    val right = tab.right
+                val targetTab = parent.getChildAt(finalTabIndex)?: parent.getChildAt(0)
+                targetTab?.post {
+                    val right = targetTab.right
                     calendarTab.scrollTo(right, 0)
-                    calendarTab.getTabAt(finalTabIndex)!!.select()
+
+                    val tab = try {
+                        Log.d(LOG_TAG, "Trying to select the ${finalTabIndex}th tab")
+                        calendarTab.getTabAt(finalTabIndex)!!
+                    } catch(e: KotlinNullPointerException) {
+                        e.printStackTrace()
+                        Log.d(LOG_TAG, "Error!, Trying to select the ${finalTabIndex - 1}th tab")
+                        calendarTab.getTabAt(finalTabIndex - 1)
+                    }
+                    tab?.apply {
+                        select()
+                        Log.d(LOG_TAG, "Selected the ${finalTabIndex}th tab named: $text")
+                    }
                 }
             }
+        }
+
+        internal fun getSelectedTabIndex(): Int {
+            return calendarTab.selectedTabPosition
         }
 
     }

@@ -1,10 +1,10 @@
 package io.dairyly.dairyly.screens.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.dairyly.dairyly.R
 import io.dairyly.dairyly.data.DairyRepository
 import io.dairyly.dairyly.data.models.DiaryDateHolder
-import io.dairyly.dairyly.ui.adapter.DairyRvAdapter
+import io.dairyly.dairyly.ui.recyclerview.DairyRvAdapter
 import io.dairyly.dairyly.utils.AppViewModelFactory
 import io.dairyly.dairyly.viewmodels.DiaryViewModel
 import kotlinx.android.synthetic.main.fragment_diary_list.*
@@ -52,13 +52,13 @@ class DiaryListFragment : Fragment() {
         }
 
         viewModel.listEntriesByDateHolder.observe(this){
-            // Toast.makeText(this@DiaryListFragment.context, it.status.toString(), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@DiaryListFragment.context, it.status.toString(), Toast.LENGTH_SHORT).show()
             rvAdapter.submitList(it.data)
         }
 
-        viewModel.listAllEntries.observe(this){
-            Log.d("NEW DIARY ENTRY", "Entry $it")
-        }
+        // viewModel.listAllEntries.observe(this){
+        //     Log.d("NEW DIARY ENTRY", "Entry $it")
+        // }
 
     }
 

@@ -29,6 +29,7 @@ xmlns:tools="http://schemas.android.com/tools">
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bodyCardView"
         android:layout_marginTop="56dp"
         app:cardCornerRadius="@dimen/margin_small_8"
         android:layout_width="match_parent"
@@ -61,7 +62,18 @@ xmlns:tools="http://schemas.android.com/tools">
                 android:layout_height="match_parent"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/editEntryFab"
+                android:layout_width="wrap_content"
+                android:text="@string/action_edit_this_entry"
+                app:icon="@drawable/ic_create_black_24dp"
+                app:layout_anchor="@id/diaryEntryViewPager"
+                app:layout_anchorGravity="center_horizontal|bottom"
+                android:layout_marginBottom="@dimen/margin_large_24"
+                android:layout_height="wrap_content" />
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </com.google.android.material.card.MaterialCardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

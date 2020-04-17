@@ -1,7 +1,7 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Diaryly" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,20 +10,27 @@
 
         <item name="colorControlActivated">@color/colorPrimaryDark</item>
         <item name="android:textCursorDrawable">@null</item>
+
+        <!-- Material Dialog -->
         <item name="md_font_title">@font/google_sans_bold</item>
+        <item name="md_corner_radius">@dimen/dialog_corner_radius</item>
     </style>
 
-    <style name="AppTheme.Splash" parent="AppTheme">
+    <style name="chipTextAppearance" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:fontFamily">@font/google_sans</item>
+    </style>
+
+    <style name="AppTheme.Splash" parent="Diaryly">
         <item name="android:windowBackground">@drawable/splash_drawable</item>
     </style>
 
-    <style name="AppTheme.Dark" parent="AppTheme">
+    <style name="AppTheme.Dark" parent="Diaryly">
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
     </style>
 
     <style name="AppTheme.Dark.Toolbar" parent="Theme.MaterialComponents.Light.DarkActionBar" />
 
-    <style name="AppTheme.NoActionBar">
+    <style name="Diaryly.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -31,5 +38,31 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="iconTint">@color/color_button_icon_color_primary_dark</item>
+        <item name="strokeColor">@color/color_button_color_primary_dark</item>
+        <item name="backgroundTint">@color/color_button_bg_color_primary_dark</item>
+        <item name="rippleColor">@color/colorPrimaryDark</item>
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <style name="Widget.App.Button.IconOnly" parent="Widget.App.Button.OutlinedButton.IconOnly">
+        <item name="strokeColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Diaryly.Entry">
+        <item name="android:lineHeight" tools:targetApi="p">24dp</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">start|top</item>
+        <item name="android:typeface">serif</item>
+    </style>
 
 </resources>

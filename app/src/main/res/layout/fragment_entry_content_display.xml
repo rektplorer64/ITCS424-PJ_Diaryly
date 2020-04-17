@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:animateLayoutChanges="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/tagChipGroup"
+            android:layout_marginHorizontal="@dimen/margin_med_16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginBottom="@dimen/margin_small_8"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/locationIndicatorLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/tagChipGroup"
+            app:layout_constraintStart_toStartOf="parent"
+            android:clickable="true"
+            android:foreground="?android:selectableItemBackgroundBorderless"
+            android:padding="16dp">
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="@dimen/icon_medium_size"
+                android:layout_height="@dimen/icon_medium_size"
+                app:civ_border_color="@color/mainBlue"
+                app:civ_border_width="1dp"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                app:srcCompat="@drawable/ic_location_on_black_24dp"
+                app:tint="@color/mainBlue"
+                android:scaleType="centerInside" />
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_small_8">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/locationNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/google_sans_medium"
+                    android:textColor="@color/mainBlue"
+                    tools:text="Bangkae, Bangkok, Thailand"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/locationCoordinateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    tools:text="100.202443, 100.2332" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/imageCarousel"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            app:layout_constraintTop_toBottomOf="@id/locationIndicatorLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/imageCarouselIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            app:layout_constraintEnd_toEndOf="@id/imageCarousel"
+            app:layout_constraintStart_toStartOf="@id/imageCarousel"
+            app:layout_constraintBottom_toBottomOf="@id/imageCarousel"
+            android:layout_marginBottom="@dimen/margin_small_8"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/entryContentTextView"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="@dimen/margin_large_24"
+            android:layout_height="match_parent"
+            app:firstBaselineToTopHeight="@dimen/margin_xlarge_48"
+            style="@style/Diaryly.Entry"
+            app:layout_constraintTop_toBottomOf="@id/imageCarousel"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingBottom="84dp"
+            tools:text="@string/debug_placeholder_lorem"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

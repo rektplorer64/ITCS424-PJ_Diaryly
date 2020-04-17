@@ -38,6 +38,7 @@ class DiaryFragment : Fragment() {
             behaviorBehaviorDelegate = RylyTabDateDelegate()
         }
 
+        // TODO: Make the tab scroll on when the activity start!
         viewModel.dateHolders.observe(this) {
             val fragmentAdapter = DiaryDateViewPagerAdapter(
                     userId, this, it)

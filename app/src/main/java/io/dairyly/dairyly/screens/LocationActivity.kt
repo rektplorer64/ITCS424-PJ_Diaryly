@@ -21,20 +21,20 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import es.dmoral.toasty.Toasty
 import io.dairyly.dairyly.R
-import io.dairyly.dairyly.screens.entry.EntryEditorViewModel
 import io.dairyly.dairyly.utils.CODE_PERMISSION_FINE_LOCATION
 import io.dairyly.dairyly.utils.isGrantedFineLocationPermission
+import io.dairyly.dairyly.viewmodels.EntryEditorViewModel
 import kotlinx.android.synthetic.main.activity_location.*
 import kotlinx.android.synthetic.main.fragment_entry_edit.*
 
 class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private var requestCode = 0
     private val LOG_TAG = this::class.java.simpleName
     private lateinit var viewModel: LocationSelectorViewModel
 
@@ -47,19 +47,21 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
         intent.extras?.let {
             LocationActivityArgs.fromBundle(it).apply {
-                Log.d(LOG_TAG, "Received Location Bundle: ${coordinateLat.toDouble()}, ${coordinateLong.toDouble()}")
-                viewModel.coordinate.value = Pair(coordinateLat.toDouble(), coordinateLong.toDouble())
+                Log.d(LOG_TAG,
+                      "Received Location Bundle: ${coordinateLat.toDouble()}, ${coordinateLong.toDouble()}")
+                viewModel.coordinate.value = Pair(coordinateLat.toDouble(),
+                                                  coordinateLong.toDouble())
             }
         }
 
 
-        cancelBtn.setOnClickListener {
+        btmAppBar.setNavigationOnClickListener {
             onBackPressed()
         }
 
         locationConfirmBtn.setOnClickListener {
             MaterialDialog(this).show {
-                cornerRadius(res = R.dimen.corner_radius)
+                cornerRadius(res = R.dimen.dialog_corner_radius)
                 title(res = R.string.dialog_confirm_selected_location)
                 positiveButton(android.R.string.ok) {
                     // TODO: save the data here!!!!
@@ -67,7 +69,8 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
                         putExtra("lat", viewModel.coordinate.value!!.first)
                         putExtra("long", viewModel.coordinate.value!!.second)
                     }
-                    Log.d(LOG_TAG, "Sending back Location Bundle: ${viewModel.coordinate.value!!.first}, ${viewModel.coordinate.value!!.second}")
+                    Log.d(LOG_TAG,
+                          "Sending back Location Bundle: ${viewModel.coordinate.value!!.first}, ${viewModel.coordinate.value!!.second}")
                     if(parent == null) {
                         setResult(Activity.RESULT_OK, intent)
                     } else {
@@ -84,7 +87,7 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onBackPressed() {
         MaterialDialog(this).show {
-            cornerRadius(res = R.dimen.corner_radius)
+            cornerRadius(res = R.dimen.dialog_corner_radius)
             title(res = R.string.dialog_exit_location_selector)
             positiveButton(android.R.string.ok) {
                 // TODO: save the data here!!!!
@@ -96,7 +99,7 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     @SuppressLint("MissingPermission")
-    private fun prepareLocationServiceAndMap(){
+    private fun prepareLocationServiceAndMap() {
         requestServiceAndCurrentLocation()
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -134,7 +137,7 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         val locationListener: LocationListener = object : LocationListener {
             override fun onLocationChanged(location: Location?) {
-                if(location == null || viewModel.coordinate.value != EntryEditorViewModel.DEFAULT_LOCATION) {
+                if(location == null || viewModel.coordinate.value != EntryEditorViewModel.EMPTY_LOCATION) {
                     return
                 }
                 viewModel.coordinate.value = Pair(location.latitude, location.longitude)
@@ -171,38 +174,52 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(g: GoogleMap) {
 
         g.apply {
-            setMaxZoomPreference(15f)
+            setMinZoomPreference(1f)
+            setMaxZoomPreference(100f)
             uiSettings.setAllGesturesEnabled(true)
+            uiSettings.isCompassEnabled = false
+
 
             isMyLocationEnabled = true
 
             setOnMapClickListener {
-                g.clear()
-                g.addMarker(MarkerOptions().draggable(false).position(it))
+                setLocation(g, it)
                 viewModel.coordinate.value = Pair(it.latitude, it.longitude)
             }
 
             setOnMyLocationClickListener {
-                g.clear()
-                g.addMarker(MarkerOptions().draggable(false).position(LatLng(it.latitude, it.longitude)))
+                setLocation(g, LatLng(it.latitude, it.longitude))
                 viewModel.coordinate.value = Pair(it.latitude, it.longitude)
             }
         }
 
-        viewModel.coordinate.observe(this,
-                                     Observer {
-                                         Log.d(LOG_TAG, "Updating the location to (${it.first}, ${it.second})")
-                                         val position = LatLng(it.first, it.second)
+        viewModel.coordinate
+                .observe(this,
+                         Observer {
+                             Log.d(LOG_TAG, "Updating the location to (${it.first}, ${it.second})")
+                             val position = LatLng(it.first, it.second)
 
-                                         g.clear()
-                                         g.addMarker(MarkerOptions().draggable(true).position(position))
-                                         g.moveCamera(CameraUpdateFactory.newLatLng(position))
+                             g.clear()
+                             val marker = MarkerOptions()
+                                     .draggable(true)
+                                     .position(position)
+                                     .title("Selected Location")
+                             g.addMarker(marker)
 
-                                         // viewModel.coordinate.removeObserver(this)
-                                     })
+                             val camera= CameraUpdateFactory.newCameraPosition(CameraPosition.builder().target(marker.position).zoom(15f).build())
+                             g.animateCamera(camera)
+                             // viewModel.coordinate.removeObserver(this)
+                         })
     }
 
-    class LocationSelectorViewModel : ViewModel(){
+    private fun setLocation(mapInstance: GoogleMap,
+                            location: LatLng) {
+        mapInstance.clear()
+        mapInstance.addMarker(MarkerOptions().draggable(false)
+                                      .position(location))
+    }
+
+    class LocationSelectorViewModel : ViewModel() {
         val coordinate: MutableLiveData<Pair<Double, Double>> = MutableLiveData(Pair(0.0, 0.0))
     }
 }

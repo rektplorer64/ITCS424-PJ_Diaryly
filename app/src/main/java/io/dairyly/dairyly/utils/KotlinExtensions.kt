@@ -1,6 +1,7 @@
 package io.dairyly.dairyly.utils
 
 import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.view.LayoutInflater
@@ -37,7 +38,6 @@ fun <A, B, C> zipLiveData(a: LiveData<A>, b: LiveData<B>, predicate: (A, B) -> C
     }
 }
 
-
 @IntDef(CHIP_ACTION, CHIP_CHOICE, CHIP_ENTRY, CHIP_FILTER)
 @kotlin.annotation.Retention
 annotation class ChipType
@@ -63,4 +63,9 @@ fun ChipGroup.addChip(@LayoutRes chipLayoutRes: Int, @ChipType chipType: Int, ch
 fun Activity.isGrantedFineLocationPermission(): Boolean {
     return ActivityCompat.checkSelfPermission(this,
                                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+}
+
+fun Activity.isGrantedExternalStoragePermission(): Boolean {
+    return ActivityCompat.checkSelfPermission(this,
+                                              READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
 }
