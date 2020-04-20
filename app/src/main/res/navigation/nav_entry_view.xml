@@ -23,5 +23,10 @@
             app:argType="string"
             android:defaultValue="-1"/>
 
+        <argument
+            android:name="date"
+            app:nullable="true"
+            app:argType="java.util.Date" />
+
     </activity>
 </navigation>

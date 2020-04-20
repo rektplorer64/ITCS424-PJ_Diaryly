@@ -5,8 +5,8 @@
     <!-- App logo -->
     <item>
         <bitmap
-            android:src="@drawable/ic_logo"
-            android:gravity="center">
+            android:src="@drawable/ic_logo_centered"
+            android:gravity="fill_horizontal|clip_horizontal|center_vertical">
         </bitmap>
     </item>
 

@@ -1,7 +1,6 @@
 package io.dairyly.dairyly.ui.recyclerview
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.text.format.DateUtils
 import android.text.format.DateUtils.FORMAT_ABBREV_ALL
 import android.util.Log
@@ -19,7 +18,6 @@ import io.dairyly.dairyly.R
 import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.databinding.CardNormalDiaryNewBinding
 import io.dairyly.dairyly.models.FirebaseStorageRepository.getImageStorageReference
-import io.dairyly.dairyly.models.data.getForegroundAndAccentColor
 import io.dairyly.dairyly.screens.entry.EntryDisplayActivityArgs
 import io.dairyly.dairyly.utils.populateTags
 import java.text.SimpleDateFormat
@@ -27,7 +25,7 @@ import java.util.*
 import kotlin.math.min
 
 
-class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder) :
+class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder? = null) :
         ListAdapter<io.dairyly.dairyly.models.data.DiaryEntry, DairyRvAdapter.DairyViewHolder>(
                 DiaryDiffCallback()) {
 
@@ -55,6 +53,9 @@ class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder) :
         }
 
         holder.itemViewBinding.root.setOnClickListener {
+            if(diaryDateHolder == null){
+                return@setOnClickListener
+            }
             val b = EntryDisplayActivityArgs(item.id, diaryDateHolder)
             Log.d(LOG_TAG, "Clicked on item ID = ${item.id}")
             it.findNavController().navigate(R.id.moreEntryDetailAction, b.toBundle())
@@ -74,7 +75,7 @@ class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder) :
             }
         }
 
-        holder.itemViewBinding.subtitleTextView.apply {
+        holder.itemViewBinding.overlineTextView.apply {
             val dateFormat = SimpleDateFormat("hh:mm",
                                               this.context.resources.configuration.locales[0])
 
@@ -98,26 +99,13 @@ class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder) :
             }
         }
 
-        holder.itemViewBinding.sideIcon.apply {
-            val resourceId = when {
-                item.goodBadScore > 0 -> R.drawable.ic_thumb_up_black_24dp
-                item.goodBadScore < 0 -> R.drawable.ic_thumb_down_black_24dp
-                else                  -> R.drawable.ic_circle_off_black_24dp
-            }
-
-            val color = item.getForegroundAndAccentColor(context)
-
-            imageTintList = ColorStateList.valueOf(color.first)
-            circleColor = color.second
-            setImageDrawable(context.getDrawable(resourceId))
+        holder.itemViewBinding.goodBadView.apply {
+            setNumber(item.goodBadScore)
+            setIconBackgroundColor(item.color)
         }
 
-        holder.itemViewBinding.sideIconText.apply {
-            text = when {
-                item.goodBadScore > 0  -> "+ ${item.goodBadScore}"
-                else                   -> item.goodBadScore.toString()
-
-            }
+        holder.itemViewBinding.subtitleTextView.apply {
+            text = item.subtitle
         }
 
         holder.itemViewBinding.chipGroupView.apply {

@@ -1,27 +1,28 @@
 package io.dairyly.dairyly.viewmodels
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
-import io.dairyly.dairyly.data.DairyRepository
 import io.dairyly.dairyly.data.Resource
 import io.dairyly.dairyly.data.models.DiaryDateHolder
+import io.dairyly.dairyly.models.DiaryRepo
 import io.dairyly.dairyly.models.data.DiaryEntry
-import io.dairyly.dairyly.usecases.DiaryContentUseCase
+import io.dairyly.dairyly.usecases.DiaryContentUseCase.getAllDiaryEntriesByDateHolder
+import io.dairyly.dairyly.usecases.DiaryContentUseCase.getOneDiaryEntry
+import io.dairyly.dairyly.usecases.UserDiaryUseCase.deleteDiaryEntry
+import io.reactivex.Single
 
-class EntryActivityViewModel(repository: DairyRepository, entryId: String, diaryDateHolder: DiaryDateHolder) : ViewModel() {
+class EntryActivityViewModel(application: Application, entryId: String,
+                             diaryDateHolder: DiaryDateHolder) : AndroidViewModel(application) {
 
     private val LOG_TAG = this::class.java.simpleName
-    private val diaryContentUseCase = DiaryContentUseCase(repository)
 
     // private val dateHolder = MutableLiveData(rawDateHolder)
     val dailyDiary: LiveData<Resource<List<DiaryEntry>>> =
-            LiveDataReactiveStreams.fromPublisher(diaryContentUseCase.getAllDiaryEntriesByDateHolder(diaryDateHolder)).apply {
-                observeForever {
-                    Log.d("Converting to LiveData", "Getting $it")
-                }
-            }
+            LiveDataReactiveStreams.fromPublisher(getAllDiaryEntriesByDateHolder(diaryDateHolder))
 
     var selectedDiaryEntry = entryId
     var isFirstTime = true
@@ -42,13 +43,17 @@ class EntryActivityViewModel(repository: DairyRepository, entryId: String, diary
         return target
     }
 
+    fun removeDiaryEntry(diaryEntry: DiaryEntry): Single<List<Resource<Boolean>>> {
+        return deleteDiaryEntry(diaryEntry, getApplication<Application>().applicationContext)
+    }
+
+    val userProfile by lazy { LiveDataReactiveStreams.fromPublisher(DiaryRepo.reactivelyRetrieveProfileInfo()) }
+
 }
 
-class EntryDisplayViewModel(repository: DairyRepository, val  entryId: String) : ViewModel(){
-
-    private val diaryContentUseCase = DiaryContentUseCase(repository)
+class EntryDisplayViewModel(val entryId: String) : ViewModel(){
 
     val entryContent: LiveData<Resource<DiaryEntry>> by lazy {
-        LiveDataReactiveStreams.fromPublisher(diaryContentUseCase.getOneDiaryEntry(entryId))
+        LiveDataReactiveStreams.fromPublisher(getOneDiaryEntry(entryId))
     }
 }

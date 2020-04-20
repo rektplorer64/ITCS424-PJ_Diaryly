@@ -10,8 +10,6 @@ import com.google.android.material.textview.MaterialTextView
 import io.dairyly.dairyly.R
 import io.dairyly.dairyly.models.data.DiaryEntry
 import io.dairyly.dairyly.utils.TIME_FORMATTER_SHORT
-import org.apache.commons.lang3.time.DateUtils.isSameDay
-import java.util.*
 
 class RylyTabEntryDelegate(private var onTabClickListener: ((DiaryEntry) -> Unit)? = null) : RylyToolbarBehaviorDelegate<DiaryEntry> {
 
@@ -71,6 +69,10 @@ class RylyTabEntryDelegate(private var onTabClickListener: ((DiaryEntry) -> Unit
     }
 
     override fun isAwaysEmphasized(item: DiaryEntry): Boolean? {
-        return isSameDay(Calendar.getInstance().time, item.timeCreated)
+        return false
+    }
+
+    override fun onOverlineTextClickListener(textView: View, item: DiaryEntry) {
+        // TODO("Not yet implemented")
     }
 }

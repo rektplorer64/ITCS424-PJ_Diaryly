@@ -8,8 +8,10 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import io.dairyly.dairyly.models.data.DiaryImage
 import io.dairyly.dairyly.models.data.FirebaseDiaryImage.Companion.getFirebaseStoragePath
+import io.dairyly.dairyly.models.data.Profile
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.FlowableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -74,55 +76,65 @@ object FirebaseStorageRepository {
                 }
     }
 
-    private fun deleteAnImage(storageRef: StorageReference, fileName: String): Flowable<Pair<String, Float>> {
+    private fun deleteAnImage(storageRef: StorageReference,
+                              fileName: String): Flowable<Pair<String, Float>> {
+        val function: (emitter: FlowableEmitter<Pair<String, Float>>) -> Unit = { flowable ->
+            storageRef
+                    .child(fileName)
+                    .delete()
+                    .addOnCompleteListener {
+                        Log.d(LOG_TAG, "Uploading an image ($fileName): COMPLETED!")
+                        flowable.onNext(Pair(fileName, 1f))
+                        flowable.onComplete()
+                    }
+                    .addOnFailureListener {
+                        it.printStackTrace()
+                        flowable.onError(it)
+                    }
+        }
         return Flowable
-                .create({ flowable ->
-                            storageRef
-                                    .child(fileName)
-                                    .delete()
-                                    .addOnCompleteListener {
-                                        Log.d(LOG_TAG, "Uploading an image ($fileName): COMPLETED!")
-                                        flowable.onNext(Pair(fileName, 1f))
-                                        flowable.onComplete()
-                                    }
-                                    .addOnFailureListener {
-                                        it.printStackTrace()
-                                        flowable.onError(it)
-                                    }
-                        }, BackpressureStrategy.BUFFER)
+                .create(function, BackpressureStrategy.BUFFER)
     }
 
     private fun uploadAnImage(storageRef: StorageReference,
                               fileName: String, bitmap: Bitmap): Flowable<Pair<String, Float>> {
+
+        val flowableEmitter: (emitter: FlowableEmitter<Pair<String, Float>>) -> Unit = { flowable ->
+
+            val targetFileFirebaseReference = storageRef.child(fileName)
+            targetFileFirebaseReference.downloadUrl.addOnSuccessListener {
+                flowable.onError(FirebaseException(
+                        "We cannot upload the file since there is a file already exist at $it."))
+            }.addOnFailureListener { _ ->
+                val outputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+
+                val data = outputStream.toByteArray()
+
+                targetFileFirebaseReference
+                        .putBytes(data)
+                        .addOnProgressListener {
+                            Log.d(LOG_TAG,
+                                  "Uploading an image ($fileName): ${it.bytesTransferred / it.totalByteCount.toFloat()}...")
+                            flowable.onNext(
+                                    (Pair(fileName,
+                                          (it.bytesTransferred / it.totalByteCount).toFloat())))
+                        }
+                        .addOnCompleteListener {
+                            Log.d(LOG_TAG,
+                                  "Uploading an image ($fileName): COMPLETED!")
+                            flowable.onNext(Pair(fileName, 1f))
+                            flowable.onComplete()
+                        }
+                        .addOnFailureListener {
+                            it.printStackTrace()
+                            flowable.onError(it)
+                        }
+
+            }
+        }
         return Flowable
-                .create({ flowable ->
-                    val outputStream = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-
-                    val data = outputStream.toByteArray()
-
-                    storageRef.downloadUrl.addOnSuccessListener{
-                        flowable.onError(FirebaseException("We cannot upload the file since there is a file already exist at $it."))
-                    }.addOnFailureListener {_ ->
-                        storageRef
-                                .child(fileName)
-                                .putBytes(data)
-                                .addOnProgressListener {
-                                    Log.d(LOG_TAG, "Uploading an image ($fileName): ${it.bytesTransferred / it.totalByteCount.toFloat()}...")
-                                    flowable.onNext(
-                                            (Pair(fileName, (it.bytesTransferred / it.totalByteCount).toFloat())))
-                                }
-                                .addOnCompleteListener {
-                                    Log.d(LOG_TAG, "Uploading an image ($fileName): COMPLETED!")
-                                    flowable.onNext(Pair(fileName, 1f))
-                                    flowable.onComplete()
-                                }
-                                .addOnFailureListener {
-                                    it.printStackTrace()
-                                    flowable.onError(it)
-                                }
-                    }
-                }, BackpressureStrategy.BUFFER)
+                .create(flowableEmitter, BackpressureStrategy.BUFFER)
     }
 
     fun setUserStorageReference(uid: String) {
@@ -130,8 +142,14 @@ object FirebaseStorageRepository {
     }
 
     fun DiaryImage.getImageStorageReference(): StorageReference {
-        val path = getFirebaseStoragePath(entryId)  + this.id + ".jpg"
+        val path = getFirebaseStoragePath(entryId) + this.id + ".jpg"
         Log.d(LOG_TAG, "Getting Image Path: $path")
         return userRoot.child(path)
+    }
+
+    fun Profile.getProfileImageStorageReference(): StorageReference {
+        val path = userRoot.child("profile/${this.profileImageName}")
+        Log.d(LOG_TAG, "Getting Profile Image Path: $path")
+        return path
     }
 }

@@ -49,7 +49,8 @@ class DiaryContentDisplayFragment : Fragment(), Observer<Resource<DiaryEntry>> {
         imageAdapter.registerAdapterDataObserver(imageCarouselIndicator.adapterDataObserver)
 
         // TODO -> Implement this fragment to display contents!
-        val viewModel = viewModelInjectionHelper<EntryDisplayViewModel>(this, diaryEntryId = entryId)
+        val viewModel = viewModelInjectionHelper<EntryDisplayViewModel>(this,
+                                                                        diaryEntryId = entryId)
         viewModel.entryContent.observe(viewLifecycleOwner, this)
     }
 
@@ -72,6 +73,11 @@ class DiaryContentDisplayFragment : Fragment(), Observer<Resource<DiaryEntry>> {
         }
 
         tagChipGroup.populateTags(data)
+
+        goodBadView.apply {
+            setNumber(data.goodBadScore)
+            setIconBackgroundColor(data.color)
+        }
 
         if(data.location != EMPTY_LOCATION) {
             locationIndicatorLayout.setOnClickListener {

@@ -2,7 +2,7 @@ package io.dairyly.dairyly.usecases
 
 import android.annotation.SuppressLint
 import io.dairyly.dairyly.data.Resource
-import io.dairyly.dairyly.data.Status
+import io.dairyly.dairyly.data.Resource.Status
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single

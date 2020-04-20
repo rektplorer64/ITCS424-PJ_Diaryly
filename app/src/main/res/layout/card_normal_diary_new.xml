@@ -20,12 +20,29 @@
             <ImageView
                 android:id="@+id/cardImageView"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="280dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/white_gradient" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/overlineTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/google_sans_medium"
+                android:paddingStart="@dimen/card_padding_side_16"
+                android:paddingTop="@dimen/margin_large_24"
+                android:paddingEnd="@dimen/card_padding_side_16"
+                android:textAppearance="?attr/textAppearanceOverline"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="start"
+                android:letterSpacing="0.1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardImageView"
+                app:layout_constraintEnd_toStartOf="@id/goodBadView"
+                tools:text="Title Text Here" />
 
             <!-- Title, secondary and supporting text -->
             <com.google.android.material.textview.MaterialTextView
@@ -34,43 +51,25 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/google_sans_medium"
                 android:paddingStart="@dimen/card_padding_side_16"
-                android:paddingTop="@dimen/card_padding_side_16"
+                android:paddingTop="@dimen/spacing_8dp"
                 android:paddingEnd="@dimen/card_padding_side_16"
                 android:textAppearance="?attr/textAppearanceHeadline5"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:gravity="start"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardImageView"
-                app:layout_constraintEnd_toStartOf="@id/sideIcon"
+                app:layout_constraintTop_toBottomOf="@id/overlineTextView"
+                app:layout_constraintEnd_toStartOf="@id/goodBadView"
                 tools:text="Title Text Here" />
 
-            <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/sideIcon"
-                android:layout_width="@dimen/icon_medium_size"
-                android:layout_height="@dimen/icon_medium_size"
-                android:layout_marginTop="@dimen/card_padding_side_16"
-                android:layout_marginEnd="@dimen/card_padding_side_16"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_tag_add_black_24dp"
-                app:civ_border="false"
-                app:civ_border_color="@color/colorPrimaryDark"
-                app:civ_border_width="1dp"
-                app:tint="@color/white"
-                app:civ_circle_color="@color/colorPrimaryDark"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardImageView" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/sideIconText"
+            <io.dairyly.dairyly.ui.components.GoodBadView
+                android:id="@+id/goodBadView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?android:attr/textColorSecondary"
-                app:layout_constraintStart_toStartOf="@id/sideIcon"
-                app:layout_constraintEnd_toEndOf="@id/sideIcon"
-                app:layout_constraintTop_toBottomOf="@id/sideIcon"
-                tools:text="+1" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardImageView"
+                app:layout_constraintBottom_toBottomOf="@id/titleTextView"
+                android:layout_marginEnd="@dimen/margin_med_16"
+                android:layout_marginTop="@dimen/margin_med_16" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/subtitleTextView"

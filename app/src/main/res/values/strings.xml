@@ -7,18 +7,18 @@
     <string name="goals">Goals</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="create_an_entry">Create an entry</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login" translatable="false">LoginActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label" translatable="false">First Fragment</string>
+    <string name="second_fragment_label" translatable="false">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="diaryly_logo">Diaryly Logo</string>
+    <string name="hello_first_fragment" translatable="false">Hello first fragment</string>
+    <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
+    <string name="diaryly_logo" translatable="false">Diaryly Logo</string>
     <string name="login_to_diaryly">Login to Diaryly</string>
     <string name="haven_t_sign_up_yet">Haven\'t Sign up yet?</string>
     <string name="sign_up_here">Sign up here</string>
@@ -31,13 +31,16 @@
     <string name="password">Password</string>
     <string name="password_login_hint">The password associated with the email</string>
     <string name="invalid_email">Invalid Email</string>
+    <string name="invalid_username">Invalid Username</string>
     <string name="hint_password_enter_again">Enter your password again</string>
     <string name="hint_password_repeat_register">Confirm your password</string>
     <string name="hint_password_register">At least 6 characters</string>
     <string name="register_a_new_account">Register a new Diaryly Account</string>
     <string name="tell_us_your_email">Tell us your Email Address</string>
     <string name="error_email_invalid_already_taken">This Email has already been taken! :(</string>
+    <string name="error_username_invalid_already_taken">This username has already been taken! :(</string>
     <string name="email_is_ready">You can use this email!</string>
+    <string name="username_is_ready">You can use this username!</string>
     <string name="register_passwords_not_identical">The passwords are not identical!</string>
     <string name="register_password_too_short">The length must be greater than 6 characters!</string>
     <string name="password_error_no_space">A password cannot contain a white space.</string>
@@ -79,8 +82,8 @@
     <string name="login_here">Login here</string>
     <string name="login_error_too_many_attempts">Too many login attempts!</string>
     <string name="debug_android_test">Android Test</string>
-    <string name="template_dot_2_messages">%1$s • %2$s</string>
-    <string name="debug_placeholder_lorem">Lorem ipsum dolor sit amet, nullam neque faucibus quis urna bibendum, et tincidunt ut pulvinar, donec diam aliquam, varius orci integer nulla enim torquent, velit dictum velit massa accumsan. Congue magna nisl est, sed magna mauris mauris suscipit velit quis, fringilla dui donec orci vulputate. Euismod nullam, vivamus risus sed cum dolor eu quisque, in urna, nulla rutrum. Ut suscipit eu turpis sed. Turpis cursus ultricies cum amet diam ac, cras lectus mattis, tempor corrupti nibh ut ac vestibulum, feugiat vitae. Aliquam urna, pellentesque vestibulum lorem, eget in diam suspendisse lectus fusce ornare, pulvinar ipsum nec aenean facilisis non est, metus ante nam sapien feugiat pariatur quisque. Aute duis leo netus at vitae, duis mollis dolor, lorem cras faucibus amet egestas turpis pretium. Cursus id purus ligula nunc sed eros, sem sit feugiat. Velit vestibulum luctus nibh facilisis curabitur eros, viverra quis et sollicitudin, vitae duis dui massa purus turpis.  Pellentesque imperdiet pede ac feugiat blandit vehicula, vel tincidunt nulla magna amet fringilla, similique facilisis luctus sociis velit justo, natoque nulla fringilla, posuere aliquam integer elit pellentesque. Adipiscing purus metus ut, scelerisque eleifend et vitae in, augue aptent vivamus ut etiam non, mauris ipsum sit mi donec iaculis. Tempus viverra vitae suscipit praesent donec porta, ea suspendisse, vel ornare lobortis. Cursus luctus sollicitudin dolor, non vivamus mauris auctor a justo, magna vel. Sit ipsa congue commodo luctus nam, ante aliquet amet.  Mollis amet iaculis semper, eros eu turpis donec, vitae imperdiet. Vero fermentum adipiscing sapien felis vestibulum, quam amet turpis vestibulum hendrerit et consectetuer, lectus dis tellus quis magna sit, nec sodales, erat platea lorem varius. Commodo pellentesque parturient eu arcu lacus viverra, nec morbi. Accumsan montes turpis sapien libero amet, convallis proin sodales quam amet eleifend, luctus aliquet eu fringilla donec purus ac, proin dapibus suspendisse vehicula, ut rhoncus. Ut fermentum, ante fusce tempus duis, consequat venenatis nunc pellentesque massa.  Vitae in deserunt amet lacinia. Sed non lorem imperdiet magna, orci morbi fusce ante. Gravida per porttitor pellentesque lacus, eget in natoque mauris nunc aliquam venenatis, metus fringilla nulla conubia nascetur temporibus, eros nec eget massa mi et. Dolor dictum lectus euismod pede cras, non rutrum fames pede non eu ornare, pellentesque nonummy at, purus vitae praesent. Vel diam fringilla auctor justo risus, ac fusce neque fusce mauris a, non morbi vivamus feugiat eu vestibulum nunc, nulla cursus habitasse feugiat gravida. Natoque massa volutpat donec eget, mauris deserunt enim consequat amet sodales, amet rhoncus sem luctus varius in auctor.</string>
+    <string name="template_dot_2_messages" translatable="false">%1$s • %2$s</string>
+    <string name="debug_placeholder_lorem" translatable="false">Lorem ipsum dolor sit amet, nullam neque faucibus quis urna bibendum, et tincidunt ut pulvinar, donec diam aliquam, varius orci integer nulla enim torquent, velit dictum velit massa accumsan. Congue magna nisl est, sed magna mauris mauris suscipit velit quis, fringilla dui donec orci vulputate. Euismod nullam, vivamus risus sed cum dolor eu quisque, in urna, nulla rutrum. Ut suscipit eu turpis sed. Turpis cursus ultricies cum amet diam ac, cras lectus mattis, tempor corrupti nibh ut ac vestibulum, feugiat vitae. Aliquam urna, pellentesque vestibulum lorem, eget in diam suspendisse lectus fusce ornare, pulvinar ipsum nec aenean facilisis non est, metus ante nam sapien feugiat pariatur quisque. Aute duis leo netus at vitae, duis mollis dolor, lorem cras faucibus amet egestas turpis pretium. Cursus id purus ligula nunc sed eros, sem sit feugiat. Velit vestibulum luctus nibh facilisis curabitur eros, viverra quis et sollicitudin, vitae duis dui massa purus turpis.  Pellentesque imperdiet pede ac feugiat blandit vehicula, vel tincidunt nulla magna amet fringilla, similique facilisis luctus sociis velit justo, natoque nulla fringilla, posuere aliquam integer elit pellentesque. Adipiscing purus metus ut, scelerisque eleifend et vitae in, augue aptent vivamus ut etiam non, mauris ipsum sit mi donec iaculis. Tempus viverra vitae suscipit praesent donec porta, ea suspendisse, vel ornare lobortis. Cursus luctus sollicitudin dolor, non vivamus mauris auctor a justo, magna vel. Sit ipsa congue commodo luctus nam, ante aliquet amet.  Mollis amet iaculis semper, eros eu turpis donec, vitae imperdiet. Vero fermentum adipiscing sapien felis vestibulum, quam amet turpis vestibulum hendrerit et consectetuer, lectus dis tellus quis magna sit, nec sodales, erat platea lorem varius. Commodo pellentesque parturient eu arcu lacus viverra, nec morbi. Accumsan montes turpis sapien libero amet, convallis proin sodales quam amet eleifend, luctus aliquet eu fringilla donec purus ac, proin dapibus suspendisse vehicula, ut rhoncus. Ut fermentum, ante fusce tempus duis, consequat venenatis nunc pellentesque massa.  Vitae in deserunt amet lacinia. Sed non lorem imperdiet magna, orci morbi fusce ante. Gravida per porttitor pellentesque lacus, eget in natoque mauris nunc aliquam venenatis, metus fringilla nulla conubia nascetur temporibus, eros nec eget massa mi et. Dolor dictum lectus euismod pede cras, non rutrum fames pede non eu ornare, pellentesque nonummy at, purus vitae praesent. Vel diam fringilla auctor justo risus, ac fusce neque fusce mauris a, non morbi vivamus feugiat eu vestibulum nunc, nulla cursus habitasse feugiat gravida. Natoque massa volutpat donec eget, mauris deserunt enim consequat amet sodales, amet rhoncus sem luctus varius in auctor.</string>
     <string name="location_unknown">Unknown Location</string>
     <string name="location_geo">Geo</string>
     <string name="entry_color">Color</string>
@@ -92,10 +95,29 @@
     <string name="goodbad_neutral">Neutral</string>
     <string name="unknown">Unknown</string>
     <string name="action_edit_this_entry">edit this entry</string>
-    <string name="debug_default_id">-1</string>
+    <string name="debug_default_id" translatable="false">-1</string>
     <string name="permission_thanks_storage">Storage Permission Granted, Thank you!</string>
     <string name="permission_thanks_location">Location Permission Granted, Thank you!</string>
     <string name="permission_request_storage">No Permission Granted: Requesting now...</string>
     <string name="location_not_selected">No Location Selected</string>
     <string name="confirm">confirm</string>
+    <string name="username">Username</string>
+    <string name="username_login_hint">Enter a username to use it for your account!</string>
+    <string name="hint_username_error_no_space">A username cannot contain a whitespace.</string>
+    <string name="customize_your_account">Customize your Diaryly Account!</string>
+    <string name="set_your_username_and_image">Set your username and profile image</string>
+    <string name="empty_state_title">There is nothing here!</string>
+    <string name="empty_state_subtitle">Press the Button to Add a new diary entry!</string>
+    <string name="empty_state_image_subtitle">Empty Diary Entry List</string>
+    <string name="logout">Log out</string>
+    <string name="your_profile">Your Profile</string>
+    <string name="dialog_edit_entry_exit_confirm">Do you want to exit and discard this?</string>
+    <string name="dialog_edit_entry_exit_message">Your changes will be lost if you exit.</string>
+    <string name="dialog_edit_entry_date_created">Select an Entry creation time</string>
+    <string name="entry_action_delete_this">Delete this Entry</string>
+    <string name="title_entry_edit">Edit a Diary Entry</string>
+    <string name="dialog_delete_entry_title">Delete this Diary Entry permanantly?</string>
+    <string name="dialog_delete_entry_message">Deleted Diary Entry cannot be recovered! Please be careful!</string>
+    <string name="action_delete_successful">Delete an entry successfully!</string>
+    <string name="dialog_time_window_select">Select a time window</string>
 </resources>

@@ -1,5 +1,6 @@
 package io.dairyly.dairyly.ui.components
 
+import android.view.View
 import androidx.annotation.LayoutRes
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textview.MaterialTextView
@@ -48,4 +49,6 @@ interface RylyToolbarBehaviorDelegate<TabType>{
      * @return Boolean?         a truth value that if true -> always emphasize. Otherwise -> do not. If this returns null, it means that there is no item to emphasize.
      */
     fun isAwaysEmphasized(item: TabType): Boolean?
+
+    fun onOverlineTextClickListener(textView: View, item: TabType)
 }

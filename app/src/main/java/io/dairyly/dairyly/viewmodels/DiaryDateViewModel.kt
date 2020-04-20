@@ -2,23 +2,31 @@ package io.dairyly.dairyly.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.*
-import io.dairyly.dairyly.data.DairyRepository
 import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.models.DiaryRepo
 import io.dairyly.dairyly.ui.components.DAY_TIME_WINDOW
-import io.dairyly.dairyly.usecases.UserDiaryUseCase
 import io.dairyly.dairyly.utils.addDays
 import io.dairyly.dairyly.utils.zipLiveData
 import org.apache.commons.lang3.time.DateUtils
 import java.util.*
 import kotlin.math.ceil
 
-class DiaryDateViewModel(repository: DairyRepository, private val rawUserId: Int) : ViewModel() {
+class DiaryDateViewModel : ViewModel() {
+
+    var isFirstLaunch: Boolean = true
+        private set
+        get() {
+            return if(field){
+                isFirstLaunch = false
+                true
+            }else{
+                field
+            }
+        }
 
     private val LOG_TAG = DiaryDateViewModel::class.java.simpleName
-    val userDiaryUseCase = UserDiaryUseCase(repository)
 
-    private val today = MutableLiveData(Calendar.getInstance().time)
+    val today = MutableLiveData(Calendar.getInstance().time)
 
     val dateHolders: LiveData<List<DiaryDateHolder>> = Transformations.switchMap(today) {
         Log.d(LOG_TAG, today.value.toString())
@@ -71,18 +79,16 @@ class DiaryDateViewModel(repository: DairyRepository, private val rawUserId: Int
                     array[targetIndex].goodBadScore = dateHolderRes.goodBadScore
                 }
             }
-
             array
-
         }
     }
 
-    // private fun getGoodBadScoreInDay(day: Date): LiveData<Resource<Int>> {
-    //     return LiveDataReactiveStreams.fromPublisher(
-    //             userDiaryUseCase.getGoodBadScoreInDay(rawUserId, day))
-    // }
+    val userProfile by lazy {
+        LiveDataReactiveStreams.fromPublisher(DiaryRepo.reactivelyRetrieveProfileInfo())
+    }
 
-    private fun getGoodBadScoreInDayRange(dayStart: Date, dayEnd: Date): LiveData<List<DiaryDateHolder>> {
+    private fun getGoodBadScoreInDayRange(dayStart: Date,
+                                          dayEnd: Date): LiveData<List<DiaryDateHolder>> {
         return LiveDataReactiveStreams
                 .fromPublisher(
                         DiaryRepo.identifyGoodBadScoreListInRange(dayStart, dayEnd))

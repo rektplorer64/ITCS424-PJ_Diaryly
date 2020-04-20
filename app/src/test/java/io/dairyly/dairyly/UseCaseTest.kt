@@ -45,7 +45,7 @@ class UseCaseTest {
         repo.populateDatabase(DairylyGenerator(
                 MockNeat.threadLocal(), 10, 100, 100, 100, 100))
 
-        userDiaryUseCase = UserDiaryUseCase(repo)
+        userDiaryUseCase = UserDiaryUseCase()
     }
 
     @Test

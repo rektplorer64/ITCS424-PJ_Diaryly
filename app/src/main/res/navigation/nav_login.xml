@@ -89,8 +89,8 @@
         android:label="RegisterPasswordFragment"
         tools:layout="@layout/fragment_register_password">
         <action
-            android:id="@+id/action_registerPasswordFragment_to_mainActivity"
-            app:destination="@id/mainActivity"
+            android:id="@+id/action_registerPasswordFragment_to_profileCustomizeFragment"
+            app:destination="@id/profileCustomizeFragment"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_close_enter"
@@ -107,4 +107,23 @@
             android:defaultValue="Aa"
             app:argType="string" />
     </activity>
+    <fragment
+        android:id="@+id/profileCustomizeFragment"
+        android:name="io.dairyly.dairyly.screens.oobe.register.ProfileCustomizeFragment"
+        android:label="fragment_profile_customize"
+        tools:layout="@layout/fragment_profile_customize" >
+        <argument
+            android:name="uid"
+            android:defaultValue="Aa"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_profileCustomizeFragment_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"
+            app:popUpTo="@id/mainActivity"
+            app:launchSingleTop="true"/>
+    </fragment>
 </navigation>

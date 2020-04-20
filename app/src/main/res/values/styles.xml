@@ -14,21 +14,31 @@
         <!-- Material Dialog -->
         <item name="md_font_title">@font/google_sans_bold</item>
         <item name="md_corner_radius">@dimen/dialog_corner_radius</item>
+        <item name="md_color_button_text">@color/colorPrimaryDark</item>
+
+        <item name="android:statusBarColor">@color/Grey200</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="chipTextAppearance" parent="TextAppearance.MaterialComponents.Chip">
         <item name="android:fontFamily">@font/google_sans</item>
+
+    </style>
+
+    <style name="AppTheme.DarkStatusBar" parent="Diaryly">
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="AppTheme.Splash" parent="Diaryly">
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowBackground">@drawable/splash_drawable</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Diaryly">
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
     </style>
-
-    <style name="AppTheme.Dark.Toolbar" parent="Theme.MaterialComponents.Light.DarkActionBar" />
 
     <style name="Diaryly.NoActionBar">
         <item name="windowActionBar">false</item>

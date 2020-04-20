@@ -27,7 +27,7 @@ class DiaryDateHolderViewModelTest {
     @Before
     fun setUp() {
         val repo = DairyRepository.getInstance(InstrumentationRegistry.getInstrumentation().targetContext)
-        testDiaryDateVm = DiaryDateViewModel(repo, 1)
+        testDiaryDateVm = DiaryDateViewModel()
     }
 
     @Test

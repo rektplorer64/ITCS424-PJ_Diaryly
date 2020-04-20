@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import es.dmoral.toasty.Toasty
 import io.dairyly.dairyly.R
 import io.dairyly.dairyly.viewmodels.RegisterViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.buttons_login_register.*
 import kotlinx.android.synthetic.main.fragment_register_password.*
 import kotlinx.android.synthetic.main.header_login_register.*
@@ -44,45 +45,67 @@ class RegisterPasswordFragment : Fragment() {
         // Set the back button behavior
         signInBackBtn.setOnClickListener { findNavController().popBackStack() }
 
-        registerViewModel.arePasswordsOkayToSignUp.observe(viewLifecycleOwner, object : Observer<Boolean?>{
-            var alreadyDisplayed = false
-            override fun onChanged(isValid: Boolean?) {
-                signInContinueBtn.isEnabled = isValid!!
-                if(isValid) {
-                    if(alreadyDisplayed) {
-                        alreadyDisplayed = true
-                        Toasty.success(context!!, getString(R.string.password_valid),
-                                           Toast.LENGTH_SHORT).show()
-                    }else{
-                        alreadyDisplayed = false
-                    }
-                }else{
-                    alreadyDisplayed = false
-                }
-            }
+        registerViewModel
+                .arePasswordsOkayToSignUp
+                .observe(viewLifecycleOwner,
+                         object : Observer<Boolean?> {
+                             var alreadyDisplayed = false
+                             override fun onChanged(
+                                     isValid: Boolean?) {
+                                 signInContinueBtn.isEnabled = isValid!!
+                                 if(isValid) {
+                                     if(alreadyDisplayed) {
+                                         alreadyDisplayed = true
+                                         Toasty.success(context!!,
+                                                        getString(
+                                                                R.string.password_valid),
+                                                        Toast.LENGTH_SHORT)
+                                                 .show()
+                                     } else {
+                                         alreadyDisplayed = false
+                                     }
+                                 } else {
+                                     alreadyDisplayed = false
+                                 }
+                             }
 
-        })
+                         })
 
         signInContinueBtn.setOnClickListener {
             bottomProgressBar.visibility = View.VISIBLE
             it.isEnabled = !it.isEnabled
+            // try {
             registerViewModel
                     .createUser()
-                    .onErrorReturn {throwable ->
-                        Toasty.error(context!!,
-                                     "${getString(R.string.error)}: ${throwable.message}")
-                                .show()
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .doOnError { throwable ->
                         throwable.printStackTrace()
-                        it.isEnabled = true
-                        return@onErrorReturn null
+                        Toasty.error(context!!, "Error: ${throwable.localizedMessage}", Toast.LENGTH_LONG).show()
+
+                        passwordTextField1.error = "Badly formatted Email!! Please go back and edit your password!"
+                        bottomProgressBar.visibility = View.GONE
                     }
-                    .subscribe { user, _ ->
-                        // The user creation process is finished
-                        Toasty.info(context!!, "${getString(R.string.logged_in)}: ${user.email}")
-                                .show()
-                        val action = RegisterPasswordFragmentDirections.actionRegisterPasswordFragmentToMainActivity()
-                        findNavController().navigate(action)
+                    .subscribe { data, throwable ->
+
+                        if(data != null) {
+                            // The user creation process is finished
+                            Toasty.info(context!!,
+                                        "${getString(R.string.logged_in)}: ${data.email}")
+                                    .show()
+                            val action = RegisterPasswordFragmentDirections
+                                    .actionRegisterPasswordFragmentToProfileCustomizeFragment(
+                                            data.uid)
+                            findNavController().navigate(action)
+                        }
+
+                        if(throwable != null) {
+                            Log.e(LOG_TAG, throwable.message ?: "An error happens!")
+                        }
                     }
+            // } finally {
+            //
+            // }
+
         }
 
         registerViewModel.password1Status.observe(viewLifecycleOwner) {

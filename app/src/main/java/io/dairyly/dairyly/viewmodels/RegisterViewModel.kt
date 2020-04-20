@@ -1,22 +1,24 @@
 package io.dairyly.dairyly.viewmodels
 
+import android.app.Application
+import android.content.Context
+import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import io.dairyly.dairyly.models.DiaryRepo
 import io.dairyly.dairyly.models.FirebaseUserRepository
+import io.dairyly.dairyly.utils.suspendinglyLoadBitmapFromUri
 import io.dairyly.dairyly.utils.zipLiveData
 import io.reactivex.Single
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel(application: Application) : AndroidViewModel(application) {
 
     companion object {
         const val SHORT_PASSWORD_THRESHOLD = 6
         const val LONG_PASSWORD_THRESHOLD = 30
-        const val DEFAULT_EMPTY_FIELD = "signInContinueBtn"
+        const val DEFAULT_EMPTY_FIELD = "sfdjfhgjkhkytipuyppqwe"
     }
 
     private val LOG_TAG = this::class.java.simpleName
@@ -31,20 +33,42 @@ class RegisterViewModel : ViewModel() {
 
     val emailLiveData: MutableLiveData<String?> = MutableLiveData(
             null)
-    val isNewEmailStatusLiveData: MutableLiveData<Boolean?> = MutableLiveData(
-            null)
-
+    val isNewEmailStatusLiveData: MutableLiveData<Boolean?> = MutableLiveData(null)
     val password1: MutableLiveData<String?> = MutableLiveData(
             DEFAULT_EMPTY_FIELD)
+
     val password1Status: LiveData<PasswordValidity> =
             Transformations.map(password1) { return@map validatePasswordFormat(it) }
-
     val password2: MutableLiveData<String?> = MutableLiveData(
             DEFAULT_EMPTY_FIELD)
+
     val password2Status: LiveData<PasswordValidity> =
             Transformations.map(password2) { return@map validatePasswordFormat(it) }
+    val account: FirebaseUser? = firebaseAuth.currentUser
 
-    var account: FirebaseUser? = firebaseAuth.currentUser
+    val username: MutableLiveData<String> = MutableLiveData("")
+    val isUsernameAvailableStatusLiveData: MutableLiveData<Boolean?> = MutableLiveData(null)
+
+    val profileImageUri = MutableLiveData<Uri>(null)
+
+    val profileImageBitmap = Transformations.switchMap(profileImageUri) {
+        Log.d(LOG_TAG, "imageBitMap LiveData invoked")
+        it ?: return@switchMap liveData<List<Pair<Uri, android.graphics.Bitmap>>?> {
+            emit(null)
+        }
+
+        Log.d(LOG_TAG, "Loading Images...")
+
+        val resultBitmap = suspendinglyLoadBitmapFromUri(application, listOf(it))
+
+        return@switchMap liveData<List<Pair<Uri, android.graphics.Bitmap>>?> {
+            if(!resultBitmap.isNullOrEmpty()) {
+                emit(ArrayList(resultBitmap))
+            } else {
+                emit(arrayListOf())
+            }
+        }
+    }
 
     private val arePasswordsIdentical: LiveData<Boolean> by lazy {
         zipLiveData(password1,
@@ -90,43 +114,19 @@ class RegisterViewModel : ViewModel() {
 
     fun validateExistingEmail(): Single<Boolean> {
         return FirebaseUserRepository.validateExistingEmail(emailLiveData.value!!)
-        // firebaseAuth.fetchSignInMethodsForEmail(emailLiveData.value!!)
-        //         .addOnFailureListener {
-        //             isNewEmailStatusLiveData.value = null
-        //         }
-        //         .addOnCompleteListener { task ->
-        //             val isNewUser = task.result!!.signInMethods
-        //                     ?.isEmpty()
-        //             if(isNewUser!!) {
-        //                 Log.d("TAG", "Is New User!")
-        //                 isNewEmailStatusLiveData.value = true
-        //             } else {
-        //                 Log.e("TAG", "Is Old User!")
-        //                 isNewEmailStatusLiveData.value = false
-        //             }
-        //         }
+    }
+
+    fun validateExistingUsername(): Single<Boolean> {
+        return FirebaseUserRepository.validateExistingUsername(username.value!!)
     }
 
     fun createUser(): Single<FirebaseUser> {
         return FirebaseUserRepository
                 .createUserAccount(emailLiveData.value!!, password1.value!!)
-        // firebaseAuth.createUserWithEmailAndPassword(emailLiveData.value!!, password1.value!!)
-        //         .addOnCompleteListener { task ->
-        //             if(task.isSuccessful) {
-        //                 val firebaseUser = task.result?.user
-        //                 val emailVerified = firebaseUser?.isEmailVerified
-        //                 val user = firebaseUser?.displayName
-        //                 val uid = firebaseUser?.uid
-        //
-        //                 // Do something with your data
-        //                 if(!emailVerified!!) {
-        //                     Log.d(LOG_TAG, "Email Verified!")
-        //                     account = firebaseUser
-        //                 } //manage your email verification
-        //             } else {
-        //                 //Manage error
-        //             }
-        //         }
+    }
+
+    fun saveCustomizationData(context: Context): Single<List<Boolean>>? {
+        return profileImageUri.value?.let { DiaryRepo.updateProfileInfo(context, it, username.value!!) }
     }
 
 }

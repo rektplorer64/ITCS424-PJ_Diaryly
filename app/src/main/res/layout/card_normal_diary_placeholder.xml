@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+
+        <View
+            android:id="@+id/imagePlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:gravity="start"
+            android:paddingStart="@dimen/card_padding_side_16"
+            android:paddingTop="@dimen/margin_large_24"
+            android:paddingEnd="@dimen/card_padding_side_16"
+            android:background="@color/Grey400"
+            android:textAppearance="?attr/textAppearanceOverline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title Text Here" />
+
+        <View
+            android:id="@+id/overlineTextView"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_marginTop="@dimen/margin_med_16"
+            android:gravity="start"
+            android:paddingStart="@dimen/card_padding_side_16"
+            android:paddingTop="@dimen/margin_large_24"
+            android:paddingEnd="@dimen/card_padding_side_16"
+            android:layout_marginEnd="128dp"
+            android:background="@color/Grey400"
+            android:textAppearance="?attr/textAppearanceOverline"
+            app:layout_constraintEnd_toStartOf="@id/goodBadView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imagePlaceholder"
+            tools:text="Title Text Here" />
+
+        <!-- Title, secondary and supporting text -->
+        <View
+            android:id="@+id/titleTextView"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:fontFamily="@font/google_sans_medium"
+            android:gravity="start"
+            android:background="@color/Grey400"
+            android:paddingStart="@dimen/card_padding_side_16"
+            android:paddingEnd="@dimen/card_padding_side_16"
+            android:layout_marginTop="@dimen/spacing_8dp"
+            android:layout_marginEnd="128dp"
+            android:textAppearance="?attr/textAppearanceHeadline5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/goodBadView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/overlineTextView"
+            tools:text="Title Text Here" />
+
+        <io.dairyly.dairyly.ui.components.GoodBadView
+            android:id="@+id/goodBadView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_med_16"
+            android:layout_marginEnd="@dimen/margin_med_16"
+            app:layout_constraintBottom_toBottomOf="@id/titleTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imagePlaceholder" />
+
+        <View
+            android:id="@+id/subtitleTextView"
+            android:layout_width="189dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="@dimen/margin_small_8"
+            android:paddingStart="@dimen/card_padding_side_16"
+            android:paddingEnd="@dimen/card_padding_side_16"
+            android:background="@color/Grey400"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleTextView"
+            tools:text="Subtitle Text Here" />
+
+        <View
+            android:id="@+id/supportingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="16dp"
+            android:maxLines="4"
+            android:paddingStart="@dimen/card_padding_side_16"
+            android:paddingEnd="@dimen/card_padding_side_16"
+            android:paddingBottom="@dimen/card_padding_side_16"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
+            android:background="@color/Grey400"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subtitleTextView"
+            tools:text="@string/debug_placeholder_lorem" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/card_padding_side_16"
+            android:paddingBottom="@dimen/card_padding_side_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/supportingTextView">
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipBackgroundColor="@color/Grey400"
+                android:text="asdasdsa"/>
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipBackgroundColor="@color/Grey400"
+                android:text="asdassadasddsa"/>
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipBackgroundColor="@color/Grey400"
+                android:text="asa"/>
+        </com.google.android.material.chip.ChipGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

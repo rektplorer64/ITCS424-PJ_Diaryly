@@ -1,41 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:tools="http://schemas.android.com/tools"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="@layout/fragment_register_email">
 
     <ProgressBar
         android:id="@+id/bottomProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="?android:attr/progressBarStyleHorizontal"
         android:indeterminateOnly="true"
-        app:layout_constraintBottom_toTopOf="@id/signInContinueBtn"
-        app:layout_constraintStart_toStartOf="parent"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/signInContinueBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signInBackBtn"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/back"
         android:layout_margin="@dimen/margin_large_24"
+        android:text="@string/back"
         android:textColor="@android:color/black"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signInContinueBtn"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next"
         android:layout_margin="@dimen/margin_large_24"
-        style="@style/Widget.MaterialComponents.Button"
+        android:text="@string/next"
+        android:textColor="@color/color_foreground_dark"
         app:icon="@drawable/ic_arrow_forward_black_24dp"
-        app:iconTint="@color/color_button_black"
-        android:textColor="@color/color_button_black"
+        app:iconGravity="end"
+        app:iconTint="@color/color_foreground_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </merge>

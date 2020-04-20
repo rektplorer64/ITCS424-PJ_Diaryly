@@ -1,79 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".screens.entry.EntryDisplayActivity"
-    android:background="@color/darkSlateGray">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/upperAppBarLayout"
-        app:layout_constraintTop_toTopOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@color/darkSlateGray"
+        tools:context=".screens.entry.EntryDisplayActivity">
 
-        <com.google.android.material.appbar.MaterialToolbar
+        <!--    <com.google.android.material.appbar.AppBarLayout-->
+        <!--        android:id="@+id/upperAppBarLayout"-->
+        <!--        app:layout_constraintTop_toTopOf="parent"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content">-->
+
+        <!--        <com.google.android.material.appbar.MaterialToolbar-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            app:menu="@menu/bottom_navigation_menu"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            android:background="@color/darkSlateGray"-->
+        <!--            app:navigationIcon="@drawable/ic_close_white_24dp"-->
+        <!--            style="@style/Theme.MaterialComponents.Light.DarkActionBar"-->
+        <!--            app:elevation="0dp"/>-->
+
+        <!--    </com.google.android.material.appbar.AppBarLayout>-->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bodyCardView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:menu="@menu/bottom_navigation_menu"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/darkSlateGray"
-            app:navigationIcon="@drawable/ic_close_white_24dp"
-            style="@style/Theme.MaterialComponents.Light.DarkActionBar"
-            app:elevation="0dp"/>
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="@dimen/margin_small_8">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/bodyCardView"
-        android:layout_marginTop="56dp"
-        app:cardCornerRadius="@dimen/margin_small_8"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBarLayout"
-                android:layout_height="wrap_content"
-                app:expanded="true"
-                app:liftOnScroll="true"
-                app:liftOnScrollTargetViewId="@id/diaryRecyclerView"
-                android:layout_width="match_parent">
-
-                <io.dairyly.dairyly.ui.components.RylyToolbarView
-                    android:id="@+id/entryTabs"
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/appBarLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:profileImage="@color/colorPrimary"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:autoInitialScroll="false"/>
-            </com.google.android.material.appbar.AppBarLayout>
+                    app:expanded="true"
+                    app:liftOnScroll="true"
+                    app:liftOnScrollTargetViewId="@id/diaryListRecyclerView">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/diaryEntryViewPager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+                    <io.dairyly.dairyly.ui.components.RylyToolbarView
+                        android:id="@+id/entryTabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:autoInitialScroll="false"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_scrollFlags="snap"
+                        app:profileImage="@color/colorPrimary" />
+                </com.google.android.material.appbar.AppBarLayout>
 
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/editEntryFab"
-                android:layout_width="wrap_content"
-                android:text="@string/action_edit_this_entry"
-                app:icon="@drawable/ic_create_black_24dp"
-                app:layout_anchor="@id/diaryEntryViewPager"
-                app:layout_anchorGravity="center_horizontal|bottom"
-                android:layout_marginBottom="@dimen/margin_large_24"
-                android:layout_height="wrap_content" />
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/diaryEntryViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/editEntryFab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_large_24"
+                    android:contentDescription="@string/action_edit_this_entry"
+                    app:backgroundTint="?attr/colorPrimaryDark"
+                    app:srcCompat="@drawable/ic_create_black_24dp"
+                    app:tint="@android:color/white"
+                    app:layout_anchor="@id/btmAppBar"
+                    app:layout_anchorGravity="center_horizontal|bottom" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.bottomappbar.BottomAppBar
+                    android:id="@+id/btmAppBar"
+                    style="@style/ThemeOverlay.MaterialComponents.BottomAppBar.Surface"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    app:backgroundTint="?attr/colorPrimary"
+                    app:fabAlignmentMode="center"
+                    app:fabAnimationMode="scale"
+                    app:fabCradleMargin="@dimen/spacing_8dp"
+                    app:fabCradleRoundedCornerRadius="@dimen/spacing_8dp"
+                    app:hideOnScroll="true"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:navigationIcon="@drawable/icon_back_black"
+                    app:menu="@menu/entry_context_menu"
+                    android:foregroundTint="@color/blackAlpha80"/>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

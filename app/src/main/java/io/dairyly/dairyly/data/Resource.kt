@@ -21,8 +21,10 @@ data class Resource<out T>(
                     Status.LOADING, data, msg)
         }
     }
+
+    enum class Status {
+        SUCCESS, ERROR, LOADING
+    }
 }
 
-enum class Status {
-    SUCCESS, ERROR, LOADING
-}
+

@@ -1,8 +1,6 @@
 package io.dairyly.dairyly.viewmodels
 
 import android.app.Application
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.*
@@ -12,19 +10,17 @@ import io.dairyly.dairyly.models.data.DEFAULT_COLOR
 import io.dairyly.dairyly.models.data.DiaryEntry
 import io.dairyly.dairyly.models.data.DiaryImage
 import io.dairyly.dairyly.models.data.DiaryTag
-import io.dairyly.dairyly.screens.entry.EntryEditFragment
 import io.dairyly.dairyly.usecases.RxSingleUseCaseProcedure
-import io.dairyly.dairyly.utils.TIME_FORMATTER_FULL
+import io.dairyly.dairyly.utils.suspendinglyLoadBitmapToDiarylyImage
 import io.dairyly.dairyly.utils.zipLiveData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import org.apache.commons.lang3.time.DateUtils
+import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EntryEditorViewModel(application: Application, private val editorEntryId: String? = null) :
+class EntryEditorViewModel(application: Application, private val editorEntryId: String? = null, initialDiaryDateHolder: Date? = Calendar.getInstance().time) :
         AndroidViewModel(application) {
     companion object {
         val EMPTY_LOCATION = Pair(0.0, 0.0)
@@ -47,11 +43,10 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
     val color = MutableLiveData<Int?>(null)
 
     val goodBad = MutableLiveData(0)
-    val date = MutableLiveData(
-            Calendar.getInstance().time)
+    val date = MutableLiveData(determineDate(initialDiaryDateHolder))
 
     val dateText = Transformations.map(date) {
-        TIME_FORMATTER_FULL.format(it)
+        DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM).format(it)
     }
 
     private val newImages = MutableLiveData<ArrayList<DiaryImage>>(arrayListOf())
@@ -68,28 +63,7 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
 
         Log.d(LOG_TAG, "Loading Images...")
 
-        val deferred = arrayListOf<Pair<Uri, Deferred<Bitmap>>>()
-        for(image in it) {
-
-            val descriptor = application
-                    .applicationContext!!
-                    .contentResolver
-                    .openAssetFileDescriptor(image.uri, EntryEditFragment.FILE_READ_ONLY)!!
-            viewModelScope.launch {
-                deferred.add(Pair(image.uri, async {
-                    BitmapFactory.decodeFileDescriptor(descriptor.fileDescriptor, null, null)
-                }))
-            }
-            descriptor.close()
-        }
-
-        val resultBitmap = arrayListOf<DiaryImage>()
-        for(defer in deferred) {
-            viewModelScope.launch {
-                resultBitmap.add(DiaryImage(imageBitmap = defer.second.await(), uri = defer.first))
-            }
-        }
-        Log.d(LOG_TAG, "Deferred: ${deferred.size} \tLoaded: ${resultBitmap.size} Bitmaps")
+        val resultBitmap = suspendinglyLoadBitmapToDiarylyImage(application, it)
 
         return@switchMap liveData<List<DiaryImage>?> {
             if(!resultBitmap.isNullOrEmpty()) {
@@ -144,9 +118,6 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
         }
     }
 
-    // val allImages: LiveData<ArrayList<DiaryImage>?> = concat(
-    //         oldImages as LiveData<ArrayList<DiaryImage>?>,
-    //         newDiaryImages as LiveData<ArrayList<DiaryImage>?>)
     val allImages: LiveData<ArrayList<DiaryImage>> = zipLiveData(oldImages as LiveData<ArrayList<DiaryImage>>
                                                                  , newDiaryImages as LiveData<ArrayList<DiaryImage>>){ a, b ->
         val full = ArrayList<DiaryImage>(a)
@@ -155,17 +126,12 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
         return@zipLiveData full
     }
 
-    // override fun onCleared() {
-    //     compositeDisposable.clear()
-    // }
-
     fun saveData(): Single<Boolean> {
-        val c = Calendar.getInstance()
+        var createdTime = date.value!!
         val tags = tagArray
         val diaryImage = newImages.value
         val color = color.value ?: DEFAULT_COLOR
 
-        var createdTime = c.time
         var id = "-1"
         if(isModification) {
             createdTime = date.value!!
@@ -180,7 +146,7 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
                                goodBad.value!!,
                                color,
                                createdTime,
-                               c.time,
+                               createdTime,
                                diaryImage,
                                coordinate.value!!.first,
                                coordinate.value!!.second)
@@ -190,7 +156,7 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
     }
 
     fun updateData(): Single<Boolean> {
-        val c = Calendar.getInstance()
+        val nowCalendar = Calendar.getInstance()
         val tags = tagArray
 
         val diaryImage = newImages.value?.apply {
@@ -201,7 +167,9 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
 
         val color = color.value ?: DEFAULT_COLOR
 
-        var createdTime = c.time
+        val timeModified = nowCalendar.time
+
+        var createdTime = timeModified
         var id = "-1"
         if(isModification) {
             createdTime = date.value!!
@@ -216,13 +184,21 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
                                goodBad.value!!,
                                color,
                                createdTime,
-                               c.time,
+                               timeModified,
                                diaryImage,
                                coordinate.value!!.first,
                                coordinate.value!!.second)
         return DiaryRepo.updateAnEntry(getApplication(), entry)
                 .observeOn(
                         AndroidSchedulers.mainThread())
+    }
+
+    private fun determineDate(date: Date?): Date {
+        val now = Calendar.getInstance().time
+        if(DateUtils.isSameDay(date, now) || date == null){
+            return now
+        }
+        return date
     }
 
     fun addAnImage(img: Uri) {
@@ -256,3 +232,4 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
         tagArray.value = old
     }
 }
+

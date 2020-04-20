@@ -25,7 +25,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:liftOnScrollTargetViewId="@id/diaryRecyclerView">
+        app:liftOnScrollTargetViewId="@id/diaryListRecyclerView">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -90,13 +90,14 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/overlineTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/google_sans_medium"
                     android:paddingStart="72dp"
                     android:paddingTop="@dimen/margin_med_16"
                     android:paddingEnd="@dimen/margin_med_16"
                     android:text="@string/placeholder"
+                    android:foreground="?android:attr/selectableItemBackgroundBorderless"
                     android:textColor="@color/colorAccent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -197,9 +198,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:navigationIcon="@drawable/ic_close_white_24dp"
-                app:title="@string/title_entry_create"
                 app:titleTextColor="@android:color/white" />
-
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

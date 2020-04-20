@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/overlineTextView"
+        style="@style/TextAppearance.MaterialComponents.Overline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="48dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center_horizontal"
+        android:text="@string/your_profile"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="94dp"
+        android:layout_height="94dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/overlineTextView"
+        app:srcCompat="@drawable/state_empty_list_2" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/nameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="48dp"
+        android:layout_marginTop="@dimen/margin_med_16"
+        android:fontFamily="@font/google_sans_bold"
+        android:gravity="center_horizontal"
+        android:text="@string/untitled"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/textHeadline4_5"
+        app:layout_constraintTop_toBottomOf="@id/profileImageView"
+        tools:text="rektplorer64" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/emailTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="48dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:text="@string/empty_state_subtitle"
+        android:textSize="@dimen/body1"
+        app:layout_constraintTop_toBottomOf="@id/nameTextView"
+        tools:text="abcdefxafsfds@sadsadsgd.com" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/logoutBtn"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_med_16"
+        android:layout_marginBottom="32dp"
+        android:textColor="@color/colorPrimaryDark"
+        app:backgroundTint="@color/Red500"
+        app:tint="@android:color/white"
+        app:srcCompat="@drawable/ic_logout_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emailTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

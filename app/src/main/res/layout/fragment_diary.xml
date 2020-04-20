@@ -12,14 +12,16 @@
         android:background="@android:color/white"
         app:expanded="true"
         app:liftOnScroll="true"
-        app:liftOnScrollTargetViewId="@id/diaryRecyclerView"
+        app:liftOnScrollTargetViewId="@id/diaryListRecyclerView"
         app:statusBarForeground="@color/colorPrimary">
 
         <io.dairyly.dairyly.ui.components.RylyToolbarView
             android:id="@+id/calendarBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"
+            app:layout_scrollFlags="noScroll|snap"
+            app:autoInitialScroll="true"
+            app:compactSize="true"
             app:liftOnScroll="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -28,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_anchor="@id/calendarBarLayout"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addEntryFAB"

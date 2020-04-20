@@ -29,7 +29,9 @@ class EntryDisplayActivity : AppCompatActivity() {
 
         // val entryViewModel = ViewModelProvider(this, viewModelFactory).get(DiaryContentViewModel)
 
-        val viewModel = viewModelInjectionHelper<EntryActivityViewModel>(this, diaryEntryId = entryId, dateHolder = dateHolder)
+        val viewModel = viewModelInjectionHelper<EntryActivityViewModel>(this,
+                                                                         diaryEntryId = entryId,
+                                                                         dateHolder = dateHolder)
         viewModel.selectedDiaryEntry = entryId
     }
 

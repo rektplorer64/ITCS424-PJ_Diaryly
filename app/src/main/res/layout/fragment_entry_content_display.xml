@@ -68,6 +68,15 @@
 
         </LinearLayout>
 
+        <io.dairyly.dairyly.ui.components.GoodBadView
+            android:id="@+id/goodBadView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/margin_large_24"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/locationIndicatorLayout"/>
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/imageCarousel"
             android:layout_width="match_parent"
@@ -95,7 +104,7 @@
             app:layout_constraintTop_toBottomOf="@id/imageCarousel"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:paddingBottom="84dp"
+            android:paddingBottom="96dp"
             tools:text="@string/debug_placeholder_lorem"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

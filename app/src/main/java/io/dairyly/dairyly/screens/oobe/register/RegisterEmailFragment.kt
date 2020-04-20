@@ -85,10 +85,11 @@ class RegisterEmailFragment : Fragment() {
 
                         registerViewModel
                                 .validateExistingEmail()
+                                .observeOn(AndroidSchedulers.mainThread())
                                 .onErrorReturn {throwable ->
                                     Toasty.error(context!!, getString(R.string.error_email_invalid_already_taken)).show()
                                     throwable.printStackTrace()
-                                    false
+                                    true
                                 }
                                 .subscribe { status, throwable ->
                                     when(throwable) {

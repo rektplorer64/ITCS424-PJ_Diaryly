@@ -35,6 +35,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.color.colorChooser
+import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
@@ -79,11 +80,25 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = ViewModelProvider(activity!!).get(
+                EntryEditorViewModel::class.java)
+
+        toolbar.apply {
+            title = if(viewModel.isModification){
+                getString(R.string.title_entry_edit)
+            }else{
+                getString(R.string.title_entry_create)
+            }
+
+            setNavigationOnClickListener {
+                activity!!.onBackPressed()
+            }
+        }
+
+
         val markwon: Markwon = Markwon.create(context!!)
         val markwonEditor = MarkwonEditor.builder(markwon).build()
 
-        viewModel = ViewModelProvider(activity!!).get(
-                EntryEditorViewModel::class.java)
 
         val imageAdapter = ImageCarouselRvAdapter()
         imageCarousel.apply {
@@ -143,6 +158,20 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
             overlineTextView.text = it
         }
 
+        overlineTextView.setOnClickListener {
+            MaterialDialog(it.context).show {
+
+                title(res = R.string.dialog_edit_entry_date_created)
+                val c = Calendar.getInstance().apply {
+                    time = viewModel.date.value!!
+                }
+
+                dateTimePicker(currentDateTime = c, show24HoursView = true) { _, dateTime ->
+                    viewModel.date.value = dateTime.time
+                }
+            }
+        }
+
         viewModel.content.observe(viewLifecycleOwner, object : Observer<String> {
             var count = 0
             override fun onChanged(it: String?) {
@@ -179,7 +208,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                                 .subscribe { it2, throwable ->
                                     Log.d(LOG_TAG, "Upload Data Completed: $it2")
                                     Toasty.success(context, getString(R.string.status_saved)).show()
-                                    // Toasty.success(context, it2.toString()).show()
+                                    activity!!.finish()
                                 }
                     } else {
                         viewModel
@@ -187,6 +216,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                                 .subscribe { data, throwable ->
                                     Log.d(LOG_TAG, "Saved Data Completed: $data")
                                     Toasty.success(context, getString(R.string.status_saved)).show()
+                                    activity!!.finish()
                                 }
                     }
                 }
@@ -258,6 +288,11 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                                         R.color.BlueA400,
                                         R.color.CyanA400,
                                         R.color.GreenA400,
+                                        R.color.Cyan400,
+                                        R.color.Pink400,
+                                        R.color.Brown400,
+                                        R.color.Grey400,
+                                        R.color.BlueGrey400,
                                         R.color.RedA400).map {
                     context.getColor(it)
                 }.toIntArray() // size = 3
@@ -467,22 +502,6 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
         if(activity!!.isGrantedFineLocationPermission()) {
             initializeLocationAndMap()
         }
-    }
-
-    private fun invokeImageSelectionIntent() {
-        //Create an Intent with action as ACTION_PICK
-        val intent = Intent(Intent.ACTION_PICK)
-
-        // Sets the type as image/*. This ensures only components of type image are selected
-        intent.type = "image/*"
-
-        //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
-        val mimeTypes = arrayOf("image/jpeg",
-                                "image/png")
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-
-        // Launching the Intent
-        startActivityForResult(intent, REQUEST_CODE_GALLERY)
     }
 
     @SuppressLint("MissingPermission")

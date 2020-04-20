@@ -26,6 +26,14 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_close_enter"
             app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/action_logout"
+            app:destination="@id/login_navigation.xml"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"
+            app:popUpToInclusive="true"/>
 
     </fragment>
 
@@ -34,6 +42,7 @@
         android:name="io.dairyly.dairyly.screens.main.DashboardFragment"
         android:label="DashboardHome"
         tools:layout="@layout/fragment_diary" />
+
     <activity
         android:id="@+id/entryActivityEnt"
         android:name="io.dairyly.dairyly.screens.entry.EntryDisplayActivity"
@@ -51,6 +60,23 @@
     <activity
         android:id="@+id/entryEditActivity"
         android:name="io.dairyly.dairyly.screens.entry.EntryEditorActivity"
-        android:label="EntryEditActivity" />
+        android:label="EntryEditActivity">
+
+        <argument
+            android:name="date"
+            app:nullable="true"
+            app:argType="java.util.Date" />
+
+        <argument
+            android:name="entryId"
+            android:defaultValue="-1"
+            app:argType="string" />
+
+    </activity>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="io.dairyly.dairyly.screens.main.SearchFragment"
+        android:label="SearchFragment" />
+    <include app:graph="@navigation/nav_login" />
 
 </navigation>

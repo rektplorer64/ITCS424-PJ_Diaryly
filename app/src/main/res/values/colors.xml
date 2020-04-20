@@ -302,4 +302,5 @@
     <color name="BlueGrey900">#263238</color>
     <color name="Black">#000000</color>
     <color name="White">#ffffff</color>
+    <color name="blackAlpha80">#CC000000</color>
 </resources>

@@ -12,6 +12,7 @@ import androidx.core.view.marginRight
 import androidx.core.view.marginTop
 import com.google.android.material.chip.Chip
 import io.dairyly.dairyly.R
+import io.dairyly.dairyly.models.data.DEFAULT_COLOR
 
 
 val Int.toDp: Int
@@ -30,7 +31,12 @@ fun View.setMargins(@Px l: Int = marginLeft, @Px t: Int = marginTop, @Px r: Int 
 }
 
 fun Chip.changeBackgroundColor(colorInt: Int = Color.BLACK) {
-    val colorPair = calculateForegroundColorToPair(colorInt)
+    val finalBackground = if(colorInt == DEFAULT_COLOR){
+        context.getColor(R.color.colorPrimary)
+    }else{
+        colorInt
+    }
+    val colorPair = calculateForegroundColorToPair(finalBackground)
     val foreground = if(colorPair.first == Color.BLACK){
         context!!.getColor(R.color.blackAlpha60)
     }else{

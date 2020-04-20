@@ -15,15 +15,20 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
+import es.dmoral.toasty.Toasty
 import io.dairyly.dairyly.R
+import io.dairyly.dairyly.data.Resource.Status
 import io.dairyly.dairyly.models.FirebaseStorageRepository.getImageStorageReference
+import io.dairyly.dairyly.models.FirebaseStorageRepository.getProfileImageStorageReference
 import io.dairyly.dairyly.models.data.DiaryEntry
 import io.dairyly.dairyly.models.data.DiaryImage
 import io.dairyly.dairyly.ui.components.RylyTabEntryDelegate
 import io.dairyly.dairyly.ui.components.RylyToolbarView
 import io.dairyly.dairyly.viewmodels.EntryActivityViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_show_entry.*
 import kotlinx.android.synthetic.main.item_carousel_image.view.*
 
@@ -41,10 +46,33 @@ class ShowEntryFragment : Fragment() {
             behaviorBehaviorDelegate = RylyTabEntryDelegate()
         }
 
+        viewModel.userProfile.observe(viewLifecycleOwner){
+            Glide.with(entryTabs.context).load(it.getProfileImageStorageReference()).into(entryTabs.circleImageView)
+        }
+
+
         viewModel.dailyDiary.observe(this) { list ->
+
+            Log.d(LOG_TAG, "dailyDiary LiveData Emits -> $list")
+            if(list.status == Status.ERROR){
+                activity!!.finish()
+                return@observe
+            }
+
+            if(list.status == Status.ERROR && list.data.isNullOrEmpty()) {
+                activity!!.finish()
+                return@observe
+            }
+
+            if(list.status == Status.SUCCESS && list.data.isNullOrEmpty()) {
+                activity!!.finish()
+                return@observe
+            }
+
             if(list.data.isNullOrEmpty()) {
                 return@observe
             }
+
             Log.d(LOG_TAG, "${list.data.size} entries received for displaying tabs")
             // entryTabs.postDataUpdate(list.data)
 
@@ -69,13 +97,41 @@ class ShowEntryFragment : Fragment() {
             }
             entryTabs.postDataUpdate(list.data)
 
+            btmAppBar.setNavigationOnClickListener {
+                activity!!.onBackPressed()
+            }
+
+            btmAppBar.apply {
+                menu.findItem(R.id.diaryEntryDelete).setOnMenuItemClickListener {
+                    MaterialDialog(context!!).show {
+
+                        title(res = R.string.dialog_delete_entry_title)
+                        message(res = R.string.dialog_delete_entry_message)
+
+                        positiveButton(res = R.string.confirm){
+                            val diaryEntry = list.data[entryTabs.getSelectedTabIndex()]
+                            viewModel
+                                    .removeDiaryEntry(diaryEntry)
+                                    .subscribeOn(AndroidSchedulers.mainThread())
+                                    .subscribe { data, throwable ->
+                                        Toasty.success(context, context.getString(R.string.action_delete_successful))
+                                        viewModel.isFirstTime = true
+                                    }
+                        }
+
+                        negativeButton(res = R.string.cancel)
+                    }
+                    return@setOnMenuItemClickListener true
+                }
+            }
+
             editEntryFab.setOnClickListener {
                 val diaryEntry = list.data[entryTabs.getSelectedTabIndex()]
                 Log.d(LOG_TAG,
                       "Entering the Edit Activity with [EntryId = ${diaryEntry.id}] @ index = ${entryTabs.getSelectedTabIndex()}")
 
                 val action = ShowEntryFragmentDirections.actionShowEntryFragmentToEntryEditActivity2(
-                        diaryEntry.id)
+                        diaryEntry.id, diaryEntry.timeCreated)
                 findNavController().navigate(action)
             }
         }

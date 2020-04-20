@@ -1,19 +1,15 @@
 package io.dairyly.dairyly.models
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.dairyly.dairyly.data.models.DiaryDateHolder
-import io.dairyly.dairyly.models.data.DEFAULT_ID
-import io.dairyly.dairyly.models.data.DiaryEntry
-import io.dairyly.dairyly.models.data.FirebaseDiaryEntry
-import io.dairyly.dairyly.models.data.FirebaseDiaryImage
+import io.dairyly.dairyly.models.data.*
 import io.dairyly.dairyly.models.data.FirebaseDiaryImage.Companion.getFirebaseStoragePath
-import io.dairyly.dairyly.utils.createUploadImageWork
-import io.dairyly.dairyly.utils.getDayRange
-import io.dairyly.dairyly.utils.serializeToMap
+import io.dairyly.dairyly.utils.*
 import io.reactivex.*
 import org.apache.commons.lang3.time.DateUtils
 import java.util.*
@@ -56,8 +52,8 @@ object DiaryRepo {
                 if(key != null && !entryToBeInserted.images.isNullOrEmpty()) {
                     val imageList = entryToBeInserted.images!!.values.toList()
                     Log.d(LOG_TAG, "An UPLOADING task has been initialized for ${imageList.size} images.")
-                    createUploadImageWork(context, getFirebaseStoragePath(entryToBeInserted.id),
-                                          imageList)
+                    createUploadDiaryImageWork(context, getFirebaseStoragePath(entryToBeInserted.id),
+                                               imageList)
                 }
                 flowable.onNext(it.isSuccessful)
                 flowable.onComplete()
@@ -73,9 +69,100 @@ object DiaryRepo {
                 .singleOrError()
     }
 
-    fun reactivelyRetrieveAnEntryById(entry: String, isReactive: Boolean = true): Flowable<DiaryEntry> {
+    fun deleteAnEntry(diaryEntry: DiaryEntry,
+                      context: Context): Single<Boolean>{
+
+        Log.d(LOG_TAG, "DELETING a diary entry: ${diaryEntry.id} and its ${diaryEntry.images?.size?: 0} images")
+
+        val flowCallback = FlowableOnSubscribe { flowable: FlowableEmitter<Boolean> ->
+            val task = diaryEntryRoot.child(diaryEntry.id).removeValue()
+
+            task.addOnCompleteListener {
+                Log.d(LOG_TAG,
+                      "Task Finished\nAdding a new diary! (Result = ${it.isSuccessful})\n\t${it}")
+
+                if(!diaryEntry.images.isNullOrEmpty()) {
+                    val imageList = diaryEntry.images!!.map(DiaryImage::toFirebaseData).toList()
+                    Log.d(LOG_TAG, "An UPLOADING task has been initialized for ${imageList.size} images.")
+                    createDiaryImageDeletionWork(context, getFirebaseStoragePath(diaryEntry.id),
+                                               imageList)
+                }
+                flowable.onNext(it.isSuccessful)
+                flowable.onComplete()
+            }.addOnFailureListener {
+                        Log.e(LOG_TAG, "Task Error!\n${it.stackTrace}")
+                        flowable.onError(it)
+                    }
+        }
+
+        return Flowable
+                .create(flowCallback, BackpressureStrategy.BUFFER)
+                .singleOrError()
+    }
+
+    private fun getProfileImagePath(): String {
+        return "/profile/"
+    }
+
+    fun updateProfileInfo(context: Context, uri: Uri, username: String): Single<List<Boolean>> {
+        return updateUsername(username).concatWith(uploadProfileImage(context, uri)).toList()
+    }
+
+    private fun updateUsername(username: String): Single<Boolean>{
+        val ref = userRoot.child("profile/username")
+
+        val flowCallback = FlowableOnSubscribe { flowable: FlowableEmitter<Boolean> ->
+            val task = ref.setValue(username)
+
+            task.addOnCompleteListener {
+                if(it.isSuccessful) {
+                    flowable.onNext(it.isSuccessful)
+                    flowable.onComplete()
+                }else{
+                    flowable.onNext(!it.isSuccessful)
+                    flowable.onError(it.exception!!)
+                }
+            }.addOnFailureListener {
+                Log.e(LOG_TAG, "Task Error!\n${it.stackTrace}")
+                flowable.onError(it)
+            }
+        }
+
+        return Flowable
+                .create(flowCallback, BackpressureStrategy.BUFFER)
+                .singleOrError()
+    }
+
+    private fun uploadProfileImage(context: Context, uri: Uri): Single<Boolean>{
+        val ref = userRoot.child("profile/profileImageName")
+
+        val flowCallback = FlowableOnSubscribe { flowable: FlowableEmitter<Boolean> ->
+
+            val profileFilename = uri.hashCode()
+            val task = ref.setValue("$profileFilename.jpg")
+
+            task.addOnCompleteListener {
+                if(it.isSuccessful) {
+                    Log.d(LOG_TAG, "Image Uploading task initializing...")
+                    createProfileImageWork(context, getProfileImagePath(), "$profileFilename", uri)
+                }
+
+                flowable.onNext(it.isSuccessful)
+                flowable.onComplete()
+            }.addOnFailureListener {
+                Log.e(LOG_TAG, "Task Error!\n${it.stackTrace}")
+                flowable.onError(it)
+            }
+        }
+
+        return Flowable
+                .create(flowCallback, BackpressureStrategy.BUFFER)
+                .singleOrError()
+    }
+
+    fun reactivelyRetrieveAnEntryById(entryId: String, isReactive: Boolean = true): Flowable<DiaryEntry> {
         val flowCallback = FlowableOnSubscribe { flowable: FlowableEmitter<DiaryEntry> ->
-            diaryEntryRoot.child(entry)
+            diaryEntryRoot.child(entryId)
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(p0: DataSnapshot) {
                             val value = p0.getValue(FirebaseDiaryEntry::class.java)
@@ -135,28 +222,29 @@ object DiaryRepo {
                 }, BackpressureStrategy.BUFFER)
     }
 
-    fun retrieveEntriesInTimeRange(time1: Date, time2: Date): Flowable<List<DiaryEntry>> {
-        return Flowable.create(
-                { flowable ->
-                    diaryEntryRoot
-                            .orderByChild("timeCreated")
-                            .startAt(time1.time.toDouble())
-                            .endAt(time2.time.toDouble())
-                            .addValueEventListener(object : ValueEventListener {
-                                override fun onCancelled(error: DatabaseError) {
-                                    flowable.onComplete()
-                                }
+    fun reactivelyRetrieveEntriesInTimeRange(time1: Date, time2: Date): Flowable<List<DiaryEntry>> {
+        val function: (emitter: FlowableEmitter<List<DiaryEntry>>) -> Unit = { flowable ->
+            diaryEntryRoot
+                    .orderByChild("timeCreated")
+                    .startAt(time1.time.toDouble())
+                    .endAt(time2.time.toDouble())
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onCancelled(error: DatabaseError) {
+                            flowable.onComplete()
+                        }
 
-                                override fun onDataChange(snapshot: DataSnapshot) {
-                                    val list = arrayListOf<DiaryEntry>()
-                                    for(it in snapshot.children) {
-                                        list.add(it.getValue(FirebaseDiaryEntry::class.java)!!
-                                                         .toNormalData())
-                                    }
-                                    flowable.onNext(list)
-                                }
-                            })
-                }, BackpressureStrategy.BUFFER)
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val list = arrayListOf<DiaryEntry>()
+                            for(it in snapshot.children) {
+                                list.add(it.getValue(FirebaseDiaryEntry::class.java)!!
+                                                 .toNormalData())
+                            }
+                            flowable.onNext(list)
+                        }
+                    })
+        }
+        return Flowable.create(
+                function, BackpressureStrategy.BUFFER)
     }
 
     fun retrieveEntryInDay(date: Date): Flowable<List<DiaryEntry>> {
@@ -186,7 +274,7 @@ object DiaryRepo {
     }
 
     fun identifyGoodBadScoreListInRange(time1: Date, time2: Date): Flowable<List<DiaryDateHolder>> {
-        return retrieveEntriesInTimeRange(time1, time2).map { list ->
+        return reactivelyRetrieveEntriesInTimeRange(time1, time2).map { list ->
             val dateMap = TreeMap<Long, Int>()
             list.forEach {
                 val date = DateUtils.truncate(it.timeCreated, Calendar.DATE)
@@ -251,8 +339,8 @@ object DiaryRepo {
 
                 if(it.isSuccessful && !addedImageMap.isNullOrEmpty()) {
                     Log.d(LOG_TAG, "Image Uploading task initializing...")
-                    createUploadImageWork(context, getFirebaseStoragePath(firebaseDiaryEntry.id),
-                                          addedImageMap)
+                    createUploadDiaryImageWork(context, getFirebaseStoragePath(firebaseDiaryEntry.id),
+                                               addedImageMap)
                 }
 
                 // if(it.isSuccessful && !targetForRemovalImages.isNullOrEmpty()) {
@@ -273,4 +361,63 @@ object DiaryRepo {
                 .singleOrError()
     }
 
+    fun reactivelyRetrieveProfileInfo(isReactive: Boolean = true): Flowable<Profile>{
+        val flowCallback = FlowableOnSubscribe { flowable: FlowableEmitter<Profile> ->
+            userRoot.child("profile")
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val value = p0.getValue(Profile::class.java)
+                            if(value == null) {
+                                flowable.onError(Throwable("No data found!"))
+                                flowable.onComplete()
+                                return
+                            }
+                            Log.d(LOG_TAG, "Getting Profile for $value")
+                            flowable.onNext(value)
+
+                            if(!isReactive){
+                                flowable.onComplete()
+                            }
+                        }
+                        override fun onCancelled(error: DatabaseError) {
+                            // *** Do not call Flowable.onComplete() in onDataChange(); ***
+                            // Doing so will make the Flowable not reactive to later change!!
+                            // Flowable.onComplete() must be called once!
+                            // flowable.onError(error.toException())
+                            flowable.onComplete()
+                        }
+                    })
+        }
+
+        return Flowable
+                .create(flowCallback, BackpressureStrategy.BUFFER)
+    }
+
+    fun reactivelyRetrieveEntryByTitle(title: String): Flowable<List<DiaryEntry>> {
+        return Flowable.create(
+                { flowable ->
+                    diaryEntryRoot
+                            .orderByChild("title")
+                            .startAt(title)
+                            .endAt(title + "\uf8ff")
+                            .addValueEventListener(object : ValueEventListener {
+                                override fun onCancelled(error: DatabaseError) {
+                                    flowable.onComplete()
+                                }
+
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    val list = arrayListOf<DiaryEntry>()
+                                    for(it in snapshot.children) {
+                                        list.add(it.getValue(FirebaseDiaryEntry::class.java)!!
+                                                         .toNormalData())
+                                    }
+                                    flowable.onNext(list)
+                                }
+                            })
+                }, BackpressureStrategy.BUFFER)
+    }
+
+    fun logoutUser() {
+        FirebaseUserRepository.logoutUserAccount()
+    }
 }

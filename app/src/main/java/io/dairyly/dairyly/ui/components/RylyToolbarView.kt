@@ -14,6 +14,7 @@ import androidx.lifecycle.observe
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
+import de.hdodenhof.circleimageview.CircleImageView
 import io.dairyly.dairyly.R
 import io.dairyly.dairyly.utils.toPx
 import kotlinx.android.synthetic.main.bar_diary_calendar_view.view.*
@@ -30,10 +31,13 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
     lateinit var behaviorBehaviorDelegate: RylyToolbarBehaviorDelegate<TabType>
 
     val tabLayoutWrapper: TabLayoutWrapper
+    val circleImageView: CircleImageView
 
     private val liveDataScrollX: MutableLiveData<Int> = MutableLiveData()
 
     var autoScrollingEnabled: Boolean
+    private val isCompactSize: Boolean
+
 
     init {
         val attrs = context.obtainStyledAttributes(attributes, R.styleable.RylyToolbarView, 0, 0)
@@ -45,6 +49,9 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
                 autoScrollingEnabled = getBoolean(R.styleable.RylyToolbarView_autoInitialScroll,
                                                   true)
 
+                isCompactSize = getBoolean(R.styleable.RylyToolbarView_compactSize,
+                                                  false)
+
                 profileImageRes = getResourceId(R.styleable.RylyToolbarView_profileImage,
                                                 R.drawable.ic_launcher_background)
             } finally {
@@ -52,7 +59,11 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
             }
         }
 
-        val root = inflate(context, R.layout.bar_diary_calendar_view, this)
+        val root = if(!isCompactSize){
+            inflate(context, R.layout.bar_diary_calendar_view, this)
+        }else{
+            inflate(context, R.layout.bar_diary_calendar_view_compact, this)
+        }
         setContentInsetsAbsolute(0, 0)
         tabLayoutWrapper = TabLayoutWrapper(root)
 
@@ -64,9 +75,17 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
             }
         }
         profileImageView.setImageDrawable(getDrawable(context, profileImageRes))
+        circleImageView = profileImageView
+
     }
 
     private lateinit var onTabSelectedListener: TabLayout.OnTabSelectedListener
+
+    fun setCircleImageButtonListener(onClick: (View) -> Unit){
+        circleImageView.setOnClickListener {
+            onClick(it)
+        }
+    }
 
     fun postDataUpdate(list: List<TabType>?) {
         if(list != null) {
@@ -102,6 +121,12 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
                                                            subtitleTextView,
                                                            list[tab!!.position])
                 }
+            }
+
+            defaultOverlineText.setOnClickListener {
+                // Toasty.info(context!!, "${getSelectedTabIndex()}").show()
+                behaviorBehaviorDelegate.onOverlineTextClickListener(it,
+                                                                     list[getSelectedTabIndex()])
             }
             tabLayoutWrapper.calendarTab.addOnTabSelectedListener(onTabSelectedListener)
 
@@ -144,7 +169,7 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
 
     override fun onRestoreInstanceState(state: Parcelable?) {
         var newState = state
-        if(newState is Bundle){
+        if(newState is Bundle) {
             val selectedTab = newState.getInt(STATE_PERSISTENT_TAB_SELECTION)
             this@RylyToolbarView.post {
                 Log.d(LOG_TAG, "Scrolling to the ${selectedTab}th tab")
@@ -186,7 +211,7 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
                 calendarTab.addTab(tab)
             }
 
-            if(oldTabIndex !in -1..0){
+            if(oldTabIndex !in -1 .. 0) {
                 val oldAutoScroll = autoScrollingEnabled
                 autoScrollingEnabled = false
                 scrollToTab(oldTabIndex)
@@ -207,7 +232,7 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
                 tabIndex
             }
             parent.post {
-                val targetTab = parent.getChildAt(finalTabIndex)?: parent.getChildAt(0)
+                val targetTab = parent.getChildAt(finalTabIndex) ?: parent.getChildAt(0)
                 targetTab?.post {
                     val right = targetTab.right
                     calendarTab.scrollTo(right, 0)

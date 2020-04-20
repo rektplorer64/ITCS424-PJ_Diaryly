@@ -1,14 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".screens.oobe.register.ProfileCustomizeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <include
+        android:id="@+id/header"
+        layout="@layout/header_login_register_small" />
 
-</FrameLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/userEmailText"
+        style="@style/TextAppearance.MaterialComponents.Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:firstBaselineToTopHeight="@dimen/margin_xlarge_48"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        tools:text="tanawin20@gmail.com" />
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/heroProfileView"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="@dimen/margin_med_16"
+        android:clickable="true"
+        app:civ_shadow="true"
+        app:civ_shadow_color="@color/colorPrimaryDark"
+        app:civ_shadow_gravity="bottom"
+        app:civ_border="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userEmailText"
+        android:scaleType="centerCrop"
+        app:civ_circle_color="@color/colorPrimary" />
+
+    <ImageView
+        android:id="@+id/addImageButton"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/heroProfileView"
+        android:scaleX="3"
+        android:scaleY="3"
+        app:layout_constraintBottom_toBottomOf="@id/heroProfileView"
+        android:scaleType="centerInside"
+        android:background="@null"
+        android:foreground="?android:selectableItemBackgroundBorderless"
+        android:tint="@color/blackAlpha80"
+        app:srcCompat="@drawable/ic_image_add_black_24dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/usernameTextForm"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_large_24"
+        android:hint="@string/username"
+        app:boxStrokeColor="@color/colorPrimaryDark"
+        app:counterEnabled="true"
+        app:endIconMode="clear_text"
+        app:errorEnabled="true"
+        android:layout_marginTop="@dimen/margin_small_8"
+        app:errorIconDrawable="@drawable/ic_error_black_24dp"
+        app:errorIconTint="@color/errorRed"
+        app:helperText="@string/username_login_hint"
+        app:helperTextEnabled="true"
+        app:hintTextColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/heroProfileView"
+        app:startIconContentDescription="Username"
+        app:startIconDrawable="@drawable/ic_tag_add_black_24dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/usernameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:allowUndo="true"
+            android:fontFamily="@font/google_sans"
+            android:inputType="textNoSuggestions|textShortMessage"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+        android:id="@+id/bottomProgressBar"
+        android:layout_width="208dp"
+        android:layout_height="208dp"
+        android:indeterminate="true"
+        app:cpb_progressbar_width="4dp"
+        app:cpb_indeterminate_mode="true"
+        app:cpb_progress_direction="to_right"
+        app:cpb_background_progressbar_color="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@id/heroProfileView"
+        app:layout_constraintEnd_toEndOf="@id/heroProfileView"
+        app:layout_constraintStart_toStartOf="@id/heroProfileView"
+        app:layout_constraintTop_toTopOf="@id/heroProfileView" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/continueBtn"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_med_16"
+        android:layout_marginBottom="@dimen/margin_med_16"
+        android:text="@string/fui_continue"
+        android:textColor="@color/color_foreground_dark"
+        app:icon="@drawable/ic_arrow_forward_black_24dp"
+        app:iconGravity="textEnd"
+        app:iconTint="@color/color_foreground_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/usernameTextForm" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

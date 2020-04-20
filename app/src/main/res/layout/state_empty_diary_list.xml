@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/emptyStateView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="56dp">
+
+        <ImageView
+            android:id="@+id/emptyStateImage"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
+            android:contentDescription="@string/empty_state_image_subtitle"
+            android:src="@drawable/white_gradient" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_marginHorizontal="48dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_med_16"
+            android:fontFamily="@font/google_sans_bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/empty_state_title"
+            android:textSize="@dimen/textHeadline4_5" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="48dp"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:text="@string/empty_state_subtitle"
+            android:textSize="@dimen/body1" />
+    </LinearLayout>
+</LinearLayout>

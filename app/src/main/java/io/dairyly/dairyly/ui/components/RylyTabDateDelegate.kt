@@ -1,7 +1,10 @@
 package io.dairyly.dairyly.ui.components
 
 import android.text.format.DateUtils
+import android.view.View
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.datetime.datePicker
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textview.MaterialTextView
 import io.dairyly.dairyly.R
@@ -12,7 +15,7 @@ import io.dairyly.dairyly.utils.DATE_FORMATTER_MONTH_YEAR
 import org.apache.commons.lang3.time.DateUtils.isSameDay
 import java.util.*
 
-class RylyTabDateDelegate : RylyToolbarBehaviorDelegate<DiaryDateHolder> {
+class RylyTabDateDelegate(private val dateDialogListener: (Calendar) -> Unit) : RylyToolbarBehaviorDelegate<DiaryDateHolder> {
 
     override val itemLayoutRes: Int
         get() = R.layout.item_tab_small
@@ -45,5 +48,16 @@ class RylyTabDateDelegate : RylyToolbarBehaviorDelegate<DiaryDateHolder> {
 
     override fun isAwaysEmphasized(item: DiaryDateHolder): Boolean? {
         return isSameDay(Calendar.getInstance().time, item.date)
+    }
+
+    override fun onOverlineTextClickListener(textView: View, item: DiaryDateHolder) {
+        MaterialDialog(textView.context).show {
+            title(text = context.getString(R.string.dialog_time_window_select))
+
+            datePicker { dialog, date ->
+                // Use date (Calendar)
+                dateDialogListener(date)
+            }
+        }
     }
 }
