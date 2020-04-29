@@ -120,4 +120,6 @@
     <string name="dialog_delete_entry_message">Deleted Diary Entry cannot be recovered! Please be careful!</string>
     <string name="action_delete_successful">Delete an entry successfully!</string>
     <string name="dialog_time_window_select">Select a time window</string>
+    <string name="dialog_logout_confirmation_ask">Are you sure you want to Log out?</string>
+    <string name="dialog_logout_confirmation_message">After logging out, you will return to the landing page of the app. You will have to enter your email and password to login again.</string>
 </resources>

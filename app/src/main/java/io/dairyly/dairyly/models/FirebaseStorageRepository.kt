@@ -21,15 +21,15 @@ object FirebaseStorageRepository {
 
     private val LOG_TAG = this::class.java.simpleName
     private val firebaseStorage = Firebase.storage("gs://diaryly-52a2c.appspot.com/").reference
-    private lateinit var userRoot: StorageReference
+    private var userRoot: StorageReference? = null
 
     fun uploadDiaryEntryImages(storagePath: String,
                                nameBitmapPairs: List<Pair<String, Bitmap>>?): Flowable<Pair<String, Float>>? {
         val entryFolderRef = try {
-            userRoot.child(storagePath)
+            userRoot!!.child(storagePath)
         } catch(e: UninitializedPropertyAccessException) {
             FirebaseUserRepository.injectUserToStorageRepo()
-            userRoot.child(storagePath)
+            userRoot!!.child(storagePath)
         }
 
         val asyncList = arrayListOf<Flowable<Pair<String, Float>>>()
@@ -43,7 +43,7 @@ object FirebaseStorageRepository {
 
     fun deleteDiaryEntryImages(storagePath: String,
                                filenames: List<String>?): Flowable<Pair<String, Float>>? {
-        val entryFolderRef = userRoot.child(storagePath)
+        val entryFolderRef = userRoot!!.child(storagePath)
 
         val asyncList = arrayListOf<Flowable<Pair<String, Float>>>()
         for(file in filenames!!) {
@@ -141,14 +141,19 @@ object FirebaseStorageRepository {
         userRoot = firebaseStorage.child(uid)
     }
 
+    fun detachUserStorageReference(){
+        userRoot = null
+        Log.d(LOG_TAG, "Detached Firebase user storage reference!")
+    }
+
     fun DiaryImage.getImageStorageReference(): StorageReference {
         val path = getFirebaseStoragePath(entryId) + this.id + ".jpg"
         Log.d(LOG_TAG, "Getting Image Path: $path")
-        return userRoot.child(path)
+        return userRoot!!.child(path)
     }
 
     fun Profile.getProfileImageStorageReference(): StorageReference {
-        val path = userRoot.child("profile/${this.profileImageName}")
+        val path = userRoot!!.child("profile/${this.profileImageName}")
         Log.d(LOG_TAG, "Getting Profile Image Path: $path")
         return path
     }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/date_root_card"
+        android:id="@+id/dateRootCard"
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="52dp"
         android:layout_height="wrap_content"

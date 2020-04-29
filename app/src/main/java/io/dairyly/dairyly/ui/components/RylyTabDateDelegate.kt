@@ -40,7 +40,7 @@ class RylyTabDateDelegate(private val dateDialogListener: (Calendar) -> Unit) : 
                 DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_ABBREV_RELATIVE)
     }
 
-    override fun onCreateTags(tab: TabLayout.Tab, itemIndex: Int, item: DiaryDateHolder) {
+    override fun onCreateTab(tab: TabLayout.Tab, itemIndex: Int, item: DiaryDateHolder) {
         val goodness = tab.view.findViewById<TextView>(R.id.goodnessPointTextView)
         tab.text = DATE_FORMATTER_DATE.format(item.date)
         goodness.text = item.goodBadScore.toString()

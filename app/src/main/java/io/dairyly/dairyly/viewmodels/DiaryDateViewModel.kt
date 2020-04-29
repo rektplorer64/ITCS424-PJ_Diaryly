@@ -3,8 +3,10 @@ package io.dairyly.dairyly.viewmodels
 import android.util.Log
 import androidx.lifecycle.*
 import io.dairyly.dairyly.data.models.DiaryDateHolder
-import io.dairyly.dairyly.models.DiaryRepo
+import io.dairyly.dairyly.models.data.Resource
 import io.dairyly.dairyly.ui.components.DAY_TIME_WINDOW
+import io.dairyly.dairyly.usecases.UserDiaryUseCase
+import io.dairyly.dairyly.usecases.UserDiaryUseCase.getGoodBadScoreInTimeRange
 import io.dairyly.dairyly.utils.addDays
 import io.dairyly.dairyly.utils.zipLiveData
 import org.apache.commons.lang3.time.DateUtils
@@ -67,13 +69,17 @@ class DiaryDateViewModel : ViewModel() {
         val allDiaryDateMapLiveData = MutableLiveData(dateMap)
         val allGoodBadScoreInTotalRange = getGoodBadScoreInDayRange(totalStartDate, totalEndDate)
 
-        zipLiveData<ArrayList<DiaryDateHolder>, List<DiaryDateHolder>, List<DiaryDateHolder>>(
+        zipLiveData<ArrayList<DiaryDateHolder>, Resource<List<DiaryDateHolder>>, List<DiaryDateHolder>>(
                 allDiaryDateMapLiveData, allGoodBadScoreInTotalRange) { array, dbResource ->
             // Sort date holders in ascending order
 
+            if(dbResource.data.isNullOrEmpty()){
+                return@zipLiveData array
+            }
+
             Log.d(this::class.java.simpleName, "GoodBad Score Retrieved from DB: $dbResource")
             array.sort()
-            for(dateHolderRes in dbResource) {
+            for(dateHolderRes in dbResource.data) {
                 val targetIndex = array.indexOf(dateHolderRes)
                 if(targetIndex >= 0) {
                     array[targetIndex].goodBadScore = dateHolderRes.goodBadScore
@@ -84,14 +90,13 @@ class DiaryDateViewModel : ViewModel() {
     }
 
     val userProfile by lazy {
-        LiveDataReactiveStreams.fromPublisher(DiaryRepo.reactivelyRetrieveProfileInfo())
+        LiveDataReactiveStreams.fromPublisher(UserDiaryUseCase.getUserProfile())
     }
 
     private fun getGoodBadScoreInDayRange(dayStart: Date,
-                                          dayEnd: Date): LiveData<List<DiaryDateHolder>> {
+                                          dayEnd: Date): LiveData<Resource<List<DiaryDateHolder>>> {
         return LiveDataReactiveStreams
-                .fromPublisher(
-                        DiaryRepo.identifyGoodBadScoreListInRange(dayStart, dayEnd))
+                .fromPublisher(getGoodBadScoreInTimeRange(dayStart, dayEnd))
     }
 }
 

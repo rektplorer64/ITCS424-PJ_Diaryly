@@ -106,4 +106,6 @@
     <string name="dialog_delete_entry_message">รายการที่โดนลบออกไม่สามารถโดนกู้คืนได้ โปรดระวัง</string>
     <string name="action_delete_successful">ลบรายการนี้สำเร็จแล้ว!</string>
     <string name="dialog_time_window_select">เลือกกรอบเวลาที่ต้องการ</string>
+    <string name="dialog_logout_confirmation_ask">คุณแน่ใจนะว่าอยากจะออกจากระบบ?</string>
+    <string name="dialog_logout_confirmation_message">หลังจากออกระบบคุณจะออกไปที่หน้าต้อนรับขอกแอพ คุณต้องใส่ข้อมูลประจำตัวใหม่อีกครั้ง</string>
 </resources>

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import io.dairyly.dairyly.R
-import io.dairyly.dairyly.data.Resource
+import io.dairyly.dairyly.models.data.Resource
 import io.dairyly.dairyly.models.data.DEFAULT_ID
 import io.dairyly.dairyly.models.data.DiaryEntry
 import io.dairyly.dairyly.utils.getAreaNameByCoordinate

@@ -18,6 +18,7 @@ import io.dairyly.dairyly.R
 import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.databinding.CardNormalDiaryNewBinding
 import io.dairyly.dairyly.models.FirebaseStorageRepository.getImageStorageReference
+import io.dairyly.dairyly.models.data.DiaryEntry
 import io.dairyly.dairyly.screens.entry.EntryDisplayActivityArgs
 import io.dairyly.dairyly.utils.populateTags
 import java.text.SimpleDateFormat
@@ -26,8 +27,7 @@ import kotlin.math.min
 
 
 class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder? = null) :
-        ListAdapter<io.dairyly.dairyly.models.data.DiaryEntry, DairyRvAdapter.DairyViewHolder>(
-                DiaryDiffCallback()) {
+        ListAdapter<DiaryEntry, DairyRvAdapter.DairyViewHolder>(DiaryDiffCallback()) {
 
     private val LOG_TAG: String = this::class.java.simpleName
 
@@ -53,12 +53,14 @@ class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder? = null) :
         }
 
         holder.itemViewBinding.root.setOnClickListener {
-            if(diaryDateHolder == null){
-                return@setOnClickListener
-            }
-            val b = EntryDisplayActivityArgs(item.id, diaryDateHolder)
+            val dateHolder = diaryDateHolder ?: DiaryDateHolder(item.timeCreated, 0)
+            val b = EntryDisplayActivityArgs(item.id, dateHolder)
             Log.d(LOG_TAG, "Clicked on item ID = ${item.id}")
-            it.findNavController().navigate(R.id.moreEntryDetailAction, b.toBundle())
+            try {
+                it.findNavController().navigate(R.id.moreEntryDetailAction, b.toBundle())
+            } catch(e: IllegalArgumentException) {
+                it.findNavController().navigate(R.id.searchMoreEntryDetailAction, b.toBundle())
+            }
         }
 
         holder.itemViewBinding.titleTextView.apply {
@@ -118,14 +120,14 @@ class DairyRvAdapter(private val diaryDateHolder: DiaryDateHolder? = null) :
             RecyclerView.ViewHolder(itemViewBinding.root)
 
     private class DiaryDiffCallback :
-            DiffUtil.ItemCallback<io.dairyly.dairyly.models.data.DiaryEntry>() {
-        override fun areItemsTheSame(oldItem: io.dairyly.dairyly.models.data.DiaryEntry,
-                                     newItem: io.dairyly.dairyly.models.data.DiaryEntry): Boolean {
+            DiffUtil.ItemCallback<DiaryEntry>() {
+        override fun areItemsTheSame(oldItem: DiaryEntry,
+                                     newItem: DiaryEntry): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: io.dairyly.dairyly.models.data.DiaryEntry,
-                                        newItem: io.dairyly.dairyly.models.data.DiaryEntry): Boolean {
+        override fun areContentsTheSame(oldItem: DiaryEntry,
+                                        newItem: DiaryEntry): Boolean {
             return oldItem == newItem
         }
     }

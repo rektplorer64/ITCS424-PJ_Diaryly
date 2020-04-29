@@ -11,6 +11,7 @@ import com.google.firebase.database.ValueEventListener
 import io.dairyly.dairyly.models.data.Profile
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.FlowableEmitter
 import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 
@@ -22,36 +23,38 @@ object FirebaseUserRepository {
     private var firebaseUser = firebaseAuth.currentUser
 
     fun createUserAccount(email: String, password: String): Single<FirebaseUser> {
+        val function: (emitter: FlowableEmitter<FirebaseUser>) -> Unit = { flowable ->
+            firebaseAuth
+                    .createUserWithEmailAndPassword(email,
+                                                    password)
+                    .addOnCompleteListener { task ->
+                        if(task.isSuccessful) {
+                            //"Create an Account Successfully"
+                            if(task.result?.user != null) {
+                                firebaseUser = task.result?.user!!
+                                flowable.onNext(
+                                        task.result?.user!!)
+                                        .also { flowable.onComplete() }
+                            } else {
+                                if(task.exception == null) {
+                                    flowable.onError(Exception(
+                                            "Couldn't create a new user Account!"))
+                                } else {
+                                    flowable.onError(
+                                            task.exception!!)
+                                }
+                            }
+                        } else {
+                            flowable.onError(task.exception!!)
+                        }
+                    }
+                    .addOnFailureListener {
+                        flowable.onError(it)
+                    }
+        }
         return Flowable
                 .create<FirebaseUser>(
-                        { flowable ->
-                            firebaseAuth
-                                    .createUserWithEmailAndPassword(email,
-                                                                    password)
-                                    .addOnCompleteListener { task ->
-                                        if(task.isSuccessful) {
-                                            //"Create an Account Successfully"
-                                            if(task.result?.user != null) {
-                                                flowable.onNext(
-                                                        task.result?.user!!)
-                                                        .also { flowable.onComplete() }
-                                            } else {
-                                                if(task.exception == null) {
-                                                    flowable.onError(Exception(
-                                                            "Couldn't create a new user Account!"))
-                                                } else {
-                                                    flowable.onError(
-                                                            task.exception!!)
-                                                }
-                                            }
-                                        } else {
-                                            flowable.onError(task.exception!!)
-                                        }
-                                    }
-                                    .addOnFailureListener {
-                                        flowable.onError(it)
-                                    }
-                        }, BackpressureStrategy.BUFFER).singleOrError()
+                        function, BackpressureStrategy.BUFFER).singleOrError()
     }
 
     fun validateExistingEmail(email: String): Single<Boolean> {
@@ -121,7 +124,7 @@ object FirebaseUserRepository {
         firebaseUser = firebaseAuth.currentUser
         FirebaseAppRepository.setUserDatabaseReference(
                 firebaseUser!!.uid)
-        Log.d(LOG_TAG, "Injected Firebase User reference to the App Repo")
+        Log.d(LOG_TAG, "Injected Firebase User reference to the App Repo -> ${firebaseUser!!.uid}")
     }
 
     fun getUserId(): String? {
@@ -135,7 +138,7 @@ object FirebaseUserRepository {
         // firebaseUser = firebaseAuth.currentUser
         FirebaseStorageRepository.setUserStorageReference(
                 firebaseUser!!.uid)
-        Log.d(LOG_TAG, "Injected Firebase User reference to the Storage Repo")
+        Log.d(LOG_TAG, "Injected Firebase User reference to the Storage Repo -> ${firebaseUser!!.uid}")
 
     }
 
@@ -178,7 +181,9 @@ object FirebaseUserRepository {
     fun Profile.email() = firebaseUser?.email!!
 
     fun logoutUserAccount() {
+        Log.d(LOG_TAG, "Logging out from Firebase Auth")
         firebaseAuth.signOut()
+        firebaseUser = null
     }
 
 }

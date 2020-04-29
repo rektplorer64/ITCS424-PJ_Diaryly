@@ -28,6 +28,7 @@ class LoginFragment : Fragment() {
                     viewModel.account!!.uid)
             injectUserToAppRepo()
             injectUserToStorageRepo()
+
             findNavController().navigate(action)
             activity!!.finish()
         }

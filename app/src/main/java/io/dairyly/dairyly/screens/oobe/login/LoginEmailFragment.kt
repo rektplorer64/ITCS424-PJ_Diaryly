@@ -12,6 +12,7 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import es.dmoral.toasty.Toasty
 import io.dairyly.dairyly.R
+import io.dairyly.dairyly.models.FirebaseUserRepository
 import io.dairyly.dairyly.viewmodels.LoginViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.buttons_login_register.*
@@ -67,6 +68,8 @@ class LoginEmailFragment : Fragment() {
                         if(user == null) {
                             return@subscribe
                         }
+                        FirebaseUserRepository.injectUserToAppRepo()
+                        FirebaseUserRepository.injectUserToStorageRepo()
                         // The user creation process is finished
                         Toasty.info(context!!, "${getString(R.string.logged_in)}: ${user.email}").show()
                         val action = LoginEmailFragmentDirections.actionLoginEmailFragmentToMainActivity(user.uid)

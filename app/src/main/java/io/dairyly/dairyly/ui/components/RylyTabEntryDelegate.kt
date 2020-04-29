@@ -57,7 +57,7 @@ class RylyTabEntryDelegate(private var onTabClickListener: ((DiaryEntry) -> Unit
         //         DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_ABBREV_RELATIVE)
     }
 
-    override fun onCreateTags(tab: TabLayout.Tab, itemIndex: Int, item: DiaryEntry) {
+    override fun onCreateTab(tab: TabLayout.Tab, itemIndex: Int, item: DiaryEntry) {
         val goodness = tab.view.findViewById<TextView>(R.id.goodnessPointTextView)
         // if(itemIndex == 0){
         //     // tab.view.rootView.updatePaddingRelative(start = 16.toPx)

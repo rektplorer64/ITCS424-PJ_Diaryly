@@ -7,12 +7,12 @@
         android:icon="@drawable/ic_favorite_black_24dp"/>
 
     <item
-        android:id="@+id/menuDashboard"
+        android:id="@id/dashboardFragment"
         android:title="@string/dashboard"
         android:icon="@drawable/ic_dashboard_black_24dp"/>
 
     <item
-        android:id="@+id/menuOverview"
+        android:id="@id/overviewFragment"
         android:title="@string/overview"
         android:icon="@drawable/ic_calendar_black_24dp"
         tools:ignore="PrivateResource" />

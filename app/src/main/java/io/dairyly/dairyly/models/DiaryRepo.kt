@@ -7,6 +7,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.dairyly.dairyly.data.models.DiaryDateHolder
+import io.dairyly.dairyly.models.FirebaseStorageRepository.detachUserStorageReference
 import io.dairyly.dairyly.models.data.*
 import io.dairyly.dairyly.models.data.FirebaseDiaryImage.Companion.getFirebaseStoragePath
 import io.dairyly.dairyly.utils.*
@@ -363,10 +364,12 @@ object DiaryRepo {
 
     fun reactivelyRetrieveProfileInfo(isReactive: Boolean = true): Flowable<Profile>{
         val flowCallback = FlowableOnSubscribe { flowable: FlowableEmitter<Profile> ->
-            userRoot.child("profile")
-                    .addValueEventListener(object : ValueEventListener {
+            val task = userRoot.child("profile")
+
+                    task.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(p0: DataSnapshot) {
                             val value = p0.getValue(Profile::class.java)
+                            // Log.d(LOG_TAG, "Getting user profile... -> ${task.path.wireFormat()}")
                             if(value == null) {
                                 flowable.onError(Throwable("No data found!"))
                                 flowable.onComplete()
@@ -418,6 +421,8 @@ object DiaryRepo {
     }
 
     fun logoutUser() {
+        Log.d(LOG_TAG, "Logging user out from the app")
         FirebaseUserRepository.logoutUserAccount()
+        detachUserStorageReference()
     }
 }

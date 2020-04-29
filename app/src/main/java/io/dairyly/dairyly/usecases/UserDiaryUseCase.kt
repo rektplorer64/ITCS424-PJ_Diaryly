@@ -2,7 +2,8 @@ package io.dairyly.dairyly.usecases
 
 import android.content.Context
 import android.util.Log
-import io.dairyly.dairyly.data.Resource
+import io.dairyly.dairyly.models.data.Resource
+import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.models.DiaryRepo
 import io.dairyly.dairyly.models.data.DiaryEntry
 import io.dairyly.dairyly.models.data.Profile
@@ -36,5 +37,9 @@ object UserDiaryUseCase {
     fun deleteDiaryEntry(diaryEntry: DiaryEntry,
                          context: Context): Single<List<Resource<Boolean>>> {
         return RxSingleUseCaseProcedure(DiaryRepo.deleteAnEntry(diaryEntry, context), null).proceed()
+    }
+
+    fun getGoodBadScoreInTimeRange(dayStart: Date, dayEnd: Date): Flowable<Resource<List<DiaryDateHolder>>> {
+        return RxUseCaseProcedure(DiaryRepo.identifyGoodBadScoreListInRange(dayStart, dayEnd), null).proceed()
     }
 }

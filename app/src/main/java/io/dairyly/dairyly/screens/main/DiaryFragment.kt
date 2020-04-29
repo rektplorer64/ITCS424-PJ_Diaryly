@@ -26,7 +26,8 @@ import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.models.DiaryRepo
 import io.dairyly.dairyly.models.FirebaseStorageRepository.getProfileImageStorageReference
 import io.dairyly.dairyly.models.FirebaseUserRepository.email
-import io.dairyly.dairyly.screens.oobe.LoginActivity
+import io.dairyly.dairyly.models.data.Profile
+import io.dairyly.dairyly.models.data.Resource
 import io.dairyly.dairyly.ui.components.RylyTabDateDelegate
 import io.dairyly.dairyly.ui.components.RylyToolbarView
 import io.dairyly.dairyly.viewmodels.DiaryDateViewModel
@@ -85,7 +86,15 @@ class DiaryFragment : Fragment() {
         calendarBarLayout.setLiftable(true)
 
         viewModel.userProfile.observe(viewLifecycleOwner) {profile ->
-            Glide.with(calendarBar.context).load(profile.getProfileImageStorageReference())
+
+            if(profile.status == Resource.Status.ERROR){
+                return@observe
+            }
+
+            val data: Profile = profile.data ?: return@observe
+
+            Glide.with(calendarBar.context).load(data.getProfileImageStorageReference())
+                    .placeholder(R.color.colorPrimaryDark)
                     .into(calendarBar.circleImageView)
 
             calendarBar.setCircleImageButtonListener {
@@ -94,31 +103,43 @@ class DiaryFragment : Fragment() {
 
                     val root = getCustomView()
                     root.findViewById<CircularImageView>(R.id.profileImageView).apply {
-                        Glide.with(calendarBar.context).load(profile.getProfileImageStorageReference())
+                        Glide.with(calendarBar.context).load(data.getProfileImageStorageReference())
+                                .placeholder(R.color.colorPrimaryDark)
                                 .into(this)
                     }
 
                     root.findViewById<MaterialTextView>(R.id.nameTextView).apply {
-                        text = profile.username
+                        text = data.username
                     }
 
                     root.findViewById<MaterialTextView>(R.id.emailTextView).apply {
-                        text = profile.email()
+                        text = data.email()
                     }
 
                     root.findViewById<FloatingActionButton>(R.id.logoutBtn).setOnClickListener {
 
                         MaterialDialog(it.context).show {
-                            title(text = "Are you sure you want to Log out?")
-                            message(text = "After logging out, you will return to the landing page of the app. You will have to enter your email and password to login again.")
+                            title(text = getString(R.string.dialog_logout_confirmation_ask))
+                            message(text = getString(R.string.dialog_logout_confirmation_message))
 
                             positiveButton(R.string.confirm) {
                                 // Log out user from the application!
                                 DiaryRepo.logoutUser()
-                                val intent = Intent(context, LoginActivity::class.java)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                // val intent = Intent(context, LoginActivity::class.java)
+                                // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                // startActivity(intent)
+                                // activity!!.finish()
+
+                                val intent: Intent = activity!!.baseContext.packageManager
+                                        .getLaunchIntentForPackage(
+                                                activity!!.baseContext.packageName)!!
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                 startActivity(intent)
+
+                                activity!!.finish()
                             }
+
                             negativeButton(R.string.cancel)
                         }
 

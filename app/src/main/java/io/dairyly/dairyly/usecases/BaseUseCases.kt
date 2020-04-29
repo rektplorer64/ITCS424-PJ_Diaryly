@@ -1,8 +1,8 @@
 package io.dairyly.dairyly.usecases
 
 import android.annotation.SuppressLint
-import io.dairyly.dairyly.data.Resource
-import io.dairyly.dairyly.data.Resource.Status
+import io.dairyly.dairyly.models.data.Resource
+import io.dairyly.dairyly.models.data.Resource.Status
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -22,7 +22,8 @@ class RxUseCaseProcedure<T>(
     fun proceed(): Flowable<Resource<T>> {
 
         // https://github.com/ReactiveX/RxJava/issues/6214
-        val publishSubject = BehaviorSubject.createDefault(Resource.loading<T>(null, "loading data..."))
+        val publishSubject = BehaviorSubject.createDefault(
+                Resource.loading<T>(null, "loading data..."))
 
         var a = operation
                 // .startWith { publishSubject.onNext(Resource.loading<T>(null, "loading data...")) }
@@ -33,7 +34,8 @@ class RxUseCaseProcedure<T>(
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                                 // Log.d(LOG_TAG, "RX --> Received an item: $it")
-                               publishSubject.onNext(Resource.success(it, "Values has arrived!"))
+                               publishSubject.onNext(
+                                       Resource.success(it, "Values has arrived!"))
                            }, {
                                it.printStackTrace()
 
@@ -99,7 +101,7 @@ class SuspendingUseCaseProcedure<T>(val useCasePredicate: suspend () -> T,
         } catch(e: Exception) {
             errorMsg = onError(e)
             return Resource.error(result,
-                                  errorMsg)
+                                                                                    errorMsg)
         }
         return Resource.success(result, null)
     }

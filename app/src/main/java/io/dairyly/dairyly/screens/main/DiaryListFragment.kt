@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import io.dairyly.dairyly.R
 import io.dairyly.dairyly.data.DairyRepository
-import io.dairyly.dairyly.data.Resource.Status
 import io.dairyly.dairyly.data.models.DiaryDateHolder
+import io.dairyly.dairyly.models.data.Resource.Status
 import io.dairyly.dairyly.ui.recyclerview.DairyRvAdapter
 import io.dairyly.dairyly.utils.AppViewModelFactory
 import io.dairyly.dairyly.viewmodels.DiaryViewModel
@@ -52,8 +52,6 @@ class DiaryListFragment : Fragment() {
             adapter = rvAdapter
             layoutManager = LinearLayoutManager(this.context)
         }
-
-
 
         viewModel.entryListByDateHolder.observe(this){
             // Toast.makeText(this@DiaryListFragment.context, it.status.toString(), Toast.LENGTH_SHORT).show()

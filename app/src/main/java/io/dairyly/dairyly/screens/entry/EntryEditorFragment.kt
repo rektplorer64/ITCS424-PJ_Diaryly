@@ -95,10 +95,8 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-
         val markwon: Markwon = Markwon.create(context!!)
         val markwonEditor = MarkwonEditor.builder(markwon).build()
-
 
         val imageAdapter = ImageCarouselRvAdapter()
         imageCarousel.apply {
@@ -532,6 +530,8 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
         return false
     }
 
+
+
     @SuppressLint("MissingPermission")
     private fun initializeLocationAndMap() {
 
@@ -665,8 +665,10 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                 REQUEST_CODE_GALLERY         -> {
                     //data.getData return the content URI for the selected Image
                     val selectedImage: Uri = data?.data ?: return
+
                     viewModel.addAnImage(selectedImage)
                 }
+
                 REQUEST_CODE_LOCATION_PICKER -> {
                     Toasty.success(context!!, getString(R.string.location_saved)).show()
                     Log.d(LOG_TAG, "Returned Location Extra: ${data!!.extras?.get(

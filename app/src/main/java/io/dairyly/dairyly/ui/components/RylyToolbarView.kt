@@ -197,12 +197,12 @@ class RylyToolbarView<TabType>(context: Context, attributes: AttributeSet) :
                 val tab = calendarTab.newTab().apply {
                     setCustomView(behaviorBehaviorDelegate.itemLayoutRes)
                     val dataItem = diaryDateHolders[i]
-                    behaviorBehaviorDelegate.onCreateTags(this, i, dataItem)
+                    behaviorBehaviorDelegate.onCreateTab(this, i, dataItem)
 
                     val isAlwaysEmphasized: Boolean? = behaviorBehaviorDelegate
                             .isAwaysEmphasized(dataItem)
                     if(isAlwaysEmphasized != null && isAlwaysEmphasized) {
-                        customView!!.findViewById<MaterialCardView>(R.id.date_root_card).apply {
+                        customView!!.findViewById<MaterialCardView>(R.id.dateRootCard).apply {
                             strokeWidth = 2.toPx
                             strokeColor = this.context.getColor(R.color.colorPrimary)
                         }

@@ -9,6 +9,7 @@ import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.dairyly.dairyly.R
+import io.dairyly.dairyly.models.data.Resource
 import io.dairyly.dairyly.ui.recyclerview.DairyRvAdapter
 import io.dairyly.dairyly.usecases.UserDiaryUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -42,9 +43,15 @@ class SearchFragment : Fragment() {
             layoutManager = LinearLayoutManager(this.context)
         }
 
-
         viewModel.searchResult.observe(viewLifecycleOwner){
-            rvAdapter.submitList(it.data)
+            if(it.status == Resource.Status.LOADING){
+                shimmerViewContainer.visibility = View.VISIBLE
+                searchRecyclerView.visibility = View.GONE
+            }else{
+                shimmerViewContainer.visibility = View.GONE
+                searchRecyclerView.visibility = View.VISIBLE
+                rvAdapter.submitList(it.data)
+            }
         }
     }
 }

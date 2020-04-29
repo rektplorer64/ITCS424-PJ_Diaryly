@@ -6,10 +6,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
-import io.dairyly.dairyly.data.Resource
 import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.models.DiaryRepo
 import io.dairyly.dairyly.models.data.DiaryEntry
+import io.dairyly.dairyly.models.data.Resource
 import io.dairyly.dairyly.usecases.DiaryContentUseCase.getAllDiaryEntriesByDateHolder
 import io.dairyly.dairyly.usecases.DiaryContentUseCase.getOneDiaryEntry
 import io.dairyly.dairyly.usecases.UserDiaryUseCase.deleteDiaryEntry

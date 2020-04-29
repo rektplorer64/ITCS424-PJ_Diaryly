@@ -52,6 +52,12 @@ class RegisterEmailFragment : Fragment() {
             if(!isValid) {
                 emailTextField.error = getString(
                         R.string.error_email_invalid_already_taken)
+                emailTextField.apply {
+                    endIconDrawable = AppCompatResources.getDrawable(
+                            emailTextField.context,
+                            R.drawable.ic_cancel_black_24dp)
+                }
+                signInContinueBtn.isEnabled = false
             } else {
                 emailTextField.error = null
                 // TODO: Show valid message
@@ -88,8 +94,9 @@ class RegisterEmailFragment : Fragment() {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .onErrorReturn {throwable ->
                                     Toasty.error(context!!, getString(R.string.error_email_invalid_already_taken)).show()
+
                                     throwable.printStackTrace()
-                                    true
+                                    false
                                 }
                                 .subscribe { status, throwable ->
                                     when(throwable) {

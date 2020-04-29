@@ -40,7 +40,7 @@ interface RylyToolbarBehaviorDelegate<TabType>{
      * @param itemIndex Int           an integer that specifies the index of the tab.
      * @param item TabType      the data item that will be bind to the target tab.
      */
-    fun onCreateTags(tab: TabLayout.Tab, itemIndex: Int, item: TabType)
+    fun onCreateTab(tab: TabLayout.Tab, itemIndex: Int, item: TabType)
 
     /**
      * This method determines the condition that could be used to determine always selected item like

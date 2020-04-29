@@ -14,6 +14,22 @@ import kotlin.collections.HashMap
 const val DEFAULT_COLOR = -1
 const val DEFAULT_ID = "NO___ID"
 
+/**
+ * A container class that represents each entry of a DiaryEntry
+ *
+ * @property id String                      string that represent an ID of each diary entry
+ * @property title String                   title of diary entry
+ * @property subtitle String                subtitle of diary entry
+ * @property content String                 content string of diary entry
+ * @property tags List<DiaryTag>            list of tags associated with each diary entry
+ * @property goodBadScore Int               the quantity of Good and Bad: if higher than 0 -> Good, negative -> bad, zero -> neutral
+ * @property color Int                      the color integer
+ * @property timeCreated Date               the timestamp on which the entry is created
+ * @property timeModified Date              the timestamp on which the entry is modified
+ * @property images List<DiaryImage>?       list of images that associated with the diary entry
+ * @property location Pair<Double, Double>  pair of coordinate that consisted of Latitude and Longitude
+ * @constructor                             Default constructor of the DiaryEntry class
+ */
 class DiaryEntry(
         var id: String,
         var title: String,
@@ -36,9 +52,9 @@ class DiaryEntry(
             hashMapOf<String, FirebaseDiaryImage>().apply {
                 var defaultIdCount = 0
                 for(i in images!!.indices) {
-                    val key = if(images!![i].id == DEFAULT_ID){
+                    val key = if(images!![i].id == DEFAULT_ID) {
                         defaultIdCount++.toString()
-                    }else{
+                    } else {
                         images!![i].id
                     }
                     this[key] = images!![i].toFirebaseData()
@@ -92,7 +108,6 @@ class DiaryEntry(
         result = 31 * result + location.hashCode()
         return result
     }
-
 
 }
 

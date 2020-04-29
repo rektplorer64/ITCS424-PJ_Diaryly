@@ -5,6 +5,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:id="@+id/searchRecyclerView"
+        android:layout_width="match_parent"
+        android:paddingTop="84dp"
+        android:elevation="0dp"
+        android:layout_height="match_parent"
+        android:paddingBottom="84dp"/>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:elevation="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shimmer_base_alpha="0.3"
+        app:shimmer_base_color="@color/colorPrimaryDark"
+        app:shimmer_clip_to_children="true"
+        app:shimmer_colored="true"
+        app:shimmer_duration="1200"
+        app:shimmer_highlight_alpha="0.1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/card_normal_diary_placeholder" />
+
+            <include layout="@layout/card_normal_diary_placeholder" />
+
+            <include layout="@layout/card_normal_diary_placeholder" />
+
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,15 +54,19 @@
         android:layout_marginHorizontal="@dimen/margin_med_16"
         android:background="@null"
         app:liftOnScroll="true"
+        android:focusable="true"
+        android:focusedByDefault="true"
         app:liftOnScrollTargetViewId="@id/searchRecyclerView">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="56dp"
             app:cardCornerRadius="@dimen/default_corner_radius"
-            app:cardElevation="0dp"
+            app:cardElevation="4dp"
             app:strokeColor="@color/Grey400"
             app:strokeWidth="1dp"
+            android:clickable="true"
+            android:elevation="4dp"
             app:cardPreventCornerOverlap="true">
 
             <LinearLayout
@@ -45,19 +91,10 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:maxLines="1"
                     android:background="@null"
                     tools:text="asdads" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:clipToPadding="false"
-        android:clipChildren="false"
-        android:id="@+id/searchRecyclerView"
-        android:layout_width="match_parent"
-        android:paddingTop="84dp"
-        android:layout_height="match_parent"
-        android:paddingBottom="84dp"/>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

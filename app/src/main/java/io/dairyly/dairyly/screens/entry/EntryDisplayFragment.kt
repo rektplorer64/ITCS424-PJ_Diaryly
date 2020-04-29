@@ -20,11 +20,11 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import es.dmoral.toasty.Toasty
 import io.dairyly.dairyly.R
-import io.dairyly.dairyly.data.Resource.Status
 import io.dairyly.dairyly.models.FirebaseStorageRepository.getImageStorageReference
 import io.dairyly.dairyly.models.FirebaseStorageRepository.getProfileImageStorageReference
 import io.dairyly.dairyly.models.data.DiaryEntry
 import io.dairyly.dairyly.models.data.DiaryImage
+import io.dairyly.dairyly.models.data.Resource.Status
 import io.dairyly.dairyly.ui.components.RylyTabEntryDelegate
 import io.dairyly.dairyly.ui.components.RylyToolbarView
 import io.dairyly.dairyly.viewmodels.EntryActivityViewModel

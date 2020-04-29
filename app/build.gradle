@@ -208,4 +208,7 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
+    // CalendarView
+    implementation 'com.github.kizitonwose:CalendarView:0.3.4'
+
 }

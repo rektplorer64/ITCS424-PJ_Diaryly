@@ -1,4 +1,4 @@
-package io.dairyly.dairyly.data
+package io.dairyly.dairyly.models.data
 
 data class Resource<out T>(
         var status: Status,
@@ -8,17 +8,20 @@ data class Resource<out T>(
     companion object {
         fun <T> success(data: T?, msg: String?): Resource<T> {
             return Resource(
-                    Status.SUCCESS, data, msg)
+                    Status.SUCCESS, data,
+                    msg)
         }
 
         fun <T> error(data: T?, msg: String?): Resource<T> {
             return Resource(
-                    Status.ERROR, data, msg)
+                    Status.ERROR, data,
+                    msg)
         }
 
         fun <T> loading(data: T?, msg: String?): Resource<T> {
             return Resource(
-                    Status.LOADING, data, msg)
+                    Status.LOADING, data,
+                    msg)
         }
     }
 
