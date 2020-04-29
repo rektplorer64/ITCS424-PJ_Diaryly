@@ -16,9 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginBottom="@dimen/margin_small_8"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/goodBadView" />
 
         <LinearLayout
             android:id="@+id/locationIndicatorLayout"
@@ -74,8 +74,9 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="@dimen/margin_large_24"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="@dimen/margin_med_16"/>
+            app:layout_constraintTop_toTopOf="@id/locationIndicatorLayout"
+            app:layout_constraintBottom_toBottomOf="@+id/locationIndicatorLayout"
+            />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/imageCarousel"

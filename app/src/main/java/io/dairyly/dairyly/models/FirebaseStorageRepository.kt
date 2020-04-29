@@ -103,8 +103,11 @@ object FirebaseStorageRepository {
 
             val targetFileFirebaseReference = storageRef.child(fileName)
             targetFileFirebaseReference.downloadUrl.addOnSuccessListener {
-                flowable.onError(FirebaseException(
-                        "We cannot upload the file since there is a file already exist at $it."))
+                val throwable = FirebaseException(
+                        "We cannot upload the file since there is a file already exist at $it.")
+                if(flowable.tryOnError(throwable)) {
+                    flowable.onError(throwable)
+                }
             }.addOnFailureListener { _ ->
                 val outputStream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
