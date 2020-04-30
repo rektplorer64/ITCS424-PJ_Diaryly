@@ -20,7 +20,8 @@ import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EntryEditorViewModel(application: Application, private val editorEntryId: String? = null, initialDiaryDateHolder: Date? = Calendar.getInstance().time) :
+class EntryEditorViewModel(application: Application, private val editorEntryId: String? = null,
+                           initialDiaryDateHolder: Date? = Calendar.getInstance().time) :
         AndroidViewModel(application) {
     companion object {
         val EMPTY_LOCATION = Pair(0.0, 0.0)
@@ -118,8 +119,9 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
         }
     }
 
-    val allImages: LiveData<ArrayList<DiaryImage>> = zipLiveData(oldImages as LiveData<ArrayList<DiaryImage>>
-                                                                 , newDiaryImages as LiveData<ArrayList<DiaryImage>>){ a, b ->
+    val allImages: LiveData<ArrayList<DiaryImage>> = zipLiveData(
+            oldImages as LiveData<ArrayList<DiaryImage>>
+            , newDiaryImages as LiveData<ArrayList<DiaryImage>>) { a, b ->
         val full = ArrayList<DiaryImage>(a)
         full.addAll(b)
 
@@ -138,7 +140,8 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
             id = editorEntryId!!
         }
 
-        Log.d(LOG_TAG, "Saving data...\n\t\t${title.value!!}\n\t\tAnd ${newImages.value!!.size} images")
+        Log.d(LOG_TAG,
+              "Saving data...\n\t\t${title.value!!}\n\t\tAnd ${newImages.value!!.size} images")
 
         val entry = DiaryEntry(id, title.value!!,
                                subtitle.value!!, content.value!!,
@@ -195,7 +198,7 @@ class EntryEditorViewModel(application: Application, private val editorEntryId: 
 
     private fun determineDate(date: Date?): Date {
         val now = Calendar.getInstance().time
-        if(DateUtils.isSameDay(date, now) || date == null){
+        if(DateUtils.isSameDay(date, now) || date == null) {
             return now
         }
         return date
