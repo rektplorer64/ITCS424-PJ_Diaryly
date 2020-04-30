@@ -34,7 +34,11 @@ import kotlinx.android.synthetic.main.header_login_register.*
 import java.util.concurrent.TimeUnit
 
 /**
- * A simple [Fragment] subclass.
+ * A fragment that is responsible for the customization of
+ * the user profile including username and profile image.
+ *
+ * @property LOG_TAG String a string that is used for log message
+ * @property viewModel RegisterViewModel view model that is responsible for managing data in this fragment
  */
 class ProfileCustomizeFragment : Fragment() {
 
@@ -43,7 +47,8 @@ class ProfileCustomizeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+
+        // Inject the user to both app and storage references since we will have to use them for the customization
         FirebaseUserRepository.injectUserToStorageRepo()
         FirebaseUserRepository.injectUserToAppRepo()
 
@@ -54,30 +59,35 @@ class ProfileCustomizeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Get the user ID from the previous fragment.
         val userId = ProfileCustomizeFragmentArgs.fromBundle(arguments!!).uid
 
+        // Retrieve the ViewModel from the activity
         viewModel = ViewModelProvider(activity!!).get(RegisterViewModel::class.java)
 
-        // Set the page header
+        // Set the Page Header text
         defaultHeaderText.text = getString(R.string.customize_your_account)
         subtitleTextView.text = getString(R.string.set_your_username_and_image)
 
         userEmailText.text = viewModel.emailLiveData.value!!
 
         viewModel.isUsernameAvailableStatusLiveData.observe(viewLifecycleOwner) { isValid ->
+
+            // Set the progress bar to GONE since the password validity check is completed.
             bottomProgressBar.visibility = View.GONE
             if(isValid == null) {
-                // Toast.makeText(this@RegisterEmailFragment.activity, "Error Retrieving Status",
-                //                Toast.LENGTH_SHORT).show()
                 continueBtn.isEnabled = false
                 return@observe
             }
+
+            // If the password is not valid.
             if(!isValid) {
+                // Show the error message.
                 usernameTextForm.error = getString(
                         R.string.error_email_invalid_already_taken)
             } else {
+                // Show a valid message
                 usernameTextForm.error = null
-                // TODO: Show valid message
                 usernameTextForm.apply {
                     endIconDrawable = AppCompatResources.getDrawable(
                             usernameTextForm.context,
@@ -90,76 +100,103 @@ class ProfileCustomizeFragment : Fragment() {
         }
 
         continueBtn.setOnClickListener {
+
+            // If we do not know the status of the Username, we will not allow the user to continue...
             if(viewModel.isUsernameAvailableStatusLiveData.value == null) {
                 return@setOnClickListener
             }
 
+            // If we do know that it is invalid, we also do not allow the user to continue.
             if(!viewModel.isUsernameAvailableStatusLiveData.value!!) {
                 return@setOnClickListener
             }
+
             viewModel
                     .saveCustomizationData(context!!)
-                    ?.subscribe { data, throwable ->
+                    ?.subscribe { data, _ ->
+                        // If both status booleans (E.g. for username and user profile status) is true.
                         if(data[0] && data[1]) {
+                            // Proceed to the MainActivity as specified in the graph...
                             val action = ProfileCustomizeFragmentDirections.actionProfileCustomizeFragmentToMainActivity(
                                     userId)
                             findNavController().navigate(action)
                         } else {
-                            Toasty.error(context!!, "Error getting updating your profile!")
+                            Toasty.error(context!!, getString(R.string.customize_error_updating))
                         }
                     }
 
         }
 
         viewModel.profileImageBitmap.observe(viewLifecycleOwner) {
-            // Log.d(LOG_TAG, "The URI of the image is updated! -> $it")
+            // If the incoming image is NULL
             if(it == null) {
+                // Make the image add button visible
                 addImageButton.visibility = View.VISIBLE
                 return@observe
             }
+
+            // Otherwise, make it disappear.
             addImageButton.visibility = View.GONE
-            Toasty.info(context!!, "A profile image selected!").show()
-            Glide.with(context!!)
-                    .load(it[0].second)
-                    .into(heroProfileView)
+
+            // Show a toast to notify the user
+            Toasty.info(context!!, getString(R.string.customize_image_selected)).show()
+
+            // Load the image into it.
+            Glide.with(context!!).load(it[0].second).into(heroProfileView)
         }
 
         val addImageClickListener: (v: View) -> Unit = {
+            // When clicking the image button
+
+            // Check for the external storage permission.
             if(activity!!.isGrantedExternalStoragePermission()) {
+                // If the permission is already granted, open the image selector.
                 Log.d(LOG_TAG,
-                      "Permission is granted after the Image is Clicked! -> Opening Gallery")
+                      getString(R.string.permission_granted_gallery))
                 invokeImageSelectionIntent()
             } else {
+                // If not granted, ask the system for the permission.
                 requestPermissions(CODE_PERMISSION_READ_STORAGE).also {
-                    if(!it){
-                        Log.d(LOG_TAG, "Permission is denied after the Image is Clicked!")
+                    if(!it) {
+                        Log.d(LOG_TAG, getString(R.string.permission_denied_gallery))
                     }
                 }
             }
         }
+
+        // Add the same click listener to both ImageView and the add image button.
         heroProfileView.setOnClickListener(addImageClickListener)
         addImageButton.setOnClickListener(addImageClickListener)
 
+        // Use the text change event to an Observable of CharSequence
         val a = RxTextView.textChanges(usernameEditText)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())          // Do observe it the Main thread, since we must receive events from the UI.
+                .subscribeOn(AndroidSchedulers.mainThread())        // Do subscribe it the Main thread, since we must interact with the UI.
                 .debounce(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .subscribe {
-                    // Toasty.info(context!!, "sadas").show()
+                    // Remove unnecessary white spaces from the username
                     val username = it.toString().trim()
+
+                    // Validate the format of the username
                     if(username.isValidUsername()) {
+                        // If it is valid, begins to validate with the server.
+                        // We validate whether the username has already been used or not...
                         usernameTextForm.error = null
                         bottomProgressBar.visibility = View.VISIBLE
 
-                        // TODO: Proceed to validate the email with the server
+                        // Set the email to be the value in the text field
                         viewModel.emailLiveData.value = username
 
+                        // Proceed to validate the email with the server
                         viewModel
                                 .validateExistingUsername()
                                 .onErrorReturn { throwable ->
+                                    // If an error is returned, notify the user.
                                     Toasty.error(context!!, getString(
                                             R.string.error_email_invalid_already_taken)).show()
                                     throwable.printStackTrace()
+
+                                    // Make it invalid by returning false
                                     false
                                 }
                                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -200,9 +237,18 @@ class ProfileCustomizeFragment : Fragment() {
         }
     }
 
+    /**
+     * Request the permission from the system accordingly to the parameter
+     * @param permissionCode Int custom request code
+     * @return Boolean the result of the permission -> true if granted
+     */
     private fun requestPermissions(permissionCode: Int): Boolean {
+
+        // If the request code is for reading storage
         if(permissionCode == CODE_PERMISSION_READ_STORAGE) {
+            // And the app is not granted the permission storage
             if(!activity!!.isGrantedExternalStoragePermission()) {
+                // Request a permission for that
                 ActivityCompat.requestPermissions(activity!!,
                                                   arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
                                                   CODE_PERMISSION_READ_STORAGE)
@@ -215,13 +261,19 @@ class ProfileCustomizeFragment : Fragment() {
         return false
     }
 
+    /**
+     * Handle fragment behavior after returning from a system permission dialog
+     * @param requestCode Int custom request code
+     * @param permissions Array<out String> array of permission
+     * @param grantResults IntArray the result of the permission request
+     */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         Log.d(LOG_TAG, "Receiving Permission Result (code = $requestCode)")
         when(requestCode) {
-            CODE_PERMISSION_READ_STORAGE  -> {
+            CODE_PERMISSION_READ_STORAGE -> {
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toasty.success(context!!, getString(R.string.permission_thanks_storage)).show()
                     invokeImageSelectionIntent()
@@ -230,11 +282,20 @@ class ProfileCustomizeFragment : Fragment() {
         }
     }
 
+    /**
+     * Handle fragment behavior after returning from an intent
+     * @param requestCode Int custom request code
+     * @param resultCode Int  the status of the result OK or not Ok
+     * @param data Intent? the data returning from another activity
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d(LOG_TAG, "Receiving Activity Result (code = $requestCode)")
+
+        // If the result is OK
         if(resultCode == Activity.RESULT_OK) {
             Log.d(LOG_TAG, "The Result is OKAY!)")
             when(requestCode) {
+                // And the request is for the gallery
                 EntryEditFragment.REQUEST_CODE_GALLERY -> {
                     Log.d(LOG_TAG, "The Result is related to GALLERY!!")
                     Toasty.info(context!!, "A profile image selected!").show()
@@ -242,6 +303,8 @@ class ProfileCustomizeFragment : Fragment() {
                     //data.getData return the content URI for the selected Image
                     val selectedImage: Uri = data?.data ?: return
                     Log.d(LOG_TAG, "The Result contains ${selectedImage}!")
+
+                    // Set it to the ViewModel for further UI update.
                     viewModel.profileImageUri.value = selectedImage
                 }
             }

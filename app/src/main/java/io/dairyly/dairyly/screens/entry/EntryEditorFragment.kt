@@ -605,6 +605,8 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
+     *
+     * @param g GoogleMap an instance of Google Map
      */
     override fun onMapReady(g: GoogleMap) {
         g.apply {
@@ -618,14 +620,12 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                 val lat = viewModel.coordinate.value!!.first
                 val long = viewModel.coordinate.value!!.second
 
-                // if(Pair(lat, long) != DEFAULT_LOCATION) {
-                    val action = EntryEditFragmentDirections.actionEntryEditFragmentToLocationActivity(
-                            lat.toFloat(), long.toFloat()).arguments
-                    Log.d(LOG_TAG, "Sent Location Bundle: $lat, $long")
+                val action = EntryEditFragmentDirections.actionEntryEditFragmentToLocationActivity(
+                        lat.toFloat(), long.toFloat()).arguments
+                Log.d(LOG_TAG, "Sent Location Bundle: $lat, $long")
 
-                    val intent = Intent(activity!!, LocationActivity::class.java).putExtras(action)
-                    startActivityForResult(intent, REQUEST_CODE_LOCATION_PICKER)
-                // }
+                val intent = Intent(activity!!, LocationActivity::class.java).putExtras(action)
+                startActivityForResult(intent, REQUEST_CODE_LOCATION_PICKER)
             }
         }
 

@@ -27,7 +27,6 @@
         android:layout_width="220dp"
         android:layout_height="220dp"
         android:layout_marginTop="@dimen/margin_med_16"
-        android:clickable="true"
         app:civ_shadow="true"
         app:civ_shadow_color="@color/colorPrimaryDark"
         app:civ_shadow_gravity="bottom"
@@ -35,6 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userEmailText"
+        android:foreground="@null"
         android:scaleType="centerCrop"
         app:civ_circle_color="@color/colorPrimary" />
 
@@ -51,7 +51,7 @@
         app:layout_constraintBottom_toBottomOf="@id/heroProfileView"
         android:scaleType="centerInside"
         android:background="@null"
-        android:foreground="?android:selectableItemBackgroundBorderless"
+        android:foreground="?android:selectableItemBackground"
         android:tint="@color/blackAlpha80"
         app:srcCompat="@drawable/ic_image_add_black_24dp" />
 

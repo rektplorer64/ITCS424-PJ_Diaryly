@@ -27,6 +27,8 @@
                 android:paddingStart="@dimen/margin_med_16"
                 android:paddingTop="@dimen/margin_med_16"
                 android:paddingEnd="@dimen/margin_med_16"
+                android:clickable="true"
+                android:foreground="?android:selectableItemBackgroundBorderless"
                 android:textColor="@color/mainBlue"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -114,6 +116,8 @@
                 android:layout_marginEnd="@dimen/margin_med_16"
                 android:src="@drawable/ic_launcher_background"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:clickable="true"
+                android:foreground="?android:selectableItemBackgroundBorderless"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

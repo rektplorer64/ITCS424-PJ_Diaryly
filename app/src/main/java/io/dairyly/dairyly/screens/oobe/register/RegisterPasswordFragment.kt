@@ -74,7 +74,7 @@ class RegisterPasswordFragment : Fragment() {
         signInContinueBtn.setOnClickListener {
             bottomProgressBar.visibility = View.VISIBLE
             it.isEnabled = !it.isEnabled
-            // try {
+
             registerViewModel
                     .createUser()
                     .subscribeOn(AndroidSchedulers.mainThread())
@@ -82,7 +82,7 @@ class RegisterPasswordFragment : Fragment() {
                         throwable.printStackTrace()
                         Toasty.error(context!!, "Error: ${throwable.localizedMessage}", Toast.LENGTH_LONG).show()
 
-                        passwordTextField1.error = "Badly formatted Email!! Please go back and edit your password!"
+                        passwordTextField1.error = getString(R.string.register_error_email_badly_formatted)
                         bottomProgressBar.visibility = View.GONE
                     }
                     .subscribe { data, throwable ->
@@ -90,8 +90,8 @@ class RegisterPasswordFragment : Fragment() {
                         if(data != null) {
                             // The user creation process is finished
                             Toasty.info(context!!,
-                                        "${getString(R.string.logged_in)}: ${data.email}")
-                                    .show()
+                                        "${getString(R.string.logged_in)}: ${data.email}").show()
+
                             val action = RegisterPasswordFragmentDirections
                                     .actionRegisterPasswordFragmentToProfileCustomizeFragment(
                                             data.uid)
@@ -102,27 +102,23 @@ class RegisterPasswordFragment : Fragment() {
                             Log.e(LOG_TAG, throwable.message ?: "An error happens!")
                         }
                     }
-            // } finally {
-            //
-            // }
-
         }
 
         registerViewModel.password1Status.observe(viewLifecycleOwner) {
-            Log.d(LOG_TAG, "Pass 1's Message: $it")
+            // Log.d(LOG_TAG, "Pass 1's Message: $it")
             passwordTextField1.error = getPasswordErrorMessage(it)
         }
         registerViewModel.password2Status.observe(viewLifecycleOwner) {
-            Log.d(LOG_TAG, "Pass 2's Message: $it")
+            // Log.d(LOG_TAG, "Pass 2's Message: $it")
             passwordTextField2.error = getPasswordErrorMessage(it)
         }
 
         passwordEditText1.doOnTextChanged { text, _, _, _ ->
-            Log.d(LOG_TAG, "Pass 1 Text Changed: $text")
+            // Log.d(LOG_TAG, "Pass 1 Text Changed: $text")
             registerViewModel.password1.value = text.toString()
         }
         passwordEditText2.doOnTextChanged { text, _, _, _ ->
-            Log.d(LOG_TAG, "Pass 2 Text Changed: $text")
+            // Log.d(LOG_TAG, "Pass 2 Text Changed: $text")
             registerViewModel.password2.value = text.toString()
         }
 
@@ -134,6 +130,11 @@ class RegisterPasswordFragment : Fragment() {
                 R.layout.fragment_register_password, container, false)
     }
 
+    /**
+     * Return an associate error message caused by a password error
+     * @param validity PasswordValidity the enum for specifying the type
+     * @return String? error message string
+     */
     private fun getPasswordErrorMessage(validity: RegisterViewModel.PasswordValidity): String? {
         return when(validity) {
             RegisterViewModel.PasswordValidity.INVALID_FORMAT -> getString(

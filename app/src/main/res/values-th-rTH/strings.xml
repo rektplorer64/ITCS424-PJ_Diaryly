@@ -108,4 +108,9 @@
     <string name="dialog_time_window_select">เลือกกรอบเวลาที่ต้องการ</string>
     <string name="dialog_logout_confirmation_ask">คุณแน่ใจนะว่าอยากจะออกจากระบบ?</string>
     <string name="dialog_logout_confirmation_message">หลังจากออกระบบคุณจะออกไปที่หน้าต้อนรับขอกแอพ คุณต้องใส่ข้อมูลประจำตัวใหม่อีกครั้ง</string>
+    <string name="customize_error_updating">พบข้อผิดพลาดขณะอัพเดตโปรไฟล์ของคุณ</string>
+    <string name="customize_image_selected">A profile image selected!</string>
+    <string name="register_error_email_badly_formatted">อีเมลไม่ถูกต้อง กรุณาย้อนกลับไปแก้รหัสผ่านของคุณ</string>
+    <string name="permission_denied_gallery">การอนุญาตถูกยกเลิกหลังจากรูปโดนคลิก</string>
+    <string name="permission_granted_gallery"><![CDATA[ได้รับการอนุญาติแล้ว! -> กำลังเปิดแกลเลอรี่]]></string>
 </resources>
