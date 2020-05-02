@@ -69,7 +69,7 @@ class ProfileCustomizeFragment : Fragment() {
         defaultHeaderText.text = getString(R.string.customize_your_account)
         subtitleTextView.text = getString(R.string.set_your_username_and_image)
 
-        userEmailText.text = viewModel.emailLiveData.value!!
+        usernameText.text = viewModel.emailLiveData.value!!
 
         viewModel.isUsernameAvailableStatusLiveData.observe(viewLifecycleOwner) { isValid ->
 
@@ -84,7 +84,7 @@ class ProfileCustomizeFragment : Fragment() {
             if(!isValid) {
                 // Show the error message.
                 usernameTextForm.error = getString(
-                        R.string.error_email_invalid_already_taken)
+                        R.string.error_username_invalid_already_taken)
             } else {
                 // Show a valid message
                 usernameTextForm.error = null
@@ -184,16 +184,16 @@ class ProfileCustomizeFragment : Fragment() {
                         usernameTextForm.error = null
                         bottomProgressBar.visibility = View.VISIBLE
 
-                        // Set the email to be the value in the text field
-                        viewModel.emailLiveData.value = username
+                        // Set the username to be the value in the text field
+                        viewModel.username.value = username
 
-                        // Proceed to validate the email with the server
+                        // Proceed to validate the username with the server
                         viewModel
                                 .validateExistingUsername()
                                 .onErrorReturn { throwable ->
                                     // If an error is returned, notify the user.
                                     Toasty.error(context!!, getString(
-                                            R.string.error_email_invalid_already_taken)).show()
+                                            R.string.error_username_invalid_already_taken)).show()
                                     throwable.printStackTrace()
 
                                     // Make it invalid by returning false
@@ -211,7 +211,7 @@ class ProfileCustomizeFragment : Fragment() {
 
         usernameEditText.doOnTextChanged { text, _, _, _ ->
 
-            // Reset the hint if it is showing that the email is valid
+            // Reset the hint if it is showing that the username is valid
             if(usernameTextForm.helperText == getString(
                             R.string.username_is_ready)) {
                 usernameTextForm.apply {
@@ -221,11 +221,11 @@ class ProfileCustomizeFragment : Fragment() {
                 }
             }
 
-            val userEmail = text.toString().trim()
-            viewModel.username.value = userEmail
+            val username = text.toString().trim()
+            viewModel.username.value = username
             viewModel.isUsernameAvailableStatusLiveData.value = null
 
-            if(userEmail.isValidUsername()) {
+            if(username.isValidUsername()) {
                 usernameTextForm.error = null
             } else {
                 if(usernameEditText.error == null) {

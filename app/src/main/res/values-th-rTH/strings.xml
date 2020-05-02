@@ -113,4 +113,6 @@
     <string name="register_error_email_badly_formatted">อีเมลไม่ถูกต้อง กรุณาย้อนกลับไปแก้รหัสผ่านของคุณ</string>
     <string name="permission_denied_gallery">การอนุญาตถูกยกเลิกหลังจากรูปโดนคลิก</string>
     <string name="permission_granted_gallery"><![CDATA[ได้รับการอนุญาติแล้ว! -> กำลังเปิดแกลเลอรี่]]></string>
+    <string name="gps_enabled">เปิด GPS แล้ว!</string>
+    <string name="gps_disabled">ปิด GPS แล้ว!</string>
 </resources>

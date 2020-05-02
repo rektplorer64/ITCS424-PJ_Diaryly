@@ -65,26 +65,27 @@ class DiaryDateViewModel : ViewModel() {
         Log.d(LOG_TAG, "Date Range calculation result: $dateMap")
         Log.d(LOG_TAG, "Today is $it, [$totalStartDate, $totalEndDate]")
 
-        // MutableLiveData(dateMap)
         val allDiaryDateMapLiveData = MutableLiveData(dateMap)
         val allGoodBadScoreInTotalRange = getGoodBadScoreInDayRange(totalStartDate, totalEndDate)
 
+        // Combine LiveData of DateHolders calculation and Aggregated GoodBad Score retrieved from the data source
         zipLiveData<ArrayList<DiaryDateHolder>, Resource<List<DiaryDateHolder>>, List<DiaryDateHolder>>(
-                allDiaryDateMapLiveData, allGoodBadScoreInTotalRange) { array, dbResource ->
-            // Sort date holders in ascending order
+                allDiaryDateMapLiveData, allGoodBadScoreInTotalRange) { array, databaseResource ->
+            array.sort()
 
-            if(dbResource.data.isNullOrEmpty()){
+            // Sort date holders in ascending order
+            if(databaseResource.data.isNullOrEmpty()){
                 return@zipLiveData array
             }
 
-            Log.d(this::class.java.simpleName, "GoodBad Score Retrieved from DB: $dbResource")
-            array.sort()
-            for(dateHolderRes in dbResource.data) {
+            Log.d(this::class.java.simpleName, "GoodBad Score Retrieved from DB: $databaseResource")
+            for(dateHolderRes in databaseResource.data) {
                 val targetIndex = array.indexOf(dateHolderRes)
                 if(targetIndex >= 0) {
                     array[targetIndex].goodBadScore = dateHolderRes.goodBadScore
                 }
             }
+
             array
         }
     }

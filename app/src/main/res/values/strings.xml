@@ -127,4 +127,6 @@
     <string name="permission_granted_gallery"><![CDATA[Permission is granted after the Image is Clicked! -> Opening Gallery]]></string>
     <string name="permission_denied_gallery">Permission is denied after the Image is Clicked!</string>
     <string name="register_error_email_badly_formatted">Badly formatted Email!! Please go back and edit your password!</string>
+    <string name="gps_enabled">GPS Location is enabled!</string>
+    <string name="gps_disabled">GPS Location is disabled!</string>
 </resources>

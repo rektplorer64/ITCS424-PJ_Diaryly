@@ -6,8 +6,6 @@ import io.dairyly.dairyly.data.models.DiaryEntry
 import io.dairyly.dairyly.data.models.User
 import io.reactivex.Flowable
 import io.reactivex.Single
-import net.andreinc.mockneat.MockNeat
-
 import java.util.*
 
 open class DairyRepository private constructor(context: Context) {
@@ -23,8 +21,8 @@ open class DairyRepository private constructor(context: Context) {
 
     internal open val database = lazy {
         val a = AppDatabase.getInstance(context)
-        a.populateDatabase(DairylyGenerator(
-                MockNeat.threadLocal(), 1, 1, 1000, 1000, 10))
+        // a.populateDatabase(DairylyGenerator(
+        //         MockNeat.threadLocal(), 1, 1, 1000, 1000, 10))
         a
     }
 

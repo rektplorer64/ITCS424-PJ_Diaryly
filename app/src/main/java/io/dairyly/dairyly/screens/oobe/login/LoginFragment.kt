@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         val viewModel = ViewModelProvider(this@LoginFragment.activity!!).get(
                 RegisterViewModel::class.java)
@@ -32,6 +31,8 @@ class LoginFragment : Fragment() {
             findNavController().navigate(action)
             activity!!.finish()
         }
+
+        super.onViewCreated(view, savedInstanceState)
 
         view.emailLoginBtn.apply {
             setOnClickListener {

@@ -9,6 +9,7 @@ data class DiaryDateHolder(
         var date: Date,
         var goodBadScore: Int
 ) : Comparable<DiaryDateHolder>, Serializable {
+
     override fun compareTo(other: DiaryDateHolder): Int {
         return this.date.time.compareTo(other.date.time)
     }

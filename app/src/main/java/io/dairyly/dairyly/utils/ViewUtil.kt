@@ -11,6 +11,7 @@ import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.view.marginTop
 import com.google.android.material.chip.Chip
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.dairyly.dairyly.R
 import io.dairyly.dairyly.models.data.DEFAULT_COLOR
 
@@ -45,4 +46,21 @@ fun Chip.changeBackgroundColor(colorInt: Int = Color.BLACK) {
     setTextColor(foreground)
     closeIconTint = ColorStateList.valueOf(foreground)
     chipBackgroundColor = ColorStateList.valueOf(colorPair.second)
+}
+
+fun FloatingActionButton.changeBackgroundColor(colorInt: Int = Color.BLACK){
+    val finalBackground = if(colorInt == DEFAULT_COLOR){
+        context.getColor(R.color.colorPrimary)
+    }else{
+        colorInt
+    }
+    val colorPair = calculateForegroundColorToPair(finalBackground)
+    val foreground = if(colorPair.first == Color.BLACK){
+        context!!.getColor(R.color.blackAlpha60)
+    }else{
+        colorPair.first
+    }
+
+    imageTintList = ColorStateList.valueOf(foreground)
+    backgroundTintList = ColorStateList.valueOf(colorPair.second)
 }

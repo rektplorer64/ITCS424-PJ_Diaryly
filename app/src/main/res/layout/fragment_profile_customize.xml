@@ -11,7 +11,7 @@
         layout="@layout/header_login_register_small" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/userEmailText"
+        android:id="@+id/usernameText"
         style="@style/TextAppearance.MaterialComponents.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
         app:civ_border="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userEmailText"
+        app:layout_constraintTop_toBottomOf="@id/usernameText"
         android:foreground="@null"
         android:scaleType="centerCrop"
         app:civ_circle_color="@color/colorPrimary" />

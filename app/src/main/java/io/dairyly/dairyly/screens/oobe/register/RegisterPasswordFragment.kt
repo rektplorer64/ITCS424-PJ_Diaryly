@@ -53,6 +53,7 @@ class RegisterPasswordFragment : Fragment() {
                              override fun onChanged(
                                      isValid: Boolean?) {
                                  signInContinueBtn.isEnabled = isValid!!
+
                                  if(isValid) {
                                      if(alreadyDisplayed) {
                                          alreadyDisplayed = true
@@ -82,6 +83,7 @@ class RegisterPasswordFragment : Fragment() {
                         throwable.printStackTrace()
                         Toasty.error(context!!, "Error: ${throwable.localizedMessage}", Toast.LENGTH_LONG).show()
 
+                        // Handles the error that the Firebase Auth server throw!
                         passwordTextField1.error = getString(R.string.register_error_email_badly_formatted)
                         bottomProgressBar.visibility = View.GONE
                     }

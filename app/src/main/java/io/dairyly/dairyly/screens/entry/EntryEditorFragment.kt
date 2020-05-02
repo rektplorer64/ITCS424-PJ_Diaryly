@@ -438,6 +438,8 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
             tagEditContainer.children.iterator().forEach {
                 (it as Chip).changeBackgroundColor(color)
             }
+
+            saveBtn.changeBackgroundColor(color)
         }
 
         goodBadBtnGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
@@ -570,7 +572,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
 
             @SuppressLint("MissingPermission")
             override fun onProviderEnabled(provider: String?) {
-                Toasty.info(context!!, "GPS Location is enabled!").show()
+                Toasty.info(context!!, getString(R.string.gps_enabled)).show()
 
                 if(viewModel.coordinate.value == EMPTY_LOCATION) {
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 300L, 0f,
@@ -582,7 +584,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
             }
 
             override fun onProviderDisabled(provider: String?) {
-                Toasty.error(context!!, "GPS Location is disabled!").show()
+                Toasty.error(context!!, getString(R.string.gps_disabled)).show()
                 progressMap?.visibility = View.GONE
             }
         }
