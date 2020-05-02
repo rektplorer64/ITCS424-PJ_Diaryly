@@ -17,6 +17,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.ByteArrayOutputStream
 
+/**
+ * A SINGLETON OBJECT that contains all methods required for interacting with Firebase Storage
+ * to retrieve and upload files.
+ */
 object FirebaseStorageRepository {
 
     private val LOG_TAG = this::class.java.simpleName
@@ -28,7 +32,8 @@ object FirebaseStorageRepository {
         val entryFolderRef = try {
             userRoot!!.child(storagePath)
         } catch(e: UninitializedPropertyAccessException) {
-            FirebaseUserRepository.injectUserToStorageRepo()
+            // Try reattaching the user reference to the storage
+            FirebaseUserRepository.attachUserToFirebaseRepositories()
             userRoot!!.child(storagePath)
         }
 
@@ -146,7 +151,7 @@ object FirebaseStorageRepository {
 
     fun detachUserStorageReference(){
         userRoot = null
-        Log.d(LOG_TAG, "Detached Firebase user storage reference!")
+        Log.d(LOG_TAG, "Detached Firebase user storage reference! -> Result: ${userRoot == null}")
     }
 
     fun DiaryImage.getImageStorageReference(): StorageReference {

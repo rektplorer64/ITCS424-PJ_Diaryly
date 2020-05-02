@@ -49,8 +49,9 @@ class ProfileCustomizeFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         // Inject the user to both app and storage references since we will have to use them for the customization
-        FirebaseUserRepository.injectUserToStorageRepo()
-        FirebaseUserRepository.injectUserToAppRepo()
+
+        // Attach user credential to the application repo
+        FirebaseUserRepository.attachUserToFirebaseRepositories()
 
         return inflater.inflate(
                 R.layout.fragment_profile_customize, container, false)

@@ -68,8 +68,10 @@ class LoginEmailFragment : Fragment() {
                         if(user == null) {
                             return@subscribe
                         }
-                        FirebaseUserRepository.injectUserToAppRepo()
-                        FirebaseUserRepository.injectUserToStorageRepo()
+
+                        // Attach user credential to the application repo
+                        FirebaseUserRepository.attachUserToFirebaseRepositories()
+
                         // The user creation process is finished
                         Toasty.info(context!!, "${getString(R.string.logged_in)}: ${user.email}").show()
                         val action = LoginEmailFragmentDirections.actionLoginEmailFragmentToMainActivity(user.uid)

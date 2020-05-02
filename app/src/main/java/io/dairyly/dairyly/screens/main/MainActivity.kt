@@ -6,8 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import io.dairyly.dairyly.R
-import io.dairyly.dairyly.models.FirebaseUserRepository.injectUserToAppRepo
-import io.dairyly.dairyly.models.FirebaseUserRepository.injectUserToStorageRepo
+import io.dairyly.dairyly.models.FirebaseUserRepository.attachUserToFirebaseRepositories
 import io.dairyly.dairyly.utils.viewModelInjectionHelper
 import io.dairyly.dairyly.viewmodels.DiaryDateViewModel
 import io.dairyly.dairyly.viewmodels.DiaryViewModel
@@ -20,8 +19,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        injectUserToAppRepo()
-        injectUserToStorageRepo()
+        // Attach user credential to the application repo
+        attachUserToFirebaseRepositories()
 
         viewModelInjectionHelper<DiaryViewModel>(this)
         viewModelInjectionHelper<DiaryDateViewModel>(this)

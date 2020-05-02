@@ -60,23 +60,28 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-
         btmAppBar.setNavigationOnClickListener {
             onBackPressed()
         }
 
+        // After the confirm button is pressed.
         locationConfirmBtn.setOnClickListener {
+            // Show a dialog asking the user to confirm
             MaterialDialog(this).show {
                 cornerRadius(res = R.dimen.dialog_corner_radius)
                 title(res = R.string.dialog_confirm_selected_location)
+
+                // After the confirming, put the coordinate in the bundle and send back to the caller
                 positiveButton(android.R.string.ok) {
-                    // TODO: save the data here!!!!
                     val intent = Intent().apply {
                         putExtra("lat", viewModel.coordinate.value!!.first)
                         putExtra("long", viewModel.coordinate.value!!.second)
                     }
+
                     Log.d(LOG_TAG,
                           "Sending back Location Bundle: ${viewModel.coordinate.value!!.first}, ${viewModel.coordinate.value!!.second}")
+
+                    // Handling different Activity circumstance
                     if(parent == null) {
                         setResult(Activity.RESULT_OK, intent)
                     } else {
@@ -84,6 +89,7 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                     finish()
                 }
+
                 negativeButton(android.R.string.cancel)
             }
         }
@@ -92,14 +98,18 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onBackPressed() {
+        // If the back button is pressed, show a dialog asking to confirm whether the user wants to exit or not.
         MaterialDialog(this).show {
             cornerRadius(res = R.dimen.dialog_corner_radius)
             title(res = R.string.dialog_exit_location_selector)
+
+            // After the okay button is pressed.
             positiveButton(android.R.string.ok) {
-                // TODO: save the data here!!!!
+                // Tell the invoker that the user has canceled.
                 setResult(Activity.RESULT_CANCELED)
                 finish()
             }
+
             negativeButton(android.R.string.cancel)
         }
     }
@@ -218,13 +228,26 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
                          })
     }
 
+    /**
+     * Set the location to the map
+     *
+     * @param mapInstance GoogleMap Google Map instance
+     * @param location LatLng The target coordinate
+     */
     private fun setLocation(mapInstance: GoogleMap,
                             location: LatLng) {
+        // Clear the markers
         mapInstance.clear()
+
+        // Add a new marker at the target coordinate
         mapInstance.addMarker(MarkerOptions().draggable(false)
                                       .position(location))
     }
 
+    /**
+     * A host ViewModel that stores Location selection
+     * @property coordinate MutableLiveData<Pair<Double, Double>> coordinate data
+     */
     class LocationSelectorViewModel : ViewModel() {
         val coordinate: MutableLiveData<Pair<Double, Double>> = MutableLiveData(Pair(0.0, 0.0))
     }

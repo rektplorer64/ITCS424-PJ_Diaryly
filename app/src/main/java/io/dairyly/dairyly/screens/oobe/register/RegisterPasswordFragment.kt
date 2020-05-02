@@ -14,6 +14,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import es.dmoral.toasty.Toasty
 import io.dairyly.dairyly.R
+import io.dairyly.dairyly.models.FirebaseUserRepository
 import io.dairyly.dairyly.viewmodels.RegisterViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.buttons_login_register.*
@@ -60,15 +61,13 @@ class RegisterPasswordFragment : Fragment() {
                                  signInContinueBtn.isEnabled = isValid!!
 
                                  if(isValid) {
-                                     if(alreadyDisplayed) {
+                                     if(!alreadyDisplayed) {
                                          alreadyDisplayed = true
                                          Toasty.success(context!!,
                                                         getString(
                                                                 R.string.password_valid),
                                                         Toast.LENGTH_SHORT)
                                                  .show()
-                                     } else {
-                                         alreadyDisplayed = false
                                      }
                                  } else {
                                      alreadyDisplayed = false
@@ -98,6 +97,9 @@ class RegisterPasswordFragment : Fragment() {
                             // The user creation process is finished
                             Toasty.info(context!!,
                                         "${getString(R.string.logged_in)}: ${data.email}").show()
+
+                            // Attach user credential to the application repo
+                            FirebaseUserRepository.attachUserToFirebaseRepositories()
 
                             val action = RegisterPasswordFragmentDirections
                                     .actionRegisterPasswordFragmentToProfileCustomizeFragment(

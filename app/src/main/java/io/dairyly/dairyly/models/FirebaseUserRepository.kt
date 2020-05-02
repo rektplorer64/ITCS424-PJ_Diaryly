@@ -15,6 +15,10 @@ import io.reactivex.FlowableEmitter
 import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 
+/**
+ * A SINGLETON OBJECT that contains all methods required for interacting with user
+ * account from Firebase Authentication
+ */
 object FirebaseUserRepository {
     private val LOG_TAG = this::class.java.simpleName
 
@@ -95,8 +99,11 @@ object FirebaseUserRepository {
                                                              if(task.isSuccessful) {
                                                                  //"Create an Account Successfully"
                                                                  if(task.result?.user != null) {
-                                                                     injectUserToAppRepo()
-                                                                     injectUserToStorageRepo()
+
+                                                                     // Attach user credential to the application repo
+                                                                     // USER IS LOGGED IN TO THIS APP!
+                                                                     attachUserToFirebaseRepositories()
+
                                                                      flowable.onNext(
                                                                              task.result?.user!!)
                                                                              .also { flowable.onComplete() }
@@ -120,11 +127,35 @@ object FirebaseUserRepository {
                 .singleOrError()
     }
 
-    fun injectUserToAppRepo() {
-        firebaseUser = firebaseAuth.currentUser
-        FirebaseAppRepository.setUserDatabaseReference(
-                firebaseUser!!.uid)
+    /**
+     * Attach user to the application database on Firebase
+     *
+     * Set the database reference to be for this user.
+     */
+    private fun attachUserToDatabaseRepo() {
+        firebaseUser = FirebaseAuth.getInstance().currentUser
+        FirebaseAppRepository.setUserDatabaseReference(firebaseUser!!.uid)
         Log.d(LOG_TAG, "Injected Firebase User reference to the App Repo -> ${firebaseUser!!.uid}")
+    }
+
+    /**
+     * Attach user to the application file storage on Firebase
+     *
+     * Set the storage reference to be for this user.
+     */
+    private fun attachUserToStorageRepo() {
+        FirebaseStorageRepository.setUserStorageReference(
+                FirebaseAuth.getInstance().currentUser!!.uid)
+        Log.d(LOG_TAG, "Injected Firebase User reference to the Storage Repo -> ${firebaseUser!!.uid}")
+    }
+
+    /**
+     * Attach the user to Firebase Database and File Storage
+     * It is similar to logging the user in to the app.
+     */
+    fun attachUserToFirebaseRepositories(){
+        attachUserToDatabaseRepo()
+        attachUserToStorageRepo()
     }
 
     fun getUserId(): String? {
@@ -132,14 +163,6 @@ object FirebaseUserRepository {
             firebaseUser = firebaseAuth.currentUser
         }
         return firebaseUser?.uid
-    }
-
-    fun injectUserToStorageRepo() {
-        // firebaseUser = firebaseAuth.currentUser
-        FirebaseStorageRepository.setUserStorageReference(
-                firebaseUser!!.uid)
-        Log.d(LOG_TAG, "Injected Firebase User reference to the Storage Repo -> ${firebaseUser!!.uid}")
-
     }
 
     @SuppressLint("RestrictedApi")
@@ -181,8 +204,10 @@ object FirebaseUserRepository {
     fun Profile.email() = firebaseUser?.email!!
 
     fun logoutUserAccount() {
-        Log.d(LOG_TAG, "Logging out from Firebase Auth")
+        Log.d(LOG_TAG, "Logging out user -> uid={${firebaseAuth.currentUser!!.uid}} from Firebase Auth")
         firebaseAuth.signOut()
+        FirebaseStorageRepository.detachUserStorageReference()
+        Log.d(LOG_TAG, "Logout result: ${firebaseAuth.currentUser == null}")
         firebaseUser = null
     }
 

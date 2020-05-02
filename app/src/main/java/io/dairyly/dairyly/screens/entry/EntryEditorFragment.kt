@@ -33,7 +33,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
-import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.color.colorChooser
 import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.afollestad.materialdialogs.input.getInputField
@@ -242,7 +241,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                     viewModel.title.value = inputText.toString()
                 }
 
-                onCancel { input(prefill = "") }
+                // onCancel { input(prefill = "") }
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     this.getInputField().setTextCursorDrawable(R.drawable.edit_text_cursor)
@@ -270,7 +269,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                     viewModel.subtitle.value = inputText.toString()
                 }
 
-                onCancel { input(prefill = "") }
+                // onCancel { input(prefill = "") }
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     this.getInputField().setTextCursorDrawable(R.drawable.edit_text_cursor)

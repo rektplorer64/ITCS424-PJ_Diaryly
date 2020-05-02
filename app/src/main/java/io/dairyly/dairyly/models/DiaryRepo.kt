@@ -16,12 +16,22 @@ import org.apache.commons.lang3.time.DateUtils
 import java.util.*
 import kotlin.collections.HashMap
 
+/**
+ * A SINGLETON OBJECT that contains all methods required for MANIPULATING and QUERYING
+ * Diary-related object from Firebase Database
+ */
 object DiaryRepo {
 
     private val LOG_TAG = this::class.java.simpleName
 
-    private val userRoot = FirebaseAppRepository.userRoot
-    private val diaryEntryRoot = userRoot.child("diaryEntry")
+    private var userRoot = FirebaseAppRepository.userRoot
+
+    private var diaryEntryRoot = userRoot.child("diaryEntry")
+
+    fun refreshUserRoot(){
+        userRoot = FirebaseAppRepository.userRoot
+        diaryEntryRoot = userRoot.child("diaryEntry")
+    }
 
     fun addNewEntry(context: Context,
                     diaryEntry: DiaryEntry): Single<Boolean> {
