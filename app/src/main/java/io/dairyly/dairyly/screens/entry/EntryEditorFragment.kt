@@ -64,7 +64,11 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.Executors
 
-
+/**
+ * A Fragment responsible for hosting a whole process of Editing/Creating a DiaryEntry
+ * @property LOG_TAG String String Tag string for showing Debugging Log
+ * @property viewModel EntryEditorViewModel Data holder for this Fragment
+ */
 class EntryEditFragment : Fragment(), OnMapReadyCallback {
 
     private val LOG_TAG = this::class.java.simpleName
@@ -708,6 +712,12 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
     }
 }
 
+/**
+ * A RecyclerView adapter for Chips
+ * @property onChipClickListener Function2<Chip, String, Unit> A listener specifying the behavior when a chip is clicked
+ * @property setChipBackgroundColor Int the initial color of all Chips
+ * @constructor default constructor
+ */
 class ChipRecyclerAdapter(context: Context,
                           private val onChipClickListener: (Chip, String) -> Unit) :
         ListAdapter<DiaryTag, ChipRecyclerAdapter.ViewHolder>(ChipDiffCallback()) {

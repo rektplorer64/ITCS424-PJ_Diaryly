@@ -14,13 +14,13 @@ import java.util.*
 
 
 @RunWith(AndroidJUnit4::class)
-class DairyRepositoryTest {
+class DiaryRepositoryTest {
 
     @get:Rule
     val executor = InstantTaskExecutorRule()
 
     private lateinit var context: Context
-    private lateinit var repo: DairyRepository
+    private lateinit var repo: DiaryRepository
 
     private val testUserId = 1
 
@@ -29,9 +29,9 @@ class DairyRepositoryTest {
     @Before
     fun initializeDatabase() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        repo = DairyRepository.getInstance(context)
+        repo = DiaryRepository.getInstance(context)
 
-        repo.populateDatabase(DairylyGenerator(MockNeat.threadLocal(), 10, 100, 100, 100, 100))
+        repo.populateDatabase(DiarylyGenerator(MockNeat.threadLocal(), 10, 100, 100, 100, 100))
     }
 
     @Test

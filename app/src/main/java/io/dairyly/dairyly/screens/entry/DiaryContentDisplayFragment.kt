@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import io.dairyly.dairyly.R
-import io.dairyly.dairyly.models.data.Resource
 import io.dairyly.dairyly.models.data.DEFAULT_ID
 import io.dairyly.dairyly.models.data.DiaryEntry
+import io.dairyly.dairyly.models.data.Resource
 import io.dairyly.dairyly.utils.getAreaNameByCoordinate
 import io.dairyly.dairyly.utils.openCoordinateInGoogleMap
 import io.dairyly.dairyly.utils.populateTags
@@ -19,6 +19,11 @@ import io.dairyly.dairyly.viewmodels.EntryDisplayViewModel
 import io.dairyly.dairyly.viewmodels.EntryEditorViewModel.Companion.EMPTY_LOCATION
 import kotlinx.android.synthetic.main.fragment_entry_content_display.*
 
+/**
+ * A Fragment that displays the content of a given diary entry
+ * @property LOG_TAG String Tag string for showing Debugging Log
+ * @property imageAdapter ImageCarouselRvAdapter RecyclerViewAdapter for ViewPager
+ */
 class DiaryContentDisplayFragment : Fragment(), Observer<Resource<DiaryEntry>> {
 
     private val LOG_TAG = this::class.java.simpleName

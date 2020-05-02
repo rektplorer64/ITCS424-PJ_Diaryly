@@ -11,6 +11,9 @@ import io.dairyly.dairyly.data.converters.*
 import io.dairyly.dairyly.data.models.*
 import kotlinx.coroutines.runBlocking
 
+/**
+ * The custom Class that constructs Room Database
+ */
 @Database(
         entities = [UserDetail::class, UserFile::class, UserDetailFileCrossRef::class,
             DiaryEntryInfo::class, Tag::class, DiaryEntryTagCrossRef::class, DiaryEntryBlockInfo::class],
@@ -50,7 +53,12 @@ abstract class AppDatabase : RoomDatabase() {
     }
 }
 
-fun AppDatabase.populateDatabase(gen: DairylyGenerator){
+/**
+ * An extension function that populates database by a given generator
+ * @receiver AppDatabase Room Database instance
+ * @param gen DairylyGenerator a generator
+ */
+fun AppDatabase.populateDatabase(gen: DiarylyGenerator){
 
     val db = this
 
@@ -74,7 +82,12 @@ fun AppDatabase.populateDatabase(gen: DairylyGenerator){
     }
 }
 
-fun DairyRepository.populateDatabase(gen: DairylyGenerator){
+/**
+ * An extension function that populates database by a given generator
+ * @receiver DairyRepository App Data Repository
+ * @param gen DairylyGenerator a generator
+ */
+fun DiaryRepository.populateDatabase(gen: DiarylyGenerator){
 
     val db = this.database.value
 

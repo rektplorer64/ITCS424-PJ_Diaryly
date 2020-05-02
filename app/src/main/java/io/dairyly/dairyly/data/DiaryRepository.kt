@@ -8,14 +8,14 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.util.*
 
-open class DairyRepository private constructor(context: Context) {
+open class DiaryRepository private constructor(context: Context) {
 
     companion object{
         @Volatile
-        private var INSTANCE: DairyRepository? = null
+        private var INSTANCE: DiaryRepository? = null
 
-        fun getInstance(context: Context): DairyRepository = INSTANCE ?: synchronized(this){
-            INSTANCE?: DairyRepository(context).also { INSTANCE = it }
+        fun getInstance(context: Context): DiaryRepository = INSTANCE ?: synchronized(this){
+            INSTANCE ?: DiaryRepository(context).also { INSTANCE = it }
         }
     }
 

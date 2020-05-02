@@ -9,7 +9,23 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.random.asKotlinRandom
 
-class DairylyGenerator(
+/**
+ * A generator that can populate the database powered by MockNeat
+ * @property m MockNeat a library generator
+ * @property totalUsers Int                                     A number of total users to be generated
+ * @property totalFiles Int                                     A number of total files to be generated
+ * @property totalEntryBlocks Int                               A number of total entry blocks to be generated
+ * @property totalEntries Int                                   A number of total entries to be generated
+ * @property totalTags Int                                      A number of tags to be generated
+ * @property users List<UserDetail>                             A list of generated user details
+ * @property files List<UserFile>                               A list of generated files
+ * @property entryBlocks List<DiaryEntryBlockInfo>              A list of generated entry blocks
+ * @property entries List<DiaryEntryInfo>                       A list of generated entries
+ * @property tags List<Tag>                                     A list of generated tags
+ * @property entryTagsCrossRefs List<DiaryEntryTagCrossRef>     A list of generated cross reference of tags and entries
+ * @constructor                                                 Construct a new instance of the generator
+ */
+class DiarylyGenerator(
         private val m: MockNeat,
         val totalUsers: Int,
         val totalFiles: Int,
@@ -34,23 +50,31 @@ class DairylyGenerator(
         entryTagsCrossRefs = generateEntryTagCrossRef()
     }
 
+    /**
+     * Generate Many-to-Many references between tags and diary entries
+     * @return List<DiaryEntryTagCrossRef> result of the cross-referencing
+     */
     private fun generateEntryTagCrossRef(): List<DiaryEntryTagCrossRef> {
         val crossRef = mutableListOf<DiaryEntryTagCrossRef>()
-        for(i in 1 .. totalEntries){
+        for(i in 1 .. totalEntries) {
             val numberOfTags = m.random.asKotlinRandom().nextInt(3, 8)
             val tagSet = hashSetOf<Int>()
-            for(j in 1 .. numberOfTags){
+            for(j in 1 .. numberOfTags) {
                 val tagId = m.random.asKotlinRandom().nextInt(1, totalTags)
                 tagSet.add(tagId)
             }
 
-            for(t in tagSet){
+            for(t in tagSet) {
                 crossRef += DiaryEntryTagCrossRef(i, t)
             }
         }
         return crossRef
     }
 
+    /**
+     * Generate details of users
+     * @return List<UserDetail> result of the generation
+     */
     private fun generateUserDetailObjects(): List<UserDetail> {
         val users = mutableListOf<UserDetail>()
         for(i in 1 .. totalUsers) {
@@ -78,6 +102,10 @@ class DairylyGenerator(
         return users
     }
 
+    /**
+     * Generate user files details
+     * @return List<UserFile> result list that contains generated user files
+     */
     private fun generateUserFileObjects(): List<UserFile> {
         val userFiles = mutableListOf<UserFile>()
         for(i in 1 .. totalFiles) {
@@ -94,6 +122,10 @@ class DairylyGenerator(
         return userFiles
     }
 
+    /**
+     * Generate diary entry blocks
+     * @return List<DiaryEntryBlockInfo> result list that contains diary entry blocks
+     */
     private fun generateDairyEntryBlockObjects(): List<DiaryEntryBlockInfo> {
         val blocks = mutableListOf<DiaryEntryBlockInfo>()
         for(i in 1 .. totalEntryBlocks) {
@@ -115,6 +147,10 @@ class DairylyGenerator(
         return blocks
     }
 
+    /**
+     * Generate diary entries
+     * @return List<DiaryEntryInfo> result list that contains diary entries of all users
+     */
     private fun generateDairyEntryObjects(): List<DiaryEntryInfo> {
         val entryInfo = mutableListOf<DiaryEntryInfo>()
 
@@ -131,7 +167,8 @@ class DairylyGenerator(
                     m.localDates().between(referenceDate, LocalDate.now()).toUtilDate()
                             .`val`()
 
-            val timeCreated = m.localDates().past(LocalDate.parse(timeModified.formatToServerDateDefaults()))
+            val timeCreated = m.localDates()
+                    .past(LocalDate.parse(timeModified.formatToServerDateDefaults()))
                     .toUtilDate().`val`()
             // val timeCreated = m.localDates().past(LocalDate.of(2020, 1, 1)).toUtilDate().`val`()
             val goodBad = m.probabilites(DiaryEntryInfo.GoodBad::class.java)
@@ -144,6 +181,10 @@ class DairylyGenerator(
         return entryInfo
     }
 
+    /**
+     * Generate tags for each entries
+     * @return List<Tag> result list that contains tags
+     */
     private fun generateTagsObjects(): List<Tag> {
         val tagInfo = mutableListOf<Tag>()
         for(i in 1 .. totalTags) {

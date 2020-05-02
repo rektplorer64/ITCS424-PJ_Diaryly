@@ -14,7 +14,7 @@ import io.dairyly.dairyly.viewmodels.RegisterViewModel
 import kotlinx.android.synthetic.main.fragment_login.view.*
 
 /**
- * A simple [Fragment] subclass.
+ * A Fragment that is the Landing Page of the app
  */
 class LoginFragment : Fragment() {
 

@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.header_login_register.*
 import kotlinx.android.synthetic.main.header_login_register.subtitleTextView
 
 /**
- * A simple [Fragment] subclass.
+ * A Fragment that hosts User Login by Email process
  */
 class LoginEmailFragment : Fragment() {
 

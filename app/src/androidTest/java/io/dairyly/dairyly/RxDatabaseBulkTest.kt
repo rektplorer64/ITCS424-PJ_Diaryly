@@ -37,7 +37,7 @@ class RxDatabaseBulkTest {
     @Before
     fun createDatabase() {
 
-        val gen = DairylyGenerator(MockNeat.threadLocal(), totalUsers, totalFiles, totalEntryBlocks,
+        val gen = DiarylyGenerator(MockNeat.threadLocal(), totalUsers, totalFiles, totalEntryBlocks,
                                    totalEntries, totalTags)
         db = Room.inMemoryDatabaseBuilder(
                 InstrumentationRegistry.getInstrumentation().targetContext, AppDatabase::class.java)

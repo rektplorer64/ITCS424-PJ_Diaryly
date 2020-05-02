@@ -33,6 +33,12 @@ import io.dairyly.dairyly.viewmodels.EntryEditorViewModel
 import kotlinx.android.synthetic.main.activity_location.*
 import kotlinx.android.synthetic.main.fragment_entry_edit.*
 
+/**
+ * An activity that allows user to pick a location from a Google-powered world map
+ *
+ * @property LOG_TAG String String Tag string for showing Debugging Log
+ * @property viewModel LocationSelectorViewModel ViewModel that holds data for the location selection process
+ */
 class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val LOG_TAG = this::class.java.simpleName

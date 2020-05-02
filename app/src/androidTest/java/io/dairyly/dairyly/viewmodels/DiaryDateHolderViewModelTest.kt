@@ -3,7 +3,7 @@ package io.dairyly.dairyly.viewmodels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.test.platform.app.InstrumentationRegistry
-import io.dairyly.dairyly.data.DairyRepository
+import io.dairyly.dairyly.data.DiaryRepository
 import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.utils.getOrAwaitValue
 import org.junit.Before
@@ -26,7 +26,7 @@ class DiaryDateHolderViewModelTest {
 
     @Before
     fun setUp() {
-        val repo = DairyRepository.getInstance(InstrumentationRegistry.getInstrumentation().targetContext)
+        val repo = DiaryRepository.getInstance(InstrumentationRegistry.getInstrumentation().targetContext)
         testDiaryDateVm = DiaryDateViewModel()
     }
 

@@ -10,7 +10,7 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import io.dairyly.dairyly.R
-import io.dairyly.dairyly.data.DairyRepository
+import io.dairyly.dairyly.data.DiaryRepository
 import io.dairyly.dairyly.data.models.DiaryDateHolder
 import io.dairyly.dairyly.models.data.Resource.Status
 import io.dairyly.dairyly.ui.recyclerview.DairyRvAdapter
@@ -39,7 +39,7 @@ class DiaryListFragment : Fragment() {
             }
         }
 
-        val viewModelFactory = this.context?.let { DairyRepository.getInstance(it) }?.let {
+        val viewModelFactory = this.context?.let { DiaryRepository.getInstance(it) }?.let {
             AppViewModelFactory()
         }!!
 

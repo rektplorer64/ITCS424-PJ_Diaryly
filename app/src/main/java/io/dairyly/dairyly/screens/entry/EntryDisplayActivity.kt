@@ -7,6 +7,10 @@ import io.dairyly.dairyly.R
 import io.dairyly.dairyly.utils.viewModelInjectionHelper
 import io.dairyly.dairyly.viewmodels.EntryActivityViewModel
 
+/**
+ * A container activity for the Fragments are responsible for displaying diary entry's content
+ * @property LOG_TAG String String Tag string for showing Debugging Log
+ */
 class EntryDisplayActivity : AppCompatActivity() {
 
     private val LOG_TAG = this::class.java.simpleName

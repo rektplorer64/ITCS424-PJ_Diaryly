@@ -7,6 +7,9 @@ import io.dairyly.dairyly.R
 import io.dairyly.dairyly.utils.viewModelInjectionHelper
 import io.dairyly.dairyly.viewmodels.EntryEditorViewModel
 
+/**
+ * A container Activity that hosts an instance of EntryEditorFragment
+ */
 class EntryEditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

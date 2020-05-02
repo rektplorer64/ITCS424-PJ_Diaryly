@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.header_login_register.*
 import java.util.concurrent.TimeUnit
 
 /**
- * A simple [Fragment] subclass.
+ * A Fragment that allows user to register a new account by an email
  */
 class RegisterEmailFragment : Fragment() {
 

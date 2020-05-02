@@ -1,12 +1,12 @@
 package io.dairyly.dairyly
 
-import io.dairyly.dairyly.data.DairylyGenerator
+import io.dairyly.dairyly.data.DiarylyGenerator
 import io.dairyly.dairyly.utils.DATA_GEN_OPTION
 import junit.framework.TestCase.assertEquals
 import net.andreinc.mockneat.MockNeat
 import org.junit.Test
 
-class DairylyGeneratorTest {
+class DiarylyGeneratorTest {
 
     private val totalUsers = DATA_GEN_OPTION["totalUsers"]!!
     private val totalFiles = DATA_GEN_OPTION["totalFiles"]!!
@@ -14,7 +14,7 @@ class DairylyGeneratorTest {
     private val totalEntries = DATA_GEN_OPTION["totalEntries"]!!
     private val totalTags = DATA_GEN_OPTION["totalTags"]!!
 
-    private val gen = DairylyGenerator(MockNeat.threadLocal(), totalUsers, totalFiles, totalEntryBlocks, totalEntries, totalTags)
+    private val gen = DiarylyGenerator(MockNeat.threadLocal(), totalUsers, totalFiles, totalEntryBlocks, totalEntries, totalTags)
 
     @Test
     fun getUsers() {

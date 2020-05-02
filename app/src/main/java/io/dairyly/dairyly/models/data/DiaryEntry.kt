@@ -111,10 +111,21 @@ class DiaryEntry(
 
 }
 
+/**
+ * An extension function to determine if a color
+ * @receiver DiaryEntry target diary entry
+ * @return Boolean true if there is a color
+ */
 fun DiaryEntry.hasSpecifiedColor(): Boolean {
     return this.color != DEFAULT_COLOR || this.color == 0
 }
 
+/**
+ * Determine foreground and background color based on entry's accent
+ * @receiver DiaryEntry target diary entry
+ * @param context Context context to read the color resource
+ * @return Pair<Int, Int> pair of foreground (Black or White) and background (Diary Entry's color)
+ */
 fun DiaryEntry.getForegroundAndAccentColor(context: Context): Pair<Int, Int> {
     return if(hasSpecifiedColor()) {
         calculateForegroundColorToPair(this.color)
@@ -123,6 +134,21 @@ fun DiaryEntry.getForegroundAndAccentColor(context: Context): Pair<Int, Int> {
     }
 }
 
+/**
+ * A Firebase version of DiaryEntry for an easier Serialization
+ * @property id String                                          A unique diary entry ID string
+ * @property title String                                       The title of the entry
+ * @property content String                                     The content string of the entry
+ * @property subtitle String                                    The subtitle of the entry
+ * @property tags List<DiaryTag>                                The list of tags associated with the entry
+ * @property goodBadScore Int                                   The quantitative value of Good-Bad score
+ * @property color Int                                          The color associated with the diary entry
+ * @property timeCreated Long                                   The timestamp showing the creation time of the entry
+ * @property timeModified Long                                  The timestamp showing the modification time of the entry
+ * @property images HashMap<String, FirebaseDiaryImage>?        The map that stores images of the Diary entry
+ * @property location HashMap<String, Double>                   The map that stores coordinate specified for the Diary Entry
+ * @constructor
+ */
 @IgnoreExtraProperties
 data class FirebaseDiaryEntry(
         var id: String = "",
@@ -140,6 +166,11 @@ data class FirebaseDiaryEntry(
                 "lat" to 0.0, "long" to 0.0)
 ) {
 
+    /**
+     * Convert this object into DiaryEntry class which is mainly used by the rest of the app except Firebase
+     *
+     * @return DiaryEntry a Diary Entry object
+     */
     fun toNormalData(): DiaryEntry {
 
         return DiaryEntry(id, title, subtitle, content, tags, goodBadScore,

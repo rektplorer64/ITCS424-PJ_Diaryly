@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import io.dairyly.dairyly.data.DairyRepository
-import io.dairyly.dairyly.data.DairylyGenerator
+import io.dairyly.dairyly.data.DiaryRepository
+import io.dairyly.dairyly.data.DiarylyGenerator
 import io.dairyly.dairyly.data.models.DiaryEntryInfo
 import io.dairyly.dairyly.data.populateDatabase
 import io.dairyly.dairyly.usecases.UserDiaryUseCase
@@ -28,7 +28,7 @@ class UseCaseTest {
     var executor = InstantTaskExecutorRule()
 
     private lateinit var context: Context
-    private lateinit var repo: DairyRepository
+    private lateinit var repo: DiaryRepository
 
     private lateinit var userDiaryUseCase: UserDiaryUseCase
 
@@ -41,8 +41,8 @@ class UseCaseTest {
         //         InstrumentationRegistry.getInstrumentation().targetContext, AppDatabase::class.java)
         //         .build()
 
-        repo = DairyRepository.getInstance(context)
-        repo.populateDatabase(DairylyGenerator(
+        repo = DiaryRepository.getInstance(context)
+        repo.populateDatabase(DiarylyGenerator(
                 MockNeat.threadLocal(), 10, 100, 100, 100, 100))
 
         userDiaryUseCase = UserDiaryUseCase()

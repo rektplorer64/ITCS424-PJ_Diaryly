@@ -7,7 +7,16 @@ import io.dairyly.dairyly.data.models.DiaryEntryInfo
 // import io.dairyly.dairyly.data.models.DairyEntryInfo
 import io.dairyly.dairyly.data.models.UserFile
 
+/**
+ * A class that indicate file type enum to a string
+ */
 class UserFileTypeConverter{
+
+    /**
+     * Convert a enum to a string
+     * @param value String? string type
+     * @return UserFile.Type? an enum type
+     */
     @TypeConverter
     fun fromString(value: String?): UserFile.Type? {
         return value?.let {
@@ -15,13 +24,27 @@ class UserFileTypeConverter{
         }
     }
 
+    /**
+     * Convert an FileType enum to a string
+     * @param type Type? FileType enum
+     * @return String? a string representation
+     */
     @TypeConverter
     fun fromEnum(type: UserFile.Type?): String? {
         return type?.toString()
     }
 }
 
+/**
+ * Convert GoodBad enum class to an integer
+ */
 class GoodBadConverter{
+
+    /**
+     * Convert a value integer to an enum of GoodBad
+     * @param value Int? GoodBad value integer
+     * @return DiaryEntryInfo.GoodBad?  GoodBad enum
+     */
     @TypeConverter
     fun fromString(value: Int?): DiaryEntryInfo.GoodBad? {
         return when(value){
@@ -34,6 +57,12 @@ class GoodBadConverter{
         }
     }
 
+
+    /**
+     * Convert an enum of GoodBad to integer
+     * @param type GoodBad? GoodBad enum
+     * @return Int? integer representation
+     */
     @TypeConverter
     fun fromEnum(type: DiaryEntryInfo.GoodBad?): Int? {
         return when(type.toString()){

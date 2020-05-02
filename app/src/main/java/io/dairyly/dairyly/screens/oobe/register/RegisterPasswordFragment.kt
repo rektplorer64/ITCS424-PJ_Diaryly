@@ -21,6 +21,11 @@ import kotlinx.android.synthetic.main.fragment_register_password.*
 import kotlinx.android.synthetic.main.header_login_register.*
 
 
+/**
+ * A Fragment that allows users to enter a password associated with the entered email.
+ *
+ * @property LOG_TAG String String Tag string for showing Debugging Log
+ */
 class RegisterPasswordFragment : Fragment() {
 
     private val LOG_TAG = this::class.java.simpleName

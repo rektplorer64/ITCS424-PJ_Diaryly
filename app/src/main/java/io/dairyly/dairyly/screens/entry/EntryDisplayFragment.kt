@@ -33,6 +33,10 @@ import kotlinx.android.synthetic.main.fragment_show_entry.*
 import kotlinx.android.synthetic.main.item_carousel_image.view.*
 
 
+/**
+ * A Fragment that displays Entry Tabs and hosts a series of multiple instances of DiaryContentDisplayFragment
+ * @property LOG_TAG String String Tag string for showing Debugging Log
+ */
 class ShowEntryFragment : Fragment() {
 
     private val LOG_TAG = this::class.java.simpleName
@@ -50,40 +54,53 @@ class ShowEntryFragment : Fragment() {
             Glide.with(entryTabs.context).load(it.getProfileImageStorageReference()).into(entryTabs.circleImageView)
         }
 
-
+        // Observe the list of the incoming DiaryEntry Object that is within the given date
         viewModel.dailyDiary.observe(this) { list ->
 
             Log.d(LOG_TAG, "dailyDiary LiveData Emits -> $list")
+
+            // If the payload is erroneous
             if(list.status == Status.ERROR){
+                // Close the parent activity
                 activity!!.finish()
                 return@observe
             }
 
+            // If the payload is erroneous and the data is empty or null
             if(list.status == Status.ERROR && list.data.isNullOrEmpty()) {
+                // Close the parent activity
                 activity!!.finish()
                 return@observe
             }
 
+            // If the payload is success and the data is empty or null
             if(list.status == Status.SUCCESS && list.data.isNullOrEmpty()) {
+                // Close the parent activity
                 activity!!.finish()
                 return@observe
             }
 
+            // If the data is empty or null
             if(list.data.isNullOrEmpty()) {
+                // Don't touch the UI
                 return@observe
             }
 
             Log.d(LOG_TAG, "${list.data.size} entries received for displaying tabs")
             // entryTabs.postDataUpdate(list.data)
 
+            // Update the ViewPager adapter (The adapter that is responsible for hosting tabs)
             val fragmentAdapter = DiaryEntryViewPagerAdapter(
                     list.data.map(DiaryEntry::id), this)
 
+            // If it is the first time that the user enter this page...
             if(viewModel.isFirstTime) {
+                // Update the ViewPager to display tabs
                 diaryEntryViewPager.apply {
                     isUserInputEnabled = false
                     adapter = fragmentAdapter
 
+                    // Binds tabs to the ViewPager
                     TabLayoutMediator(entryTabs.tabLayoutWrapper.calendarTab, this) { tab, _ ->
                         if(viewModel.isFirstTime) {
                             this.setCurrentItem(tab.position, true)
@@ -95,19 +112,29 @@ class ShowEntryFragment : Fragment() {
                     viewModel.isFirstTime = false
                 }
             }
+
+            // Populate Tab items
             entryTabs.postDataUpdate(list.data)
 
-            btmAppBar.setNavigationOnClickListener {
-                activity!!.onBackPressed()
-            }
-
+            // Specify the behavior of the BottomAppBar
             btmAppBar.apply {
+                // If the back button on the bottom app bar is pressed
+                setNavigationOnClickListener {
+                    // Invoke the default back button behavior on the parent activity
+                    activity!!.onBackPressed()
+                }
+
+                // Specify the behavior of the menu item on the bottom app bar
+                // ** Specifically the delete entry menu **
                 menu.findItem(R.id.diaryEntryDelete).setOnMenuItemClickListener {
+
+                    // Show a dialog asking user to confirm the deletion
                     MaterialDialog(context!!).show {
 
                         title(res = R.string.dialog_delete_entry_title)
                         message(res = R.string.dialog_delete_entry_message)
 
+                        // If the confirm button is pressed, delete the entry via the ViewModel.
                         positiveButton(res = R.string.confirm){
                             val diaryEntry = list.data[entryTabs.getSelectedTabIndex()]
                             viewModel
@@ -121,6 +148,8 @@ class ShowEntryFragment : Fragment() {
 
                         negativeButton(res = R.string.cancel)
                     }
+
+                    // Tell the system that the menu is clicked
                     return@setOnMenuItemClickListener true
                 }
             }
@@ -150,17 +179,37 @@ class ShowEntryFragment : Fragment() {
     }
 }
 
+/**
+ * A class that is used with ViewPager to control how to inflate each fragment
+ * @property entryIds List<String> list of DiaryEntry's ID strings
+ * @constructor main constructor
+ */
 class DiaryEntryViewPagerAdapter(private val entryIds: List<String>, fragment: Fragment) :
         FragmentStateAdapter(fragment) {
+
+    /**
+     * Specify how to determine item count
+     * @return Int item count integer
+     */
     override fun getItemCount(): Int {
         return entryIds.size
     }
 
+    /**
+     * Specify how to inflate each item fragment
+     * @param position Int position integer
+     * @return Fragment the fragment
+     */
     override fun createFragment(position: Int): Fragment {
+        // Inflate DiaryContentDisplayFragment given the entry ID string
         return DiaryContentDisplayFragment.newInstance(entryIds[position])
     }
 }
 
+/**
+ * A RecyclerView Adapter for showing image carousel
+ * @property LOG_TAG String String Tag string for showing Debugging Log
+ */
 class ImageCarouselRvAdapter :
         ListAdapter<DiaryImage, ImageCarouselRvAdapter.ViewHolder>(DiaryImageDiffCallback()) {
 

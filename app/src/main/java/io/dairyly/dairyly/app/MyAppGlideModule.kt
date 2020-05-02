@@ -11,6 +11,9 @@ import com.google.firebase.storage.StorageReference
 import java.io.InputStream
 
 
+/**
+ * This class enables Glide, an image loading library, to be able to retrieve images from firebase
+ */
 @GlideModule
 class MyAppGlideModule : AppGlideModule() {
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
