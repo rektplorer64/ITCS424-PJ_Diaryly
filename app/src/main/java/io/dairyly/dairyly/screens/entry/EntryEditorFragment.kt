@@ -478,6 +478,7 @@ class EntryEditFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 count++
+                // For entry editor initialization
                 if(count == 2) {
                     Log.d(LOG_TAG, "Updating GoodBad Score to $goodBad")
                     val btn = when {
