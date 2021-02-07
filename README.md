@@ -38,8 +38,8 @@ the app must satisfies the following requirements:
 ## ✨ What we did
 We created a diary application that allows users to record their actions based on two alignments: ***Good*** or ***Bad*** actions.
 
-## ⚠ This README is under construction
-### But you can read more about my project here: [PDF Link]: https://github.com/rektplorer64/ITCS424-PJ_Diaryly/blob/master/reports/checkpoint_5_report_final.pdf
+## ⚠ Full version of the document
+**🌐 Link:** [PDF file link]: https://github.com/rektplorer64/ITCS424-PJ_Diaryly/blob/master/reports/checkpoint_5_report_final.pdf
 
 ## 😀 Features
 - [x] **User registration & User login**
